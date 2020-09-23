@@ -1,0 +1,33 @@
+Package: caretForecast
+Title: Forecasting using caret infrastructure
+Version: 0.0.2
+Authors@R: 
+    person(given = "Resul",
+           family = "Akay",
+           role = c("aut", "cre"),
+           email = "resulakay1@gmail.com")
+Description: This package allows users to forecast time series using caret infrastructure. The user can use any regression model for model fitting.
+License: Apache License (>= 2.0)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Suggests: 
+    testthat (>= 2.3.2),
+    knitr (>= 1.29)
+Imports: 
+    forecast (>= 8.12),
+    caret (>= 6.0.86),
+    forecastML (>= 0.9.0),
+    lifecycle (>= 0.2.0),
+    dplyr (>= 1.0.2),
+    tseries (>= 0.10.47),
+    lubridate (>= 1.7.9),
+    parallel,
+    doParallel (>= 1.0.15),
+    methods,
+    stats
+RdMacros: lifecycle
+Depends: 
+    R (>= 3.5)
+VignetteBuilder: knitr
