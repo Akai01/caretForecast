@@ -6,7 +6,9 @@ Authors@R:
            family = "Akay",
            role = c("aut", "cre"),
            email = "resulakay1@gmail.com")
-Description: This package allows users to forecast time series using caret infrastructure. The user can use any regression model for model fitting.
+Description: This package allows users to forecast time series using caret 
+             infrastructure. The user can use any regression model for 
+             model fitting.
 License: Apache License (>= 2.0)
 Encoding: UTF-8
 LazyData: true

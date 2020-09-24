@@ -1,5 +1,9 @@
 # caretForecast Package: Installation and basic usage
 
+ <!-- badges: start -->
+  [![Travis build status](https://travis-ci.com/Akai01/caretForecast.svg?branch=master)](https://travis-ci.com/Akai01/caretForecast)
+  <!-- badges: end -->
+
 
 ### Installation
 
