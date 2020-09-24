@@ -12,6 +12,11 @@ A character vector of Suggested methods
 \description{
 Suggested methods for ARml
 }
+\examples{
+\dontrun{
+suggested_methods()
+}
+}
 \author{
 Res Akay
 }

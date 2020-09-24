@@ -6,8 +6,12 @@
 #' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 #'
 #' @param object a ts object
-#' @param ... other arguments
-#' @author Res Akay
+#' @param ... other arguments pased \code{autoplot}
+#' @author Resul Akay
+#' @examples
+#' \dontrun{
+#' ts_plot(AirPassengers)
+#' }
 #'
 #'
 #' @export

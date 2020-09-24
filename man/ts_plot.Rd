@@ -9,11 +9,18 @@ ts_plot(object, ...)
 \arguments{
 \item{object}{a ts object}
 
-\item{...}{other arguments}
+\item{...}{other arguments pased \code{autoplot}}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 }
+\examples{
+\dontrun{
+ts_plot(AirPassengers)
+}
+
+
+}
 \author{
-Res Akay
+Resul Akay
 }

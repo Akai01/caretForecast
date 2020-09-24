@@ -7,7 +7,6 @@
 #'   \item{date}{date}
 #'   \item{item}{products}
 #'   \item{value}{sales}
-#'   ...
 #' }
 #' @source \url{https://robjhyndman.com/data/ausretail.csv}
 "retail"

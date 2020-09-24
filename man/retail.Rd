@@ -10,7 +10,6 @@ A data class of "tbl_df", "tbl", "data.frame" with 13986 rows and 3 columns:
 \item{date}{date}
 \item{item}{products}
 \item{value}{sales}
-...
 }
 }
 \source{
