@@ -1,5 +1,5 @@
 Package: caretForecast
-Title: Forecasting using caret infrastructure
+Title: Time series forecasting using caret infrastructure
 Version: 0.0.2
 Authors@R: 
     person(given = "Resul",
@@ -31,7 +31,7 @@ Imports:
     stats
 RdMacros: lifecycle
 Depends: 
-    R (>= 3.5)
+    R (>= 3.2.0)
 VignetteBuilder: knitr
 URL: https://github.com/Akai01/caretForecast
 BugReports: https://github.com/Akai01/caretForecast/issues
