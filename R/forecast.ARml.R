@@ -66,9 +66,9 @@ forecast.ARml <- function(object,
 
   f <- frequency(object$y)
 
-  lambda = object$lambda
-  BoxCox_biasadj = object$BoxCox_biasadj
-  BoxCox_fvar = object$BoxCox_fvar
+  lambda <- object$lambda
+  BoxCox_biasadj <- object$BoxCox_biasadj
+  BoxCox_fvar <- object$BoxCox_fvar
 
   htime <- time(ts(rep(0, h), frequency = f, start = max(time(object$y)) + 1 / f))
 
