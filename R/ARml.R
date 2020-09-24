@@ -110,7 +110,7 @@ ARml <- function(y,
   }
 
   if(!is.null(xreg)){
-    if(class(xreg) == "ts" | "data.frame" %in% class(xreg)){
+    if(!class(xreg) %in% c("matrix","array")){
       xreg <- as.matrix(xreg)
     }
   }

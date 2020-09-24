@@ -31,3 +31,5 @@ RdMacros: lifecycle
 Depends: 
     R (>= 3.5)
 VignetteBuilder: knitr
+URL: https://github.com/Akai01/caretForecast
+BugReports: https://github.com/Akai01/caretForecast/issues
