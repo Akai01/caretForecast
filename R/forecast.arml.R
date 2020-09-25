@@ -19,7 +19,7 @@
 #' \item{model}{A list containing information about the fitted model}
 #' \item{newx}{A matrix containing regressors}
 #' @author Res Akay
-#' @note See \code{\link[forecast]{n_rowetar}} and \code{forecastxgb}
+#' @note See \code{\link[forecast]{nnetar}} and \code{forecastxgb}
 #' @examples
 #' \dontrun{
 #' library(MLforecast)

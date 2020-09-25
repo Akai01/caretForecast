@@ -40,7 +40,7 @@ if(require(testthat)){
 if(require(testthat)){
   test_that("tests for some arguments in ARml", {
     ARml(AirPassengers, caret_method = "lm", maxlag = 10,
-         xreg = rnorm(length(AirPassengers)), K=3) -> fit
+         xreg = forecast::seasonaldummy(AirPassengers), seasonal = F) -> fit
 
     class_fit <- class(fit)
 

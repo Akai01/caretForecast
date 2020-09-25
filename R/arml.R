@@ -10,11 +10,11 @@
 #' @importFrom methods is
 #' @importFrom stats frequency is.ts predict sd start time ts
 #' @import lifecycle
-#' @param y  A univariate time series object
+#' @param y  A univariate time series object.
 #' @param xreg Optionally, a numerical vector or matrix of external regressors,
 #' which must have the same number of rows as y.
-#'  (It should not be a data frame.)
-#' @param maxlag Maximum value of lag
+#'  (It should not be a data frame.).
+#' @param maxlag Maximum value of lag.
 #' @param caret_method A string specifying which classification or
 #' regression model to use.
 #' Possible values are found using names(getModelInfo()).
@@ -31,11 +31,13 @@
 #' See preProcess and trainControl on the procedures and how to adjust them.
 #'  Pre-processing code is only designed to work when x is a simple matrix or
 #'   data frame.
-#' @param cv_horizon The number of consecutive values in test set sample
+#' @param cv_horizon The number of consecutive values in test set sample.
 #' @param initial_window The initial number of consecutive values in each
-#' training set sample
-#' @param fixed_window Logical, if FALSE, all training samples start at 1
-#' @param verbose A logical for printing a training log
+#' training set sample.
+#' @param fixed_window Logical, if FALSE, all training samples start at 1.
+#' @param verbose A logical for printing a training log.
+#' @param seasonal Boolean. If \code{seasonal = TRUE} the fourier terms will be
+#'  used for modeling seasonality.
 #' @param K Maximum order(s) of Fourier terms
 #' @param tune_grid A data frame with possible tuning values.
 #' The columns are named the same as the tuning parameters.
