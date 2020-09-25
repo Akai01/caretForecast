@@ -134,7 +134,7 @@ training_data <- window(retail, end = c(2008, 12))
 
 testing_data <- window(retail, start = c(2009, 1))
 
-i <- 9
+i <- 1
 
 fit <- ARml(training_data[,i], maxlag = 12, caret_method = "ridge")
 
@@ -146,6 +146,7 @@ MAPE <- accuracy(fc, testing_data[,i])[,"MAPE"][2]
 
 fc_plot(fc, main = paste("Ridge Regression's MAPE = ", MAPE)) + 
 autolayer(testing_data[,i], series = "testing_data")
+
 get_var_imp(fc)
 
 get_var_imp(fc, plot = F)
