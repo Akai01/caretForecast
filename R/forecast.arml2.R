@@ -6,7 +6,8 @@
 #'
 #' @param object A list class of ARml
 #' @param h forecast horizon
-#' @param xreg Optionally, a numerical vector or matrix of future external regressors
+#' @param xreg Optionally, a numerical vector or matrix of future external
+#' regressors
 #' @param level Confidence level for prediction intervals.
 #' @param ... Other arguments pased to forecast()
 #' @return A list class of forecast containing the following elemets
@@ -17,8 +18,8 @@
 #' \item{upper}{Upper limits for prediction intervals}
 #' \item{level}{The confidence values associated with the prediction intervals}
 #' \item{model}{A list containing information about the fitted model}
-#' \item{newx}{A matrix containing regressors}
-#' @author Res Akay
+#' \item{newxreg}{A matrix containing regressors}
+#' @author Resul Akay
 #' @note See \code{\link[forecast]{nnetar}} and \code{forecastxgb}
 #' @examples
 #' \dontrun{
@@ -74,23 +75,19 @@ forecast.ARml <- function(object,
                    start = max(time(object$y)) + 1 / freq))
   if(object$seasonal == TRUE & freq > 1)
   {
-  fxh <- fourier(object$y2, K = object$K, h = h)
+  fourier_h <- forecast::fourier(object$y2, K = object$K, h = h)
 }
 
-  x <- object$x
-  y <- object$y2
-
-
-  for(i in 1:h){
-    tmp <- forward(x, y, model = object$model, xregpred = xreg1[i, ], i = i,
-                   object = object, freq = freq, fxh = fxh)
-    x <- tmp$x
-    y <- tmp$y
-  }
+  fc_x <- fc_forward(object = object, xreg = xreg1, freq = freq,
+                     fourier_h = fourier_h, h = h)
+    x <- fc_x$x
+    y <- fc_x$y
 
   y <- ts(y[-(1:length(object$y2))],
           frequency = freq,
           start = max(time(object$y)) + 1 / freq)
+  x <- x[-(1:nrow(object$x)),]
+
 if(!is.null(lambda)){
  y <- forecast::InvBoxCox(y, lambda = lambda, biasadj = BoxCox_biasadj,
                      fvar = BoxCox_fvar)
@@ -99,14 +96,16 @@ if(!is.null(lambda)){
     x = object$y,
     mean = y,
     lower = ts(data.frame("95%" = c(y - 1.96 * sd(y)),
-                          "80%" = c(y - 1.28 * sd(y))),  frequency = frequency(object$y),
+                          "80%" = c(y - 1.28 * sd(y))),
+               frequency = frequency(object$y),
                start = start(y)),
     upper = ts( data.frame("95%" = c(y + 1.96 * sd(y)),
-                           "80%" = c(y + 1.28 * sd(y))), frequency =  frequency(object$y),
+                           "80%" = c(y + 1.28 * sd(y))),
+                frequency =  frequency(object$y),
                 start = start(y)),
     fitted = object$fitted,
     level = level,
-    newx = x,
+    newxreg = x,
     method = object$method,
     model = object$model
   )
