@@ -22,8 +22,8 @@ devtools::install_github("Akai01/caretForecast")
 
 #### ----------------- Forecasting Retail Data with glmboost -------------------
 ```r
-#library(caretForecast)
-#library(forecast)
+library(caretForecast)
+library(forecast)
 
 retail <- read.csv("https://robjhyndman.com/data/ausretail.csv",header=FALSE)
 
@@ -82,6 +82,7 @@ fc_plot(fc, main = paste("cubist regression's MAPE = ", MAPE)) +
 autolayer(testing_data[,i], series = "testing_data")
 
 get_var_imp(fc)
+
 get_var_imp(fc, plot = F)
 
 ```

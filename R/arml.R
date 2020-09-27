@@ -114,10 +114,14 @@ ARml <- function(y,
                  BoxCox_fvar = NULL,
                  allow_parallel = FALSE,
                  ...){
-
-
   if("ts" %notin% class(y)){
     stop("y must be a univariate time series")
+  }
+
+  length_y <- length(y)
+
+  if(length_y < 6){
+    stop("Your time series is too short. Length of y must be > 6")
   }
 
   if(!is.null(xreg)){
@@ -127,8 +131,27 @@ ARml <- function(y,
   }
 
   freq <- stats::frequency(y)
+  if(maxlag > (length_y - freq - round(freq / 4))){
 
-  original_y <- y
+    message(paste("Input data is too short. Reducing maxlags to",
+                  length_y - freq - round(freq / 4)))
+    maxlag <- length_y - freq - round(freq / 4)
+  }
+
+  if (maxlag != round(maxlag)){
+    maxlag <- round(maxlag)
+    if(verbose)
+    {
+      message(paste("maxlag must be an integer, maxlag rounded to", maxlag))
+    }
+  }
+
+  if(!is.null(xreg))
+  {
+    ncolxreg <- ncol(xreg)
+  }
+
+  n <- length_y - maxlag
 
   if(is.null(lambda)){
     modified_y <- y
@@ -145,30 +168,6 @@ ARml <- function(y,
     modified_y <- forecast::BoxCox(y, lambda)
   }
 }
-  length_y <- length(y)
-
-  if(length_y < 6){
-    stop("Your time series is too short. Length of y must be > 6")
-  }
-
-  if(maxlag > (length_y - freq - round(freq / 4))){
-
-    warning(paste("Input data is too short. Reducing maxlags to",
-                  length_y - freq - round(freq / 4)))
-    maxlag <- length_y - freq - round(freq / 4)
-  }
-
-  if (maxlag != round(maxlag)){
-    maxlag <- round(maxlag)
-    if(verbose)
-    {
-      message(paste("maxlag must be an integer, maxlag rounded to", maxlag))
-      }
-  }
-
-  origxreg <- xreg
-
-  n <- length_y - maxlag
 
   y2 <- ts(modified_y[-(1:(maxlag))], start = time(modified_y)[maxlag + 1],
            frequency = freq)
@@ -184,14 +183,14 @@ ARml <- function(y,
 
   x <- matrix(0, nrow = n, ncol = ncolx)
 
-  x[ , 1:maxlag] <- lag_maker(modified_y, maxlag, keeporig = FALSE)
+  x[ , 1:maxlag] <- lag_maker(modified_y, maxlag)
 
 
   if(seasonal == TRUE & freq > 1)
     {
-    fx <- fourier(y2, K = K)
-    x[ , (maxlag + 1):ncolx] <- fx
-    colnames(x) <- c(paste0("lag", 1:maxlag), colnames(fx))
+    fourier_s <- fourier(y2, K = K)
+    x[ , (maxlag + 1):ncolx] <- fourier_s
+    colnames(x) <- c(paste0("lag", 1:maxlag), colnames(fourier_s))
   }
 
   if(seasonal == FALSE | freq == 1)
@@ -239,7 +238,7 @@ ARml <- function(y,
   method <- paste0("ARml(", maxlag, paste(", ", K_m), ")")
 
   output <- list(
-    y =  original_y,
+    y =  y,
     y2 = y2,
     x = x,
     model = model,
@@ -253,12 +252,11 @@ ARml <- function(y,
   )
   if(seasonal == TRUE & freq > 1)
     {
-    output$fx <- fx
+    output$fourier_s <- fourier_s
     output$K <- K
     }
   if(!is.null(xreg)){
-    output$ origxreg = origxreg
-    output$ncolxreg <- ncol(origxreg)
+    output$ncolxreg <- ncolxreg
   }
   class(output) <- "ARml"
   return(output)

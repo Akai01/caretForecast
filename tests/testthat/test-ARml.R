@@ -35,8 +35,6 @@ if(require(testthat)){
 }
 
 
-
-
 if(require(testthat)){
   test_that("tests for some arguments in ARml", {
     ARml(AirPassengers, caret_method = "lm", maxlag = 10,

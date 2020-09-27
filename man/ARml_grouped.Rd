@@ -163,5 +163,5 @@ plot(fc$combined_forecasts, data_actual = retail,
 
 }
 \author{
-Res Akay
+Resul Akay
 }

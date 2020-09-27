@@ -18,5 +18,5 @@ suggested_methods()
 }
 }
 \author{
-Res Akay
+Resul Akay
 }

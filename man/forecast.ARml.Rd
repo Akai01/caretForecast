@@ -11,7 +11,8 @@
 
 \item{h}{forecast horizon}
 
-\item{xreg}{Optionally, a numerical vector or matrix of future external regressors}
+\item{xreg}{Optionally, a numerical vector or matrix of future external
+regressors}
 
 \item{level}{Confidence level for prediction intervals.}
 
@@ -26,7 +27,7 @@ A list class of forecast containing the following elemets
 \item{upper}{Upper limits for prediction intervals}
 \item{level}{The confidence values associated with the prediction intervals}
 \item{model}{A list containing information about the fitted model}
-\item{newx}{A matrix containing regressors}
+\item{newxreg}{A matrix containing regressors}
 }
 \description{
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
@@ -53,5 +54,5 @@ accuracy(fc, test)
 
 }
 \author{
-Res Akay
+Resul Akay
 }

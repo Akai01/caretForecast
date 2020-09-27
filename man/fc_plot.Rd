@@ -32,5 +32,5 @@ accuracy(fc, test)
 
 }
 \author{
-Res Akay
+Resul Akay
 }

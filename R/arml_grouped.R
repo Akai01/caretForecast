@@ -87,7 +87,7 @@
 #' returned.
 #' @param set_seed set random number generation
 #'
-#' @author Res Akay
+#' @author Resul Akay
 #'
 #' @examples
 #'  \dontrun{

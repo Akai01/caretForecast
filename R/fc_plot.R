@@ -6,7 +6,7 @@
 #'
 #' @param object a forecast object
 #' @param ... other arguments passed to \code{\link[forecast]{autoplot}}
-#' @author Res Akay
+#' @author Resul Akay
 #'
 #' @examples
 #' \dontrun{

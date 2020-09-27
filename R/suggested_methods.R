@@ -1,6 +1,6 @@
 #' @title Suggested methods for ARml
 #' @return A character vector of Suggested methods
-#' @author Res Akay
+#' @author Resul Akay
 #' @examples
 #' \dontrun{
 #' suggested_methods()

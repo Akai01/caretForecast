@@ -41,5 +41,5 @@ get_var_imp(fc, plot = T)
 
 }
 \author{
-Res Akay
+Resul Akay
 }
