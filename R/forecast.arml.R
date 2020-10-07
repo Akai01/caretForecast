@@ -23,18 +23,21 @@
 #' @note See \code{\link[forecast]{nnetar}} and \code{forecastxgb}
 #' @examples
 #' \dontrun{
-#' library(MLforecast)
-#' library(forecast)
-#' train <- window(AirPassengers, end = c(1959, 12))
+#'library(forecast)
 #'
-#' test <- window(AirPassengers, start = c(1960, 1))
+#'library(caretForecast)
 #'
-#' ARml(train, caret_method = "svmLinear2", maxlag = 12, trend_method = "none",
-#'  pre_process = "center") -> fit
+#'train_data <- window(AirPassengers, end = c(1959, 12))
 #'
-#' forecast(fit, h = length(test), level = NULL, PI = T) -> fc
-#' fc_plot(fc)+ autolayer(test)
-#' accuracy(fc, test)
+#'test <- window(AirPassengers, start = c(1960, 1))
+#'
+#'ARml(train_data, caret_method = "svmLinear2", maxlag = 12) -> fit
+#'
+#'forecast(fit, h = length(test), level = NULL, PI = T) -> fc
+#'
+#'fc_plot(fc)+ autolayer(test)
+#'
+#'accuracy(fc, test)
 #' }
 #'
 #'
