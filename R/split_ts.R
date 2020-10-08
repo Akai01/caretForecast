@@ -4,7 +4,7 @@
 #' @param test_size The number of observations to keep in the test set
 #' @author Resul Akay
 #'
-#'
+#'@export
 
 split_ts <- function (y, test_size = 10)
 {
