@@ -7,12 +7,24 @@
 split_ts(y, test_size = 10)
 }
 \arguments{
-\item{y}{Time series}
+\item{y}{A univariate time series}
 
 \item{test_size}{The number of observations to keep in the test set}
 }
+\value{
+A list with train and test elements
+}
 \description{
 Split a time series into training and testing sets
+}
+\examples{
+\dontrun{
+
+dlist <- split_ts(retail_wide[,1], test_size = 12)
+
+}
+
+
 }
 \author{
 Resul Akay

@@ -86,10 +86,10 @@ forecast.ARml <- function(object,
     x <- fc_x$x
     y <- fc_x$y
 
-  y <- ts(y[-(1:length(object$y2))],
-          frequency = freq,
-          start = max(time(object$y)) + 1 / freq)
-  x <- x[-(1:nrow(object$x)),]
+  # y <- ts(y[-(1:length(object$y2))],
+  #         frequency = freq,
+  #         start = max(time(object$y)) + 1 / freq)
+  # x <- x[-(1:nrow(object$x)),]
 
 if(!is.null(lambda)){
  y <- forecast::InvBoxCox(y, lambda = lambda, biasadj = BoxCox_biasadj,

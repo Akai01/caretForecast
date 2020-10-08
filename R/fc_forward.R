@@ -30,6 +30,11 @@ fc_forward <- function(object, xreg, freq, fourier_h, h){
     y <- fc_x$y
   }
 
+  y <- ts(y[-(1:length(object$y2))],
+          frequency = freq,
+          start = max(time(object$y)) + 1 / freq)
+  x <- x[-(1:nrow(object$x)),]
+
   return(list(
     "x" = x,
     "y" = y
