@@ -1,8 +1,8 @@
 fc_forward <- function(object, xreg, freq, fourier_h, h){
 
   forward <- function(x, y, model, newxreg_in, i, object, freq, fourier_h){
-    newrow <- c(y[length(y)], x[nrow(x), 1:(object$maxlag - 1)])
-    if(object$maxlag == 1){
+    newrow <- c(y[length(y)], x[nrow(x), 1:(object$max_lag - 1)])
+    if(object$max_lag == 1){
       newrow = newrow[-1]
     }
     if(object$seasonal == TRUE & freq > 1)

@@ -4,7 +4,7 @@ if(require(testthat)){
   test_that("tests for some arguments in get_var_imp", {
     library(forecast)
     library(caret)
-    forecast(ARml(AirPassengers, caret_method = "lm", maxlag = 12, trend_method = "none",
+    forecast(ARml(AirPassengers, caret_method = "lm", max_lag = 12, trend_method = "none",
                   pre_process = "center"), h = 12) -> fc
 
     a <- get_var_imp(fc, plot = F)
@@ -21,7 +21,7 @@ if(require(testthat)){
 if(require(testthat)){
 
   test_that("tests for some arguments in get_var_imp", {
-    forecast(ARml(AirPassengers, caret_method = "lm", maxlag = 12, trend_method = "none",
+    forecast(ARml(AirPassengers, caret_method = "lm", max_lag = 12, trend_method = "none",
                   pre_process = "center"), h = 12) -> fc
 
     a <- get_var_imp(fc, plot = T)

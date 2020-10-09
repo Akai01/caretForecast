@@ -7,11 +7,11 @@
 ARml(
   y,
   xreg = NULL,
-  maxlag = 5,
+  max_lag = 5,
   caret_method = "cubist",
   pre_process = NULL,
   cv_horizon = 4,
-  initial_window = length(y) - maxlag - cv_horizon * 2,
+  initial_window = length(y) - max_lag - cv_horizon * 2,
   fixed_window = FALSE,
   verbose = TRUE,
   seasonal = TRUE,
@@ -34,7 +34,7 @@ ARml(
 which must have the same number of rows as y.
 (It should not be a data frame.).}
 
-\item{maxlag}{Maximum value of lag.}
+\item{max_lag}{Maximum value of lag.}
 
 \item{caret_method}{A string specifying which classification or
 regression model to use.
@@ -133,7 +133,7 @@ train_data <- window(AirPassengers, end = c(1959, 12))
 
 test <- window(AirPassengers, start = c(1960, 1))
 
-ARml(train_data, caret_method = "svmLinear2", maxlag = 12) -> fit
+ARml(train_data, caret_method = "svmLinear2", max_lag = 12) -> fit
 
 forecast(fit, h = length(test), level = NULL, PI = T) -> fc
 

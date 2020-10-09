@@ -35,7 +35,7 @@ testing_data <- window(retail, start = c(2009, 1))
 
 i <- 6
 
-fit <- ARml(training_data[,i], maxlag = 12, caret_method = "glmboost")
+fit <- ARml(training_data[,i], max_lag = 12, caret_method = "glmboost")
 
 forecast(fit, h = nrow(testing_data), level = c(95,80))-> fc
 
@@ -70,7 +70,7 @@ testing_data <- window(retail, start = c(2009, 1))
 
 i <- 5
 
-fit <- ARml(training_data[,i], maxlag = 12, caret_method = "cubist")
+fit <- ARml(training_data[,i], max_lag = 12, caret_method = "cubist")
 
 forecast(fit, h = nrow(testing_data), level = c(95,80))-> fc
 
@@ -104,7 +104,7 @@ testing_data <- window(retail, start = c(2009, 1))
 
 i <- 1
 
-fit <- ARml(training_data[,i], maxlag = 12, caret_method = "svmLinear")
+fit <- ARml(training_data[,i], max_lag = 12, caret_method = "svmLinear")
 
 forecast(fit, h = nrow(testing_data), level = c(95,80))-> fc
 
@@ -137,7 +137,7 @@ testing_data <- window(retail, start = c(2009, 1))
 
 i <- 1
 
-fit <- ARml(training_data[,i], maxlag = 12, caret_method = "ridge")
+fit <- ARml(training_data[,i], max_lag = 12, caret_method = "ridge")
 
 forecast(fit, h = nrow(testing_data), level = c(95,80))-> fc
 

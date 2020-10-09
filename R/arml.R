@@ -14,7 +14,7 @@
 #' @param xreg Optionally, a numerical vector or matrix of external regressors,
 #' which must have the same number of rows as y.
 #'  (It should not be a data frame.).
-#' @param maxlag Maximum value of lag.
+#' @param max_lag Maximum value of lag.
 #' @param caret_method A string specifying which classification or
 #' regression model to use.
 #' Possible values are found using names(getModelInfo()).
@@ -87,7 +87,7 @@
 #'
 #'test <- window(AirPassengers, start = c(1960, 1))
 #'
-#'ARml(train_data, caret_method = "svmLinear2", maxlag = 12) -> fit
+#'ARml(train_data, caret_method = "svmLinear2", max_lag = 12) -> fit
 #'
 #'forecast(fit, h = length(test), level = NULL, PI = T) -> fc
 #'
@@ -99,11 +99,11 @@
 
 ARml <- function(y,
                  xreg = NULL,
-                 maxlag = 5,
+                 max_lag = 5,
                  caret_method = "cubist",
                  pre_process = NULL,
                  cv_horizon = 4,
-                 initial_window = length(y) - maxlag -  cv_horizon*2,
+                 initial_window = length(y) - max_lag -  cv_horizon*2,
                  fixed_window =FALSE,
                  verbose = TRUE,
                  seasonal = TRUE,
@@ -123,8 +123,25 @@ ARml <- function(y,
 
   length_y <- length(y)
 
-  if(length_y < 6){
-    stop("Your time series is too short. Length of y must be > 6")
+  freq <- stats::frequency(y)
+
+  if (length_y < freq) {
+    stop("Not enough data to fit a model")
+  }
+
+  if(c(length_y - freq - round(freq / 4)) < max_lag){
+
+    warning(paste("Input data is too short. Reducing max_lags to ",
+                  round(length_y - freq - round(freq / 4))))
+    max_lag <- round(length_y - freq - round(freq / 4))
+  }
+
+  if (max_lag != round(max_lag)){
+    max_lag <- round(max_lag)
+    if(verbose)
+    {
+      message(paste("max_lag must be an integer, max_lag rounded to", max_lag))
+    }
   }
 
   if(!is.null(xreg)){
@@ -133,28 +150,18 @@ ARml <- function(y,
     }
   }
 
-  freq <- stats::frequency(y)
-  if(maxlag > (length_y - freq - round(freq / 4))){
+  constant_y <- forecast::is.constant(forecast::na.interp(y))
 
-    message(paste("Input data is too short. Reducing maxlags to",
-                  length_y - freq - round(freq / 4)))
-    maxlag <- length_y - freq - round(freq / 4)
-  }
-
-  if (maxlag != round(maxlag)){
-    maxlag <- round(maxlag)
-    if(verbose)
-    {
-      message(paste("maxlag must be an integer, maxlag rounded to", maxlag))
-    }
+  if(constant_y) {
+    warning("Constant data, setting max_lag = 1, lambda = NULL")
+    lambda <- NULL
+    max_lag = 1
   }
 
   if(!is.null(xreg))
   {
     ncolxreg <- ncol(xreg)
   }
-
-  n <- length_y - maxlag
 
   if(is.null(lambda)){
     modified_y <- y
@@ -172,40 +179,38 @@ ARml <- function(y,
   }
 }
 
-  y2 <- ts(modified_y[-(1:(maxlag))], start = time(modified_y)[maxlag + 1],
+  y2 <- ts(modified_y[-(1:(max_lag))], start = time(modified_y)[max_lag + 1],
            frequency = freq)
 
   if(seasonal == TRUE | freq > 1)
   {
-    ncolx <- maxlag + K * 2
+    ncolx <- max_lag + K * 2
     }
   if(seasonal == FALSE | freq == 1)
     {
-    ncolx <- maxlag
-    }
+    ncolx <- max_lag
+  }
 
-  x <- matrix(0, nrow = n, ncol = ncolx)
+  x <- matrix(0, nrow = c(length_y - max_lag), ncol = ncolx)
 
-  x[ , 1:maxlag] <- lag_maker(modified_y, maxlag)
-
+  x[ , 1:max_lag] <- lag_maker(modified_y, max_lag)
 
   if(seasonal == TRUE & freq > 1)
     {
     fourier_s <- fourier(y2, K = K)
-    x[ , (maxlag + 1):ncolx] <- fourier_s
-    colnames(x) <- c(paste0("lag", 1:maxlag), colnames(fourier_s))
+    x[ , (max_lag + 1):ncolx] <- fourier_s
+    colnames(x) <- c(paste0("lag", 1:max_lag), colnames(fourier_s))
   }
 
   if(seasonal == FALSE | freq == 1)
     {
-    colnames(x) <- c(paste0("lag", 1:maxlag))
+    colnames(x) <- c(paste0("lag", 1:max_lag))
   }
 
   if(!is.null(xreg)){
-    xreg <- xreg[-(1:maxlag),]
+    xreg <- xreg[-(1:max_lag),]
     x <- cbind(x, xreg[ , , drop = FALSE])
   }
-
 
   model <- caret::train(x = x,
                       y = as.numeric(y2),
@@ -222,7 +227,7 @@ ARml <- function(y,
                         allowParallel = allow_parallel),
                       tuneGrid = tune_grid)
 
-  fitted <- ts(c(rep(NA, maxlag),
+  fitted <- ts(c(rep(NA, max_lag),
                  predict(model, newdata = x)),
                frequency = freq, start = min(time(modified_y)))
 
@@ -238,7 +243,7 @@ ARml <- function(y,
   {
     K_m <- K
   }
-  method <- paste0("ARml(", maxlag, paste(", ", K_m), ")")
+  method <- paste0("ARml(", max_lag, paste(", ", K_m), ")")
 
   output <- list(
     y =  y,
@@ -246,13 +251,14 @@ ARml <- function(y,
     x = x,
     model = model,
     fitted = fitted,
-    maxlag = maxlag,
+    max_lag = max_lag,
     lambda = lambda,
     seasonal = seasonal,
     BoxCox_biasadj = BoxCox_biasadj,
     BoxCox_fvar = BoxCox_fvar,
     method = paste0("caret method ",caret_method, " with ", method)
   )
+
   if(seasonal == TRUE & freq > 1)
     {
     output$fourier_s <- fourier_s
