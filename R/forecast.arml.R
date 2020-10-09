@@ -81,7 +81,7 @@ forecast.ARml <- function(object,
   fourier_h <- forecast::fourier(object$y2, K = object$K, h = h)
 }
 
-  fc_x <- fc_forward(object = object, xreg = xreg1, freq = freq,
+  fc_x <- pred_model(object = object, xreg = xreg1, freq = freq,
                      fourier_h = fourier_h, h = h)
     x <- fc_x$x
     y <- fc_x$y
