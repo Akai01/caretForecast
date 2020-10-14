@@ -65,7 +65,7 @@
 #'  and the corresponding upper and lower intervals.
 #' @param allow_parallel If a parallel backend is loaded and available,
 #' should the function use it?
-#' @param ... Ignored
+#' @param ... Ignored.
 #' @return A list class of forecast containing the following elemets
 #' \item{x}{The input time series}
 #' \item{method}{The name of the forecasting method as a character string}
