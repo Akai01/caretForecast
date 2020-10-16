@@ -14,7 +14,9 @@ status](https://www.r-pkg.org/badges/version/caretForecast)](https://CRAN.R-proj
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
-The goal of caretForecast is to …
+The goal of caretForecast is to provide tools for forecasting time
+series data using various machine learning algorithms. (More details
+will follow…)
 
 ## Installation
 
