@@ -102,7 +102,7 @@ and the corresponding upper and lower intervals.}
 \item{allow_parallel}{If a parallel backend is loaded and available,
 should the function use it?}
 
-\item{...}{Ignored}
+\item{...}{Ignored.}
 }
 \value{
 A list class of forecast containing the following elemets

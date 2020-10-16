@@ -1,0 +1,155 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# caretForecast
+
+<!-- badges: start -->
+[![Travis build status](https://travis-ci.com/Akai01/caretForecast.svg?branch=master)](https://travis-ci.com/Akai01/caretForecast)
+[![codecov](https://codecov.io/gh/Akai01/caretForecast/branch/master/graph/badge.svg)](https://codecov.io/gh/Akai01/caretForecast)
+[![CRAN status](https://www.r-pkg.org/badges/version/caretForecast)](https://CRAN.R-project.org/package=caretForecast)
+[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+<!-- badges: end -->
+
+The goal of caretForecast is to ...
+
+## Installation
+
+
+The development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("Akai01/caretForecast")
+```
+## Example
+### Note: User can train any caret supported regression model.
+
+These are basic examples which shows you how to solve common problems with 
+different ML models. 
+
+
+```{r example}
+
+library(caretForecast)
+library(forecast)
+
+# Forecasting Retail Data with glmboost
+data(retail_wide, package = "caretForecast")
+
+i <- 8
+
+dtlist <- caretForecast::split_ts(retail_wide[,i], test_size = 12)
+
+training_data <- dtlist$train
+
+testing_data <- dtlist$test
+
+fit <- ARml(training_data, max_lag = 12, caret_method = "glmboost", 
+            verbose = FALSE)
+
+forecast(fit, h = length(testing_data), level = c(95,80))-> fc
+
+accuracy(fc, testing_data)
+
+
+fc_plot(fc) + 
+autolayer(testing_data, series = "testing_data")
+
+rm(list=ls(all=TRUE))
+
+## NOTE : Promotions, holidays, and other external variables can be added in the model via xreg argument. Please look at the documentation of ARml.
+
+# Forecasting Retail Data with cubist regression
+
+i <- 9
+
+data(retail_wide, package = "caretForecast")
+
+dtlist <- caretForecast::split_ts(retail_wide[,i], test_size = 12)
+
+training_data <- dtlist$train
+
+testing_data <- dtlist$test
+
+fit <- ARml(training_data, max_lag = 12, caret_method = "cubist", 
+            verbose = FALSE)
+
+forecast(fit, h = length(testing_data), level = c(95,80))-> fc
+
+accuracy(fc, testing_data)
+
+fc_plot(fc) + 
+autolayer(testing_data, series = "testing_data")
+
+rm(list=ls(all=TRUE))
+
+# Forecasting using Support Vector Machines with Linear Kernel
+
+data(retail_wide, package = "caretForecast")
+
+i <- 5
+
+dtlist <- caretForecast::split_ts(retail_wide[,i], test_size = 12)
+
+training_data <- dtlist$train
+
+testing_data <- dtlist$test
+
+fit <- ARml(training_data, max_lag = 12, caret_method = "svmLinear", 
+            verbose = FALSE)
+
+forecast(fit, h = length(testing_data), level = c(95,80))-> fc
+
+accuracy(fc, testing_data)
+
+fc_plot(fc) + 
+autolayer(testing_data, series = "testing_data")
+
+get_var_imp(fc)
+
+get_var_imp(fc, plot = F)
+
+rm(list=ls(all=TRUE))
+
+# Forecasting using Ridge Regression
+data(retail_wide, package = "caretForecast")
+
+i <- 8
+
+dtlist <- caretForecast::split_ts(retail_wide[,i], test_size = 12)
+
+training_data <- dtlist$train
+
+testing_data <- dtlist$test
+
+fit <- ARml(training_data, max_lag = 12, caret_method = "ridge", 
+            verbose = FALSE)
+
+forecast(fit, h = length(testing_data), level = c(95,80))-> fc
+
+accuracy(fc, testing_data)
+
+fc_plot(fc) + 
+autolayer(testing_data, series = "testing_data")
+
+get_var_imp(fc)
+
+get_var_imp(fc, plot = F)
+
+rm(list=ls(all=TRUE))
+
+```
+
+

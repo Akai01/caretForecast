@@ -7,7 +7,7 @@ if(require(testthat)){
 
     result <- as.numeric(result$test)
 
-    expect_that(result, equals(c(14549, 14579)))
+    expect_that(result, equals(c(409.4, 583.6)))
 
   })
 }
