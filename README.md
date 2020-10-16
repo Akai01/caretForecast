@@ -77,7 +77,7 @@ autolayer(testing_data, series = "testing_data")
 
 ``` r
 
-rm(list=ls(all=TRUE))
+
 
 ## NOTE : Promotions, holidays, and other external variables can be added in the model via xreg argument. Please look at the documentation of ARml.
 
@@ -114,7 +114,7 @@ autolayer(testing_data, series = "testing_data")
 
 ``` r
 
-rm(list=ls(all=TRUE))
+
 
 # Forecasting using Support Vector Machines with Linear Kernel
 
@@ -183,7 +183,7 @@ get_var_imp(fc, plot = F)
 #> C1-12   1.5751
 #> C3-12   0.3495
 
-rm(list=ls(all=TRUE))
+
 
 # Forecasting using Ridge Regression
 data(retail_wide, package = "caretForecast")
@@ -250,6 +250,4 @@ get_var_imp(fc, plot = F)
 #> S1-12   0.40638
 #> S2-12   0.09599
 #> C5-12   0.05234
-
-rm(list=ls(all=TRUE))
 ```

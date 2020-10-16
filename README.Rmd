@@ -67,7 +67,7 @@ accuracy(fc, testing_data)
 fc_plot(fc) + 
 autolayer(testing_data, series = "testing_data")
 
-rm(list=ls(all=TRUE))
+
 
 ## NOTE : Promotions, holidays, and other external variables can be added in the model via xreg argument. Please look at the documentation of ARml.
 
@@ -93,7 +93,7 @@ accuracy(fc, testing_data)
 fc_plot(fc) + 
 autolayer(testing_data, series = "testing_data")
 
-rm(list=ls(all=TRUE))
+
 
 # Forecasting using Support Vector Machines with Linear Kernel
 
@@ -121,7 +121,7 @@ get_var_imp(fc)
 
 get_var_imp(fc, plot = F)
 
-rm(list=ls(all=TRUE))
+
 
 # Forecasting using Ridge Regression
 data(retail_wide, package = "caretForecast")
@@ -148,7 +148,7 @@ get_var_imp(fc)
 
 get_var_imp(fc, plot = F)
 
-rm(list=ls(all=TRUE))
+
 
 ```
 
