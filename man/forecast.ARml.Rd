@@ -33,7 +33,7 @@ A list class of forecast containing the following elemets
 \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
 }
 \note{
-See \code{\link[forecast]{nnetar}} and \code{forecastxgb}
+See \code{\link[forecast]{nnetar}}
 }
 \examples{
 \dontrun{

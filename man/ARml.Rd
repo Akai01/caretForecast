@@ -121,7 +121,7 @@ A list class of forecast containing the following elemets
 Autoregressive forecasting using various Machine Learning models.
 }
 \note{
-See \code{\link[forecast]{nnetar}} and \code{forecastxgb}
+See \code{\link[forecast]{nnetar}}
 }
 \examples{
 \dontrun{

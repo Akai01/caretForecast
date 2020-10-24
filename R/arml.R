@@ -76,7 +76,7 @@
 #' \item{model}{A list containing information about the fitted model}
 #' \item{newx}{A matrix containing regressors}
 #' @author Resul Akay
-#' @note See \code{\link[forecast]{nnetar}} and \code{forecastxgb}
+#' @note See \code{\link[forecast]{nnetar}}
 #' @examples
 #' \dontrun{
 #'library(forecast)
@@ -179,7 +179,7 @@ ARml <- function(y,
   }
 }
 
-  y2 <- ts(modified_y[-(1:(max_lag))], start = time(modified_y)[max_lag + 1],
+  modified_y_2 <- ts(modified_y[-(1:(max_lag))], start = time(modified_y)[max_lag + 1],
            frequency = freq)
 
   if(seasonal == TRUE | freq > 1)
@@ -197,7 +197,7 @@ ARml <- function(y,
 
   if(seasonal == TRUE & freq > 1)
     {
-    fourier_s <- fourier(y2, K = K)
+    fourier_s <- fourier(modified_y_2, K = K)
     x[ , (max_lag + 1):ncolx] <- fourier_s
     colnames(x) <- c(paste0("lag", 1:max_lag), colnames(fourier_s))
   }
@@ -213,7 +213,7 @@ ARml <- function(y,
   }
 
   model <- caret::train(x = x,
-                      y = as.numeric(y2),
+                      y = as.numeric(modified_y_2),
                       method = caret_method,
                       preProcess = pre_process,
                       weights = NULL,
@@ -247,7 +247,7 @@ ARml <- function(y,
 
   output <- list(
     y =  y,
-    y2 = y2,
+    y_modified = modified_y_2,
     x = x,
     model = model,
     fitted = fitted,
@@ -263,9 +263,10 @@ ARml <- function(y,
     {
     output$fourier_s <- fourier_s
     output$K <- K
-    }
+  }
+  output$xreg_fit <- NULL
   if(!is.null(xreg)){
-    output$ncolxreg <- ncolxreg
+    output$xreg_fit <- xreg
   }
   class(output) <- "ARml"
   return(output)

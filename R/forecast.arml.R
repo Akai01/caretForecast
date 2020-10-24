@@ -20,7 +20,7 @@
 #' \item{model}{A list containing information about the fitted model}
 #' \item{newxreg}{A matrix containing regressors}
 #' @author Resul Akay
-#' @note See \code{\link[forecast]{nnetar}} and \code{forecastxgb}
+#' @note See \code{\link[forecast]{nnetar}}
 #' @examples
 #' \dontrun{
 #'library(forecast)
@@ -46,43 +46,42 @@
 forecast.ARml <- function(object,
                           h = frequency(object$y),
                           xreg = NULL, level = c(80, 95), ...){
+
+  if(!is.null(object$xreg_fit)){
+  ncolxreg <- ncol(object$xreg_fit)
+  }
+
+  if(is.null(xreg)){
+    if(!is.null(object$xreg_fit)){
+      stop("No regressors provided")
+    }
+  }
+
   if(!is.null(xreg)){
-    if(is.null(object$ncolxreg)){
-      stop("xreg will be ignored. ARml model trained without xreg")
+    if(is.null(object$xreg_fit)){
+      stop("No regressors provided to fitted model")
     }
 
-    if(ncol(xreg) != object$ncolxreg){
-      stop("Number of variables in xreg does not mach what you provide to ARml")
+    if(ncol(xreg) != ncolxreg){
+      stop("Number of regressors does not match to fitted model")
     }
-
 
     h <- nrow(xreg)
-    n_row <- nrow(xreg)
-    xreg1 <- xreg[(n_row - h + 1):n_row, ]
+    newxreg1 <- xreg
   }
 
   if(is.null(h)){
     h <- ifelse(frequency(object$y) > 1, 2 * frequency(object$y), 10)
   }
   if(is.null(xreg)){
-    xreg1 <- NULL
+    newxreg1 <- NULL
   }
-
-  freq <- frequency(object$y)
 
   lambda <- object$lambda
   BoxCox_biasadj <- object$BoxCox_biasadj
   BoxCox_fvar <- object$BoxCox_fvar
 
-  htime <- time(ts(rep(0, h), frequency = freq,
-                   start = max(time(object$y)) + 1 / freq))
-  if(object$seasonal == TRUE & freq > 1)
-  {
-  fourier_h <- forecast::fourier(object$y2, K = object$K, h = h)
-}
-
-  fc_x <- pred_model(object = object, xreg = xreg1, freq = freq,
-                     fourier_h = fourier_h, h = h)
+  fc_x <- forecast_loop(object = object, xreg = newxreg1, h = h)
     x <- fc_x$x
     y <- fc_x$y
 
