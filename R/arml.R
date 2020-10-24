@@ -125,8 +125,13 @@ ARml <- function(y,
 
   freq <- stats::frequency(y)
 
-  if (length_y < freq) {
+  if(length_y < freq){
     stop("Not enough data to fit a model")
+  }
+
+  if(max_lag <= 0){
+    warning("max_lag increased to 1. max_lag must be max_lag >= 1")
+    max_lag <- 1
   }
 
   if(c(length_y - freq - round(freq / 4)) < max_lag){
@@ -138,10 +143,8 @@ ARml <- function(y,
 
   if (max_lag != round(max_lag)){
     max_lag <- round(max_lag)
-    if(verbose)
-    {
-      message(paste("max_lag must be an integer, max_lag rounded to", max_lag))
-    }
+
+    message(paste("max_lag must be an integer, max_lag rounded to", max_lag))
   }
 
   if(!is.null(xreg)){
@@ -243,6 +246,7 @@ ARml <- function(y,
   {
     K_m <- K
   }
+
   method <- paste0("ARml(", max_lag, paste(", ", K_m), ")")
 
   output <- list(
