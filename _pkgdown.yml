@@ -11,7 +11,7 @@ template:
 
 news:
 - title: The news
-  contents: '`index`'
+  href: news/index.html
 
 reference:
 - title: All functions
