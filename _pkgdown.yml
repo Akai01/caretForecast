@@ -1,3 +1,29 @@
+url: https://akai01.github.io/caretForecast/
+
+title: caretForecast
+
+development:
+  mode: devel
+  version_label: info
+
+template:
+  bootswatch: spacelab
+
+
+reference:
+- title: All functions
+  contents:
+  - '`ARml`'
+  - '`ARml_grouped`'
+  - '`fc_plot`'
+  - '`forecast.ARml`'
+  - '`get_var_imp`'
+  - '`retail`'
+  - '`retail_wide`'
+  - '`split_ts`'
+  - '`suggested_methods`'
+  - '`ts_plot`'
+
 navbar:
   structure:
     left:
