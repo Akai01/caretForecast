@@ -1,7 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# caretForecast
+caretForecast
+=============
 
 <!-- badges: start -->
 
@@ -18,7 +19,8 @@ The goal of caretForecast is to provide tools for forecasting time
 series data using various machine learning algorithms. (More details
 will follow…)
 
-## Installation
+Installation
+------------
 
 The development version from [GitHub](https://github.com/) with:
 
@@ -27,7 +29,8 @@ The development version from [GitHub](https://github.com/) with:
 devtools::install_github("Akai01/caretForecast")
 ```
 
-## Example
+Example
+-------
 
 ### Note: User can train any caret supported regression model.
 
@@ -35,7 +38,6 @@ These are basic examples which shows you how to solve common problems
 with different ML models.
 
 ``` r
-
 library(caretForecast)
 #> Registered S3 method overwritten by 'quantmod':
 #>   method            from
@@ -61,12 +63,12 @@ fit <- ARml(training_data, max_lag = 12, caret_method = "glmboost",
 forecast(fit, h = length(testing_data), level = c(95,80))-> fc
 
 accuracy(fc, testing_data)
-#>                    ME     RMSE       MAE       MPE     MAPE      MASE      ACF1
-#> Training set 0.607478 10.21615  7.290324 -0.203876 5.192473 0.4709039 0.4751444
-#> Test set     4.871290 14.70340 10.858000  1.314927 3.769520 0.7013508 0.3969524
-#>              Theil's U
-#> Training set        NA
-#> Test set     0.6046472
+#>                     ME     RMSE      MAE        MPE     MAPE      MASE
+#> Training set 0.8868074 16.39661 11.65025 -0.3620986 5.702257 0.7559694
+#> Test set     8.3976171 20.15546 17.20306  3.0153042 5.572722 1.1162843
+#>                   ACF1 Theil's U
+#> Training set 0.5707204        NA
+#> Test set     0.3971016 0.7547318
 
 
 fc_plot(fc) + 
@@ -76,7 +78,6 @@ autolayer(testing_data, series = "testing_data")
 <img src="man/figures/README-example-1.png" width="100%" />
 
 ``` r
-
 
 
 ## NOTE : Promotions, holidays, and other external variables can be added in the model via xreg argument. Please look at the documentation of ARml.
@@ -99,12 +100,12 @@ fit <- ARml(training_data, max_lag = 12, caret_method = "cubist",
 forecast(fit, h = length(testing_data), level = c(95,80))-> fc
 
 accuracy(fc, testing_data)
-#>                      ME      RMSE      MAE         MPE     MAPE      MASE
-#> Training set  0.3297442  8.998975 6.453195 -0.03980343 3.132082 0.4187394
-#> Test set     -3.1496258 14.421058 9.957933 -0.76868573 3.035664 0.6461573
-#>                   ACF1 Theil's U
-#> Training set 0.1062483        NA
-#> Test set     0.2273518 0.5300733
+#>                     ME     RMSE      MAE         MPE     MAPE      MASE
+#> Training set 0.3452345 16.39877 12.22406 -0.08475644 2.533889 0.4073634
+#> Test set     2.5562312 14.21461 12.39887  0.24907619 1.592606 0.4131888
+#>                    ACF1 Theil's U
+#> Training set  0.2309758        NA
+#> Test set     -0.1450719 0.1701567
 
 fc_plot(fc) + 
 autolayer(testing_data, series = "testing_data")
@@ -113,7 +114,6 @@ autolayer(testing_data, series = "testing_data")
 <img src="man/figures/README-example-2.png" width="100%" />
 
 ``` r
-
 
 
 # Forecasting using Support Vector Machines with Linear Kernel
@@ -134,12 +134,12 @@ fit <- ARml(training_data, max_lag = 12, caret_method = "svmLinear",
 forecast(fit, h = length(testing_data), level = c(95,80))-> fc
 
 accuracy(fc, testing_data)
-#>                      ME     RMSE      MAE        MPE     MAPE      MASE
-#> Training set 0.08139721 17.53112 13.62193 -0.2546303 4.112980 0.7153960
-#> Test set     3.44175464 20.51069 15.60614  0.7824485 3.125285 0.8196031
-#>                     ACF1 Theil's U
-#> Training set  0.01627236        NA
-#> Test set     -0.18179943 0.1854082
+#>                        ME     RMSE      MAE       MPE     MAPE      MASE
+#> Training set -0.004996011 5.218181 3.980904 -0.333970 4.500042 0.5563544
+#> Test set     -7.264572944 9.403773 7.652439 -8.319266 8.642448 1.0694725
+#>                    ACF1 Theil's U
+#> Training set 0.02901247        NA
+#> Test set     0.22464379 0.7207839
 
 fc_plot(fc) + 
 autolayer(testing_data, series = "testing_data")
@@ -148,14 +148,12 @@ autolayer(testing_data, series = "testing_data")
 <img src="man/figures/README-example-3.png" width="100%" />
 
 ``` r
-
 get_var_imp(fc)
 ```
 
 <img src="man/figures/README-example-4.png" width="100%" />
 
 ``` r
-
 get_var_imp(fc, plot = F)
 #> loess r-squared variable importance
 #> 
@@ -163,25 +161,25 @@ get_var_imp(fc, plot = F)
 #> 
 #>        Overall
 #> lag12 100.0000
-#> lag1   49.4817
-#> lag7   43.7834
-#> lag11  40.7832
-#> lag6   40.7463
-#> lag5   40.0977
-#> lag2   38.5547
-#> lag8   32.1267
-#> lag3   30.2872
-#> lag4   28.9004
-#> lag9   24.5431
-#> lag10  20.1536
-#> C2-12  14.0799
-#> S3-12   8.9038
-#> S1-12   7.5752
-#> C4-12   6.8879
-#> S5-12   5.8994
-#> S2-12   3.7769
-#> C1-12   1.5751
-#> C3-12   0.3495
+#> lag3   81.1655
+#> lag1   79.2218
+#> lag2   78.2771
+#> lag5   75.4255
+#> lag9   74.8507
+#> lag10  74.3075
+#> lag4   73.4707
+#> lag7   71.2428
+#> lag11  69.4001
+#> lag8   69.3380
+#> lag6   66.1550
+#> S5-12   6.4068
+#> S3-12   3.9841
+#> S1-12   3.8337
+#> C4-12   3.6437
+#> C3-12   2.1007
+#> S4-12   1.6039
+#> C2-12   0.9426
+#> C5-12   0.4801
 
 
 
@@ -202,12 +200,12 @@ fit <- ARml(training_data, max_lag = 12, caret_method = "ridge",
 forecast(fit, h = length(testing_data), level = c(95,80))-> fc
 
 accuracy(fc, testing_data)
-#>                      ME     RMSE       MAE       MPE     MAPE      MASE
-#> Training set  0.1610492  6.82989  4.878706 -0.112876 3.673076 0.3151303
-#> Test set     14.3399436 18.17074 14.659070  5.000961 5.136127 0.9468733
-#>                    ACF1 Theil's U
-#> Training set 0.01354464        NA
-#> Test set     0.25207860 0.7777944
+#>                     ME     RMSE      MAE        MPE     MAPE      MASE
+#> Training set 0.1414756  8.88367  6.44208 -0.0953757 3.126316 0.4180182
+#> Test set     0.9965672 17.71459 13.30744  0.7019753 4.092068 0.8635023
+#>                     ACF1 Theil's U
+#> Training set 0.004518837        NA
+#> Test set     0.389409945 0.6513039
 
 fc_plot(fc) + 
 autolayer(testing_data, series = "testing_data")
@@ -216,38 +214,36 @@ autolayer(testing_data, series = "testing_data")
 <img src="man/figures/README-example-5.png" width="100%" />
 
 ``` r
-
 get_var_imp(fc)
 ```
 
 <img src="man/figures/README-example-6.png" width="100%" />
 
 ``` r
-
 get_var_imp(fc, plot = F)
 #> loess r-squared variable importance
 #> 
 #>   only 20 most important variables shown (out of 22)
 #> 
 #>         Overall
-#> lag1  100.00000
-#> lag12  99.74827
-#> lag2   97.78807
-#> lag3   97.74610
-#> lag4   97.10962
-#> lag5   97.08285
-#> lag7   96.20291
-#> lag11  95.90430
-#> lag6   95.80115
-#> lag8   95.68963
-#> lag9   95.38585
-#> lag10  94.50733
-#> C1-12   0.68853
-#> S3-12   0.60001
-#> C2-12   0.50234
-#> C4-12   0.44290
-#> S5-12   0.41720
-#> S1-12   0.40638
-#> S2-12   0.09599
-#> C5-12   0.05234
+#> lag12 100.00000
+#> lag1   89.57697
+#> lag11  86.89260
+#> lag2   85.81967
+#> lag3   84.07269
+#> lag10  83.53358
+#> lag9   82.52774
+#> lag7   82.18917
+#> lag4   81.93730
+#> lag5   81.85290
+#> lag8   81.22696
+#> lag6   79.96364
+#> S1-12   4.51371
+#> S3-12   1.59063
+#> C2-12   1.54661
+#> S5-12   1.53004
+#> C4-12   1.24044
+#> C1-12   0.38784
+#> S2-12   0.35446
+#> S4-12   0.07244
 ```
