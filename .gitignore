@@ -19,3 +19,4 @@ po/*~
 /*.Rcheck/
 .Rproj.user/
 .DS_Store
+docs
