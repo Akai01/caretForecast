@@ -6,10 +6,11 @@
 \usage{
 ARml(
   y,
-  xreg = NULL,
   max_lag = 5,
+  xreg = NULL,
   caret_method = "cubist",
   pre_process = NULL,
+  cv = TRUE,
   cv_horizon = 4,
   initial_window = length(y) - max_lag - cv_horizon * 2,
   fixed_window = FALSE,
@@ -30,11 +31,11 @@ ARml(
 \arguments{
 \item{y}{A univariate time series object.}
 
+\item{max_lag}{Maximum value of lag.}
+
 \item{xreg}{Optionally, a numerical vector or matrix of external regressors,
 which must have the same number of rows as y.
 (It should not be a data frame.).}
-
-\item{max_lag}{Maximum value of lag.}
 
 \item{caret_method}{A string specifying which classification or
 regression model to use.
@@ -53,6 +54,10 @@ The default is no pre-processing.
 See preProcess and trainControl on the procedures and how to adjust them.
 Pre-processing code is only designed to work when x is a simple matrix or
 data frame.}
+
+\item{cv}{Logical, if \code{cv = TRUE} model selection will be done via
+cross-validation. If \code{cv = FALSE} user need to provide a specific model
+via \code{tune_grid} argument.}
 
 \item{cv_horizon}{The number of consecutive values in test set sample.}
 
@@ -116,7 +121,7 @@ A list class of forecast containing the following elemets
 \item{newx}{A matrix containing regressors}
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+\Sexpr[results=rd, stage=render]{lifecycle::badge("maturing")}
 
 Autoregressive forecasting using various Machine Learning models.
 }

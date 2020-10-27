@@ -30,7 +30,7 @@ A list class of forecast containing the following elemets
 \item{newxreg}{A matrix containing regressors}
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+\Sexpr[results=rd, stage=render]{lifecycle::badge("maturing")}
 }
 \note{
 See \code{\link[forecast]{nnetar}}

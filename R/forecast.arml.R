@@ -2,7 +2,7 @@
 #' @title Forecasting an ARml object
 #' @description
 #'
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("maturing")}
 #'
 #' @param object A list class of ARml
 #' @param h forecast horizon
@@ -93,12 +93,12 @@ if(!is.null(lambda)){
   output <- list(
     x = object$y,
     mean = y,
-    lower = ts(data.frame("95%" = c(y - 1.96 * sd(y)),
-                          "80%" = c(y - 1.28 * sd(y))),
+    lower = ts(data.frame("95%" = c(y - 1.96 * sd(object$y)),
+                          "80%" = c(y - 1.28 * sd(object$y))),
                frequency = frequency(object$y),
                start = start(y)),
-    upper = ts( data.frame("95%" = c(y + 1.96 * sd(y)),
-                           "80%" = c(y + 1.28 * sd(y))),
+    upper = ts( data.frame("95%" = c(y + 1.96 * sd(object$y)),
+                           "80%" = c(y + 1.28 * sd(object$y))),
                 frequency =  frequency(object$y),
                 start = start(y)),
     fitted = object$fitted,

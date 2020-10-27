@@ -1,6 +1,6 @@
 #' Autoregressive forecasting using various Machine Learning models.
 #' @description
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("experimental")}
+#' \Sexpr[results=rd, stage=render]{lifecycle::badge("maturing")}
 #'
 #' Autoregressive forecasting using various Machine Learning models.
 #'
@@ -31,6 +31,9 @@
 #' See preProcess and trainControl on the procedures and how to adjust them.
 #'  Pre-processing code is only designed to work when x is a simple matrix or
 #'   data frame.
+#' @param cv Logical, if \code{cv = TRUE} model selection will be done via
+#' cross-validation. If \code{cv = FALSE} user need to provide a specific model
+#' via \code{tune_grid} argument.
 #' @param cv_horizon The number of consecutive values in test set sample.
 #' @param initial_window The initial number of consecutive values in each
 #' training set sample.
@@ -98,13 +101,14 @@
 #' @export
 
 ARml <- function(y,
-                 xreg = NULL,
                  max_lag = 5,
+                 xreg = NULL,
                  caret_method = "cubist",
                  pre_process = NULL,
+                 cv = TRUE,
                  cv_horizon = 4,
                  initial_window = length(y) - max_lag -  cv_horizon*2,
-                 fixed_window =FALSE,
+                 fixed_window = FALSE,
                  verbose = TRUE,
                  seasonal = TRUE,
                  K =  frequency(y)/2 -1,
@@ -215,6 +219,15 @@ ARml <- function(y,
     x <- cbind(x, xreg[ , , drop = FALSE])
   }
 
+  training_method <- "timeslice"
+
+  if(!cv){
+    training_method <- "none"
+    if(is.null(tune_grid)){
+      stop("Only one model should be specified in tune_grid with no resampling")
+    }
+  }
+
   model <- caret::train(x = x,
                       y = as.numeric(modified_y_2),
                       method = caret_method,
@@ -222,7 +235,7 @@ ARml <- function(y,
                       weights = NULL,
                       metric =  "RMSE",
                       trControl = caret::trainControl(
-                        method = "timeslice",
+                        method = training_method,
                         initialWindow = initial_window,
                         horizon = cv_horizon,
                         fixedWindow = fixed_window,
