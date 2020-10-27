@@ -1,0 +1,34 @@
+url: https://akai01.github.io/caretForecast/
+
+navbar:
+  structure:
+    left:
+    - home
+    - intro
+    - reference
+    - articles
+    - tutorials
+    - news
+    right: github
+  components:
+    home:
+      icon: fas fa-home fa-lg
+      href: index.html
+    reference:
+      text: Reference
+      href: reference/index.html
+
+reference:
+- title: All functions
+  desc: ~
+  contents:
+  - '`ARml`'
+  - '`ARml_grouped`'
+  - '`fc_plot`'
+  - '`forecast.ARml`'
+  - '`get_var_imp`'
+  - '`retail`'
+  - '`retail_wide`'
+  - '`split_ts`'
+  - '`suggested_methods`'
+  - '`ts_plot`'
