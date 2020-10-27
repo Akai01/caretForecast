@@ -9,6 +9,9 @@ development:
 template:
   bootswatch: spacelab
 
+news:
+- title: The news
+  contents: '`index`'
 
 reference:
 - title: All functions
