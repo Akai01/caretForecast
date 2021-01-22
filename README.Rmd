@@ -108,7 +108,7 @@ training_data <- dtlist$train
 
 testing_data <- dtlist$test
 
-fit <- ARml(training_data, max_lag = 12, caret_method = "svmLinear3", 
+fit <- ARml(training_data, max_lag = 12, caret_method = "svmLinear2", 
             verbose = FALSE)
 
 forecast(fit, h = length(testing_data), level = c(95,80))-> fc

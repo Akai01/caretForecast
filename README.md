@@ -125,110 +125,18 @@ training_data <- dtlist$train
 
 testing_data <- dtlist$test
 
-fit <- ARml(training_data, max_lag = 12, caret_method = "svmLinear3", 
+fit <- ARml(training_data, max_lag = 12, caret_method = "svmLinear2", 
             verbose = FALSE)
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
-
-#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
-#> param$cost, : No value provided for svr_eps. Using default of 0.1
 
 forecast(fit, h = length(testing_data), level = c(95,80))-> fc
 
 accuracy(fc, testing_data)
-#>                    ME     RMSE      MAE       MPE     MAPE      MASE       ACF1
-#> Training set 1.145920 11.71421 8.462603 0.6001636 6.051356 0.5466249  0.6159196
-#> Test set     2.444332 10.91173 8.269755 0.5648584 2.905481 0.5341683 -0.2357609
-#>              Theil's U
-#> Training set        NA
-#> Test set     0.4462313
+#>                      ME      RMSE       MAE        MPE     MAPE      MASE
+#> Training set  0.3016388  6.933042  4.969558 -0.1057475 3.724202 0.3209987
+#> Test set     16.6048808 20.812588 16.846600  5.7734741 5.875854 1.0881725
+#>                    ACF1 Theil's U
+#> Training set 0.06480896        NA
+#> Test set     0.33020419  0.884742
 
 fc_plot(fc) + 
   autolayer(testing_data, series = "testing_data")
