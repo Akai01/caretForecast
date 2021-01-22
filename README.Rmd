@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 [![Travis build status](https://travis-ci.com/Akai01/caretForecast.svg?branch=master)](https://travis-ci.com/Akai01/caretForecast)
 [![codecov](https://codecov.io/gh/Akai01/caretForecast/branch/master/graph/badge.svg)](https://codecov.io/gh/Akai01/caretForecast)
 [![CRAN status](https://www.r-pkg.org/badges/version/caretForecast)](https://CRAN.R-project.org/package=caretForecast)
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 The goal of caretForecast is to provide tools for forecasting time series data using various machine learning algorithms. (More details will follow...)
@@ -66,7 +66,7 @@ accuracy(fc, testing_data)
 
 
 fc_plot(fc) + 
-autolayer(testing_data, series = "testing_data")
+  autolayer(testing_data, series = "testing_data")
 
 
 
@@ -92,7 +92,7 @@ forecast(fit, h = length(testing_data), level = c(95,80))-> fc
 accuracy(fc, testing_data)
 
 fc_plot(fc) + 
-autolayer(testing_data, series = "testing_data")
+  autolayer(testing_data, series = "testing_data")
 
 
 
@@ -100,7 +100,7 @@ autolayer(testing_data, series = "testing_data")
 
 data(retail_wide, package = "caretForecast")
 
-i <- 5
+i <- 7
 
 dtlist <- caretForecast::split_ts(retail_wide[,i], test_size = 12)
 
@@ -108,7 +108,7 @@ training_data <- dtlist$train
 
 testing_data <- dtlist$test
 
-fit <- ARml(training_data, max_lag = 12, caret_method = "svmLinear", 
+fit <- ARml(training_data, max_lag = 12, caret_method = "svmLinear3", 
             verbose = FALSE)
 
 forecast(fit, h = length(testing_data), level = c(95,80))-> fc
@@ -116,7 +116,7 @@ forecast(fit, h = length(testing_data), level = c(95,80))-> fc
 accuracy(fc, testing_data)
 
 fc_plot(fc) + 
-autolayer(testing_data, series = "testing_data")
+  autolayer(testing_data, series = "testing_data")
 
 get_var_imp(fc)
 
@@ -143,11 +143,12 @@ forecast(fit, h = length(testing_data), level = c(95,80))-> fc
 accuracy(fc, testing_data)
 
 fc_plot(fc) + 
-autolayer(testing_data, series = "testing_data")
+  autolayer(testing_data, series = "testing_data")
 
 get_var_imp(fc)
 
 get_var_imp(fc, plot = F)
+
 
 
 

@@ -1,8 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-caretForecast
-=============
+# caretForecast
 
 <!-- badges: start -->
 
@@ -12,15 +11,14 @@ status](https://travis-ci.com/Akai01/caretForecast.svg?branch=master)](https://t
 [![CRAN
 status](https://www.r-pkg.org/badges/version/caretForecast)](https://CRAN.R-project.org/package=caretForecast)
 [![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 The goal of caretForecast is to provide tools for forecasting time
 series data using various machine learning algorithms. (More details
 will follow…)
 
-Installation
-------------
+## Installation
 
 The development version from [GitHub](https://github.com/) with:
 
@@ -29,8 +27,7 @@ The development version from [GitHub](https://github.com/) with:
 devtools::install_github("Akai01/caretForecast")
 ```
 
-Example
--------
+## Example
 
 ### Note: User can train any caret supported regression model.
 
@@ -72,7 +69,7 @@ accuracy(fc, testing_data)
 
 
 fc_plot(fc) + 
-autolayer(testing_data, series = "testing_data")
+  autolayer(testing_data, series = "testing_data")
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
@@ -108,7 +105,7 @@ accuracy(fc, testing_data)
 #> Test set     -0.1450719 0.1701567
 
 fc_plot(fc) + 
-autolayer(testing_data, series = "testing_data")
+  autolayer(testing_data, series = "testing_data")
 ```
 
 <img src="man/figures/README-example-2.png" width="100%" />
@@ -120,7 +117,7 @@ autolayer(testing_data, series = "testing_data")
 
 data(retail_wide, package = "caretForecast")
 
-i <- 5
+i <- 7
 
 dtlist <- caretForecast::split_ts(retail_wide[,i], test_size = 12)
 
@@ -128,21 +125,113 @@ training_data <- dtlist$train
 
 testing_data <- dtlist$test
 
-fit <- ARml(training_data, max_lag = 12, caret_method = "svmLinear", 
+fit <- ARml(training_data, max_lag = 12, caret_method = "svmLinear3", 
             verbose = FALSE)
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
+
+#> Warning in LiblineaR::LiblineaR(data = as.matrix(x), target = y, cost =
+#> param$cost, : No value provided for svr_eps. Using default of 0.1
 
 forecast(fit, h = length(testing_data), level = c(95,80))-> fc
 
 accuracy(fc, testing_data)
-#>                        ME     RMSE      MAE       MPE     MAPE      MASE
-#> Training set -0.004996011 5.218181 3.980904 -0.333970 4.500042 0.5563544
-#> Test set     -7.264572944 9.403773 7.652439 -8.319266 8.642448 1.0694725
-#>                    ACF1 Theil's U
-#> Training set 0.02901247        NA
-#> Test set     0.22464379 0.7207839
+#>                    ME     RMSE      MAE       MPE     MAPE      MASE       ACF1
+#> Training set 1.145920 11.71421 8.462603 0.6001636 6.051356 0.5466249  0.6159196
+#> Test set     2.444332 10.91173 8.269755 0.5648584 2.905481 0.5341683 -0.2357609
+#>              Theil's U
+#> Training set        NA
+#> Test set     0.4462313
 
 fc_plot(fc) + 
-autolayer(testing_data, series = "testing_data")
+  autolayer(testing_data, series = "testing_data")
 ```
 
 <img src="man/figures/README-example-3.png" width="100%" />
@@ -159,27 +248,27 @@ get_var_imp(fc, plot = F)
 #> 
 #>   only 20 most important variables shown (out of 22)
 #> 
-#>        Overall
-#> lag12 100.0000
-#> lag3   81.1655
-#> lag1   79.2218
-#> lag2   78.2771
-#> lag5   75.4255
-#> lag9   74.8507
-#> lag10  74.3075
-#> lag4   73.4707
-#> lag7   71.2428
-#> lag11  69.4001
-#> lag8   69.3380
-#> lag6   66.1550
-#> S5-12   6.4068
-#> S3-12   3.9841
-#> S1-12   3.8337
-#> C4-12   3.6437
-#> C3-12   2.1007
-#> S4-12   1.6039
-#> C2-12   0.9426
-#> C5-12   0.4801
+#>         Overall
+#> lag1  100.00000
+#> lag12  99.74827
+#> lag2   97.78807
+#> lag3   97.74610
+#> lag4   97.10962
+#> lag5   97.08285
+#> lag7   96.20291
+#> lag11  95.90430
+#> lag6   95.80115
+#> lag8   95.68963
+#> lag9   95.38585
+#> lag10  94.50733
+#> C1-12   0.68853
+#> S3-12   0.60001
+#> C2-12   0.50234
+#> C4-12   0.44290
+#> S5-12   0.41720
+#> S1-12   0.40638
+#> S2-12   0.09599
+#> C5-12   0.05234
 
 
 
@@ -208,7 +297,7 @@ accuracy(fc, testing_data)
 #> Test set     0.389409945 0.6513039
 
 fc_plot(fc) + 
-autolayer(testing_data, series = "testing_data")
+  autolayer(testing_data, series = "testing_data")
 ```
 
 <img src="man/figures/README-example-5.png" width="100%" />
