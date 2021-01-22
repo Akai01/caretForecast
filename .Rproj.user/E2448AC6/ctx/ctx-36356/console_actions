@@ -1,0 +1,14 @@
+{
+    "type": [
+        2,
+        2,
+        3,
+        2
+    ],
+    "data": [
+        "\nR version 3.6.3 (2020-02-29) -- \"Holding the Windsock\"\nCopyright (C) 2020 The R Foundation for Statistical Computing\nPlatform: x86_64-pc-linux-gnu (64-bit)\n\nR is free software and comes with ABSOLUTELY NO WARRANTY.\nYou are welcome to redistribute it under certain conditions.\nType 'license()' or 'licence()' for distribution details.\n\n  Natural language support but running in an English locale\n\nR is a collaborative project with many contributors.\nType 'contributors()' for more information and\n'citation()' on how to cite R or R packages in publications.\n\n",
+        "Type 'demo()' for some demos, 'help()' for on-line help, or\n'help.start()' for an HTML browser interface to help.\nType 'q()' to quit R.\n\n",
+        "Registered S3 method overwritten by 'quantmod':\n  method            from\n  as.zoo.data.frame zoo \n",
+        "\nRestarting R session...\n\n"
+    ]
+}

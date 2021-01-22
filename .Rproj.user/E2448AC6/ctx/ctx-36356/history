@@ -1,0 +1,512 @@
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "svmLinear", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+c(test)- c(fc$mean)
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "svmLinear2", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+c(test)- c(fc$mean)
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "svmLinear3", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+caretForecast::suggested_methods()
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "gaussprLinear", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+c(test)- c(fc$mean)
+caretForecast::suggested_methods()
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "bridge", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+c(test)- c(fc$mean)
+caretForecast::suggested_methods()
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "foba", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+c(test)- c(fc$mean)
+caretForecast::suggested_methods()
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "foba", K= 3, lambda = "icr")
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "icr", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+c(test)- c(fc$mean)
+caretForecast::suggested_methods()
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "icr", K= 3, lambda = "gcvEarth")
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "gcvEarth", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+c(test)- c(fc$mean)
+caretForecast::suggested_methods()
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "ppr", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+c(test)- c(fc$mean)
+caretForecast::suggested_methods()
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "ridge", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+caretForecast::suggested_methods()
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "glmboost", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "cubist", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+c(test)- c(fc$mean)
+caretForecast::get_var_imp(fit, plot = T)
+qfc <- qforecast::lara(train, h = length(test))
+qforecast::fc_plot(qfc) + autolayer(test)
+forecast::accuracy(qfc$mean, test)
+c(test)- c(qfc$mean)
+fit <- caretForecast::ARml(at_ts, max_lag = 30, seasonal = T,
+caret_method = "cubist", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = 1)
+fc
+forecast::auto.arima(at_ts, lambda = "auto")
+forecast::auto.arima(at_ts, lambda = "au")
+forecast::auto.arima
+fit <- caretForecast::ARml(at_ts, max_lag = 30, seasonal = T,
+caret_method = "cubist", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = 1)
+fc
+qfc <- qforecast::lara(at_ts, h = length(test))
+qfc
+fit <- caretForecast::ARml(at_ts, max_lag = 30, seasonal = T,
+caret_method = "cubist", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = 1)
+fc
+qfc <- qforecast::lara(at_ts, h = length(test))
+qfc
+dta <- data.table::fread("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+at <- dta%>%dplyr::filter(`Country/Region` == "Austria")
+at <- at[,-c(1,3,4)]%>%pivot_longer(-`Country/Region`, names_to = "date",
+values_to = "cases")
+at$cases <- diff(c(0, at$cases))
+at_ts <- ts(at$cases, start = c(1,1), frequency = 7)
+qforecast::ts_plot(at_ts)
+df <- qforecast::split_ts(at_ts, 1)
+train <- df$train
+test <- df$test
+caretForecast::suggested_methods()
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "cubist", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+c(test)- c(fc$mean)
+devtools::document()
+library(tidyverse)
+dta <- data.table::fread("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+at <- dta%>%dplyr::filter(`Country/Region` == "Austria")
+at <- at[,-c(1,3,4)]%>%pivot_longer(-`Country/Region`, names_to = "date",
+values_to = "cases")
+at$cases <- diff(c(0, at$cases))
+at_ts <- ts(at$cases, start = c(1,1), frequency = 7)
+qforecast::ts_plot(at_ts)
+df <- qforecast::split_ts(at_ts, 1)
+train <- df$train
+test <- df$test
+caretForecast::suggested_methods()
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T,
+caret_method = "cubist", K= 3, lambda = "auto")
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=FALSE,
+caret_method = "cubist", K= 3, lambda = "auto")
+devtools::document()
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=FALSE,
+caret_method = "cubist", K= 3, lambda = "auto")
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=FALSE,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = expand_grid(committees=20, neighbors=9))
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+c(test)- c(fc$mean)
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = expand_grid(committees=20, neighbors=9))
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = NULL)
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = expand_grid(committees=c(20, 1, 10),
+neighbors=c(8,9,15)))
+expand_grid("committees"=c(20, 1, 10),
+"neighbors"=c(8,9,15))
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = expand_grid("committees"=c(20, 1, 10),
+"neighbors"=c(8,9,15)))
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = expand_grid("committees"=c(20, 1, 10),
+"neighbors"=c(9)))
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = expand_grid("committees"=c(20, 1, 10),
+"neighbors"=c(1,9)))
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = expand_grid("committees"=c( 1, 10),
+"neighbors"=c(1,9)))
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = expand_grid("committees"=c( 1, 10),
+"neighbors"=c(9)))
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = NULL)
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = expand_grid("committees"=c(20, 1, 10),
+"neighbors"=c(8,9,15)))
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = NULL)
+fit$model$results
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = expand(committees = c(1, 10, 20), neighbors = c(0,5,9)))
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = expand.grid(committees = c(1, 10, 20), neighbors = c(0,5,9)))
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = expand_grid(committees = c(1, 10, 20),
+neighbors = c(0,5,9)))
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = expand.grid(committees = c(1, 10, 20),
+neighbors = c(0,5,9)))
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=F,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = expand.grid(committees = c(1, 10, 20),
+neighbors = c(0,5,9)))
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=F,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = expand.grid(committees = c( 20),
+neighbors = c(0)))
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+c(test)- c(fc$mean)
+?caretForecast::ARml
+devtools::document()
+?devtools::document()
+dta <- data.table::fread("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+at <- dta%>%dplyr::filter(`Country/Region` == "Austria")
+at <- at[,-c(1,3,4)]%>%pivot_longer(-`Country/Region`, names_to = "date",
+values_to = "cases")
+library(tidyverse)
+dta <- data.table::fread("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+at <- dta%>%dplyr::filter(`Country/Region` == "Austria")
+at <- at[,-c(1,3,4)]%>%pivot_longer(-`Country/Region`, names_to = "date",
+values_to = "cases")
+at$cases <- diff(c(0, at$cases))
+at_ts <- ts(at$cases, start = c(1,1), frequency = 7)
+qforecast::ts_plot(at_ts)
+df <- qforecast::split_ts(at_ts, 1)
+train <- df$train
+test <- df$test
+caretForecast::suggested_methods()
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=F,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = NULL)
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = NULL)
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+c(test)- c(fc$mean)
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = NULL, fixed_window = T)
+fc <- forecast::forecast(fit, h = length(test))
+fc
+caretForecast::fc_plot(fc) + autolayer(test)
+forecast::accuracy(fc, test)
+c(test)- c(fc$mean)
+caretForecast::get_var_imp(fit, plot = T)
+qfc <- qforecast::lara(train, h = length(test))
+qforecast::fc_plot(qfc) + autolayer(test)
+forecast::accuracy(qfc$mean, test)
+c(test)- c(qfc$mean)
+?ARml
+devtools::document()
+?ARml
+devtools::document()
+?ARml
+citation("xgboost")
+source('~/Documents/DataScience/Quantics_data_science/caretForecast/R/arml.R')
+library(tidyverse)
+dta <- data.table::fread("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+at <- dta%>%dplyr::filter(`Country/Region` == "Austria")
+at <- at[,-c(1,3,4)]%>%pivot_longer(-`Country/Region`, names_to = "date",
+values_to = "cases")
+at$cases <- diff(c(0, at$cases))
+?rnorm()
+rnorm(10)
+rpois(10)
+rpois(10, 12)
+exapmple_func <- function(x , args_norm = list(mean = 0, sd = 1),
+args_pois = list(lamda = 1)){
+args_norm[["x"]] <- x
+args_pois[["n"]] <- x
+norm <- do.call(rnorm,args = args_norm)
+pois <- do.call(rpois,args = args_pois)
+output <- data.frame("norm" = norm, "pois" = pois)
+return(output)
+}
+exapmple_func(12)
+?rnorm
+exapmple_func <- function(n , args_norm = list(mean = 0, sd = 1),
+args_pois = list(lamda = 1)){
+args_norm[["n"]] <- n
+args_pois[["n"]] <- n
+norm <- do.call(rnorm,args = args_norm)
+pois <- do.call(rpois,args = args_pois)
+output <- data.frame("norm" = norm, "pois" = pois)
+return(output)
+}
+exapmple_func(12)
+?rpois
+exapmple_func <- function(n , args_norm = list(mean = 0, sd = 1),
+args_pois = list(lambda = 1)){
+args_norm[["n"]] <- n
+args_pois[["n"]] <- n
+norm <- do.call(rnorm,args = args_norm)
+pois <- do.call(rpois,args = args_pois)
+output <- data.frame("norm" = norm, "pois" = pois)
+return(output)
+}
+?rpois
+exapmple_func(12)
+exapmple_func(12)
+exapmple_func(12, args_norm = list(mean = 100))
+exapmple_func(12, args_norm = list(mean = 100), args_pois = list(lambda = 100))
+library(purrr)
+DoAnalysis <- function(obj, nS1 = 40, nS2 = 40, nS3 = 20, cutoff) {
+cumS2 <- nS1 + nS2      ## this is the total number of patients at the end of Stage 2
+nmax  <- cumS2 + nS3    ## this is the total number of patients at the end of study
+## compute number of events for 1st stage
+Res_n <- sum(obj[1:nS1]) ## this is the number of response in Stage 1
+## compute number of events for 2nd stage
+Res_n2 <- sum(obj[1:cumS2]) ## this is the number of response in Stage 2
+### Now, it is the final analysis
+Res_F <- sum(obj[1:nmax]) ## this is the number of response in Final
+list(Res_n, Res_n2, Res_F)
+}
+ProcessRes <- function(results, cutoff){
+part1 <- part2 <- part3 <- c()
+for (i in 1:length(results)){
+part1 <- as.vector(c(part1, results[[i]][[1]]))
+part2 <- as.vector(c(part2, results[[i]][[2]]))
+}
+resultsTypeI <- as.data.frame(cbind(part1, part2, part3))
+names(resultsTypeI) <- c("Res_n", "Res_n2")
+resultsTypeI$fulFlag <- ifelse(resultsTypeI$Res_n2 < cutoff, 1, 0)
+R_1 <- mean(resultsTypeI$fulFlag)
+return(c(R_1))
+}
+set.seed(20201022)
+PerformSim <- function(nsim, nS1 = 40, nS2 = 40, nS3 = 20, cutoff = 26){
+## this is the simulation
+total <- nS1 + nS2 + nS3
+SimuTypeI <- map(1:nsim, ~rbinom(total, 1, 0.4))
+results <- map(SimuTypeI, ~DoAnalysis(.x))
+ProcessRes(results = results)
+}
+PerformSim(nsim = 1000)
+devtools::check()
+devtools::document()
+?ARml
+devtools::document()
+devtools::document()
+devtools::document()
+devtools::check()
+devtools::check()
+usethis::use_pkgdown()
+?usethis::use_pkgdown()
+install.packages("pkgdown")
+install.packages("textshaping")
+install.packages("pkgdown")
+?usethis::use_pkgdown()
+usethis::use_pkgdown()
+pkgdown::build_site()
+pkgdown::build_site()
+?usethis::use_github_action
+usethis::use_github_action("pkgdown")
+pkgdown::build_site()
+usethis::use_github_action("caretForecast")
+usethis::use_github_action("pkgdown")
+pkgdown::build_site()
+?pkgdown::autolink_html()
+pkgdown::autolink_html()
+pkgdown::init_site()
+?pkgdown::init_site()
+pkgdown::init_site()
+devtools::check()
+?usethis::use_pkgdown_travis()
+usethis::use_pkgdown_travis()
+usethis::use_pkgdown()
+usethis::use_pkgdown_travis()
+pkgdown::build_site()
+usethis::use_github_action("pkgdown")
+pkgdown::init_site()
+devtools::check()
+#usethis::use_gitlab_ci()
+usethis::use_travis()
+usethis::use_pkgdown_travis()
+usethis::use_github_action("pkgdown")
+pkgdown::init_site()
+pkgdown::build_site()
+usethis::use_pkgdown_travis()
+usethis::use_pkgdown_travis()
+pkgdown::build_site()
+devtools::document()
+devtools::check()
+inteRgrate::check_gitignore()
+inteRgrate::check_gitignore()
+devtools::check()
+devtools::build_readme()
+devtools::build_readme()
+devtools::build_readme()
+pkgdown::build_site()
+usethis::use_pkgdown()
+pkgdown::build_home()
+usethis::use_pkgdown()
+pkgdown::build_home()
+pkgdown::deploy_site_github()
+pkgdown::build_site()
+pkgdown::deploy_site_github()
+usethis::use_pkgdown()
+pkgdown::build_site()
+usethis::use_pkgdown()
+# Run to build the website
+pkgdown::build_site()
+# Run to build the website
+pkgdown::build_site()
+pkgdown::deploy_site_github()
+devtools::check()
+template_navbar(path = ".")
+pkgdown::template_navbar(path = ".")
+pkgdown::template_articles()
+pkgdown::template_navbar()
+pkgdown::build_news()
+?pkgdown::build_site()
+pkgdown::build_site()
+?pkgdown::in_pkgdown()
+pkgdown::template_articles()
+pkgdown::template_reference()
+pkgdown::navbar_structure
+library(pkgdown)
+?navbar_structure()
+pkgdown:::navbar_structure
+pkgdown::in_pkgdown()
+?pkgdown::in_pkgdown()
+pkgdown::
+pkgdown::deploy_site_github()
+pkgdown::build_home()
+pkgdown::template_articles()
+library(tidyverse)
+dta <- data.table::fread("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+at <- dta%>%dplyr::filter(`Country/Region` == "Austria")
+at <- at[,-c(1,3,4)]%>%pivot_longer(-`Country/Region`, names_to = "date",
+values_to = "cases")
+View(at)
+at$cases <- diff(c(0, at$cases))
+at_ts <- ts(at$cases, start = c(1,1), frequency = 7)
+qforecast::ts_plot(at_ts)
+df <- qforecast::split_ts(at_ts, 1)
+train <- df$train
+test <- df$test
+caretForecast::suggested_methods()
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+caret_method = "cubist", K= 3, lambda = "auto",
+tune_grid = NULL, fixed_window = T)
+fc <- forecast::forecast(fit, h = length(test))
+fit <- caretForecast::ARml(at_ts, max_lag = 30, seasonal = T,
+caret_method = "cubist", K= 3, lambda = "auto")
+fc <- forecast::forecast(fit, h = 1)
+fc
+qfc <- qforecast::lara(at_ts, h = length(test))
+qfc
+devtools::document()
+training_data <- window(AirPassengers, end = c(1960, 1))
+testing_data <- window(AirPassengers, start = c(1960, 2))
+fit <- ARml(training_data, max_lag = 12, caret_method = "nnet",
+lambda = NULL, pre_process = c("center", "scale"))
+debug(ARml)
+fit <- ARml(training_data, max_lag = 12, caret_method = "nnet",
+lambda = NULL, pre_process = c("center", "scale"))
+View(x)
+modified_y_2
+fit <- ARml(training_data, max_lag = 12, caret_method = "nnet",
+lambda = NULL, pre_process = c( "scale"))
+undebug(ARml)
+fit <- ARml(training_data, max_lag = 12, caret_method = "nnet",
+lambda = NULL, pre_process = c( "scale"))
+fit <- ARml(training_data, max_lag = 12, caret_method = "nnet",
+lambda = NULL, pre_process = NULL)
+debug(caret::train)
+fit <- ARml(training_data, max_lag = 12, caret_method = "nnet",
+lambda = NULL, pre_process = NULL)
+View(models)
+View(performance)
+View(seeds)
+View(tmp)
+View(trainInfo)
+View(trainInfo[["loop"]])
+View(trControl)
+usethis::use_lifecycle_badge("experimental")
+library(caretForecast)
+library(caretForecast)
+library(forecast)
+data(retail_wide, package = "caretForecast")
+i <- 8
+install.packages("pkgdown")
+install.packages("pkgdown")
+install.packages("textshaping")

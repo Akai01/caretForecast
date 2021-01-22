@@ -1,0 +1,55 @@
+library(tidyverse)
+
+dta <- data.table::fread("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+
+at <- dta%>%dplyr::filter(`Country/Region` == "Austria")
+
+at <- at[,-c(1,3,4)]%>%pivot_longer(-`Country/Region`, names_to = "date",
+                                    values_to = "cases")
+at$cases <- diff(c(0, at$cases))
+
+at_ts <- ts(at$cases, start = c(1,1), frequency = 7)
+
+qforecast::ts_plot(at_ts)
+df <- qforecast::split_ts(at_ts, 1)
+train <- df$train
+test <- df$test
+
+caretForecast::suggested_methods()
+
+fit <- caretForecast::ARml(train, max_lag = 30, seasonal = T, cv=T,
+                           caret_method = "cubist", K= 3, lambda = "auto",
+                           tune_grid = NULL, fixed_window = T)
+
+fc <- forecast::forecast(fit, h = length(test)) 
+
+fc
+
+caretForecast::fc_plot(fc) + autolayer(test)
+
+forecast::accuracy(fc, test)
+
+c(test)- c(fc$mean)
+
+caretForecast::get_var_imp(fit, plot = T)
+
+qfc <- qforecast::lara(train, h = length(test))
+
+qforecast::fc_plot(qfc) + autolayer(test)
+
+forecast::accuracy(qfc$mean, test)
+
+c(test)- c(qfc$mean)
+
+# final forecast ------------
+
+fit <- caretForecast::ARml(at_ts, max_lag = 30, seasonal = T, 
+                           caret_method = "cubist", K= 3, lambda = "auto")
+
+fc <- forecast::forecast(fit, h = 1) 
+
+fc
+
+qfc <- qforecast::lara(at_ts, h = length(test))
+
+qfc

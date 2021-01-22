@@ -1,0 +1,28 @@
+{
+    "id": "F55AE104",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1606259459790.0,
+    "source_on_save": false,
+    "relative_order": 14,
+    "properties": {
+        "id": "61027e198ad74f6c84d00adabefa6e1b",
+        "name": "tmp",
+        "title": "tmp",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1603807504,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1606259459790,
+    "read_only": false,
+    "read_only_alternatives": []
+}

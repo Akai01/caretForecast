@@ -1,0 +1,25 @@
+{
+    "id": "4E69A307",
+    "path": "~/Documents/DataScience/Quantics_data_science/caretForecast/R/arml.R",
+    "project_path": "R/arml.R",
+    "type": "r_source",
+    "hash": "4201946189",
+    "contents": "",
+    "dirty": false,
+    "created": 1606259038695.0,
+    "source_on_save": false,
+    "relative_order": 8,
+    "properties": {
+        "cursorPosition": "230,11",
+        "scrollLine": "0",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1603806217,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1603806217,
+    "read_only": false,
+    "read_only_alternatives": []
+}

@@ -1,0 +1,26 @@
+{
+    "id": "A17AF680",
+    "path": "~/Documents/DataScience/Quantics_data_science/dev/package_dev.R",
+    "project_path": null,
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1607893227475.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "75,0",
+        "scrollLine": "59"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1611307691,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1611307691970,
+    "read_only": false,
+    "read_only_alternatives": []
+}

@@ -1,0 +1,28 @@
+{
+    "id": "34C480DA",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1606259474701.0,
+    "source_on_save": false,
+    "relative_order": 17,
+    "properties": {
+        "id": "fa156fcb93d84fe5bce85b64abe808e7",
+        "name": "trControl",
+        "title": "trControl",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1603807504,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1606259474701,
+    "read_only": false,
+    "read_only_alternatives": []
+}

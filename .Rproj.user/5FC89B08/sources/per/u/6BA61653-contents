@@ -1,0 +1,9 @@
+devtools::document()
+
+training_data <- window(AirPassengers, end = c(1960, 1))
+
+testing_data <- window(AirPassengers, start = c(1960, 2))
+
+
+fit <- ARml(training_data, max_lag = 12, caret_method = "nnet",
+            lambda = NULL, pre_process = c( "scale"))

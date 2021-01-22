@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://akai01.github.io/caretForecast//index.html</loc>
+  </url>
+  <url>
+    <loc>https://akai01.github.io/caretForecast//reference/ARml.html</loc>
+  </url>
+  <url>
+    <loc>https://akai01.github.io/caretForecast//reference/ARml_grouped.html</loc>
+  </url>
+  <url>
+    <loc>https://akai01.github.io/caretForecast//reference/fc_plot.html</loc>
+  </url>
+  <url>
+    <loc>https://akai01.github.io/caretForecast//reference/forecast.ARml.html</loc>
+  </url>
+  <url>
+    <loc>https://akai01.github.io/caretForecast//reference/get_var_imp.html</loc>
+  </url>
+  <url>
+    <loc>https://akai01.github.io/caretForecast//reference/retail.html</loc>
+  </url>
+  <url>
+    <loc>https://akai01.github.io/caretForecast//reference/retail_wide.html</loc>
+  </url>
+  <url>
+    <loc>https://akai01.github.io/caretForecast//reference/split_ts.html</loc>
+  </url>
+  <url>
+    <loc>https://akai01.github.io/caretForecast//reference/suggested_methods.html</loc>
+  </url>
+  <url>
+    <loc>https://akai01.github.io/caretForecast//reference/ts_plot.html</loc>
+  </url>
+</urlset>
