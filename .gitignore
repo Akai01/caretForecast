@@ -9,7 +9,6 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 .Renviron
-docs/
 po/*~
 .Rapp.history
 .RData
