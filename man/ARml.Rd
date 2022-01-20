@@ -40,10 +40,8 @@ which must have the same number of rows as y.
 \item{caret_method}{A string specifying which classification or
 regression model to use.
 Possible values are found using names(getModelInfo()).
-See \url{http://topepo.github.io/caret/train-models-by-tag.html}.
 A list of functions can also be passed for a custom model function.
-See \url{http://topepo.github.io/caret/using-your-own-model-in-train.html}
-for details.}
+See \url{http://topepo.github.io/caret/} for details.}
 
 \item{pre_process}{A string vector that defines a pre-processing of the
 predictor data.
@@ -111,26 +109,22 @@ should the function use it?}
 }
 \value{
 A list class of forecast containing the following elemets
-\item{x}{The input time series}
-\item{method}{The name of the forecasting method as a character string}
-\item{mean}{Point forecasts as a time series}
-\item{lower}{Lower limits for prediction intervals}
-\item{upper}{Upper limits for prediction intervals}
-\item{level}{The confidence values associated with the prediction intervals}
-\item{model}{A list containing information about the fitted model}
-\item{newx}{A matrix containing regressors}
+\itemize{
+\item x : The input time series
+\item method : The name of the forecasting method as a character string
+\item mean : Point forecasts as a time series
+\item lower : Lower limits for prediction intervals
+\item upper : Upper limits for prediction intervals
+\item level : The confidence values associated with the prediction intervals
+\item model : A list containing information about the fitted model
+\item newx : A matrix containing regressors
+}
 }
 \description{
-\Sexpr[results=rd, stage=render]{lifecycle::badge("maturing")}
-
 Autoregressive forecasting using various Machine Learning models.
-}
-\note{
-See \code{\link[forecast]{nnetar}}
 }
 \examples{
 \dontrun{
-library(forecast)
 
 library(caretForecast)
 

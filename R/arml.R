@@ -1,15 +1,9 @@
 #' Autoregressive forecasting using various Machine Learning models.
-#' @description
-#' \Sexpr[results=rd, stage=render]{lifecycle::badge("maturing")}
 #'
-#' Autoregressive forecasting using various Machine Learning models.
-#'
-#' @import forecast
-#' @import caret
-#' @import tseries
 #' @importFrom methods is
 #' @importFrom stats frequency is.ts predict sd start time ts
-#' @import lifecycle
+#' @importFrom forecast is.constant na.interp BoxCox.lambda BoxCox InvBoxCox
+#' @importFrom caret train trainControl
 #' @param y  A univariate time series object.
 #' @param xreg Optionally, a numerical vector or matrix of external regressors,
 #' which must have the same number of rows as y.
@@ -18,10 +12,8 @@
 #' @param caret_method A string specifying which classification or
 #' regression model to use.
 #' Possible values are found using names(getModelInfo()).
-#' See \url{http://topepo.github.io/caret/train-models-by-tag.html}.
 #' A list of functions can also be passed for a custom model function.
-#' See \url{http://topepo.github.io/caret/using-your-own-model-in-train.html}
-#' for details.
+#' See \url{http://topepo.github.io/caret/} for details.
 #' @param pre_process A string vector that defines a pre-processing of the
 #' predictor data.
 #' Current possibilities are "BoxCox", "YeoJohnson", "expoTrans", "center",
@@ -70,19 +62,18 @@
 #' should the function use it?
 #' @param ... Ignored.
 #' @return A list class of forecast containing the following elemets
-#' \item{x}{The input time series}
-#' \item{method}{The name of the forecasting method as a character string}
-#' \item{mean}{Point forecasts as a time series}
-#' \item{lower}{Lower limits for prediction intervals}
-#' \item{upper}{Upper limits for prediction intervals}
-#' \item{level}{The confidence values associated with the prediction intervals}
-#' \item{model}{A list containing information about the fitted model}
-#' \item{newx}{A matrix containing regressors}
+#' * x : The input time series
+#' * method : The name of the forecasting method as a character string
+#' * mean : Point forecasts as a time series
+#' * lower : Lower limits for prediction intervals
+#' * upper : Upper limits for prediction intervals
+#' * level : The confidence values associated with the prediction intervals
+#' * model : A list containing information about the fitted model
+#' * newx : A matrix containing regressors
 #' @author Resul Akay
-#' @note See \code{\link[forecast]{nnetar}}
+#'
 #' @examples
 #' \dontrun{
-#'library(forecast)
 #'
 #'library(caretForecast)
 #'

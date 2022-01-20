@@ -18,8 +18,7 @@ if(require(testthat)){
     library(forecast)
     ARml(AirPassengers, caret_method = "lm", max_lag = 10,
          xreg = forecast::seasonaldummy(AirPassengers), seasonal = F) -> fit
-    forecast(fit, h = 2,
-             xreg = forecast::seasonaldummy(AirPassengers, h = 2)) -> fc
+    forecast(fit, h = 2, xreg = forecast::seasonaldummy(AirPassengers, h = 2)) -> fc
     values <- round(c(fc$mean))
     expect_that(values, equals(c(447, 430)))
 
