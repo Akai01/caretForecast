@@ -42,9 +42,7 @@ different ML models.
 
 
 ```{r example}
-
 library(caretForecast)
-library(forecast)
 
 # Forecasting Retail Data with glmboost
 data(retail_wide, package = "caretForecast")
@@ -60,12 +58,12 @@ testing_data <- dtlist$test
 fit <- ARml(training_data, max_lag = 12, caret_method = "glmboost", 
             verbose = FALSE)
 
-forecast(fit, h = length(testing_data), level = c(95,80))-> fc
+forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
 
 accuracy(fc, testing_data)
 
 
-fc_plot(fc) + 
+autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 
 
@@ -87,11 +85,11 @@ testing_data <- dtlist$test
 fit <- ARml(training_data, max_lag = 12, caret_method = "cubist", 
             verbose = FALSE)
 
-forecast(fit, h = length(testing_data), level = c(95,80))-> fc
+forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
 
 accuracy(fc, testing_data)
 
-fc_plot(fc) + 
+autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 
 
@@ -111,11 +109,11 @@ testing_data <- dtlist$test
 fit <- ARml(training_data, max_lag = 12, caret_method = "svmLinear2", 
             verbose = FALSE)
 
-forecast(fit, h = length(testing_data), level = c(95,80))-> fc
+forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
 
 accuracy(fc, testing_data)
 
-fc_plot(fc) + 
+autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 
 get_var_imp(fc)
@@ -138,20 +136,16 @@ testing_data <- dtlist$test
 fit <- ARml(training_data, max_lag = 12, caret_method = "ridge", 
             verbose = FALSE)
 
-forecast(fit, h = length(testing_data), level = c(95,80))-> fc
+forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
 
 accuracy(fc, testing_data)
 
-fc_plot(fc) + 
+autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 
 get_var_imp(fc)
 
 get_var_imp(fc, plot = F)
-
-
-
-
 ```
 
 

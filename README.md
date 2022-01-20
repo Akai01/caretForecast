@@ -39,8 +39,6 @@ library(caretForecast)
 #> Registered S3 method overwritten by 'quantmod':
 #>   method            from
 #>   as.zoo.data.frame zoo
-library(forecast)
-
 # Forecasting Retail Data with glmboost
 data(retail_wide, package = "caretForecast")
 
@@ -56,8 +54,7 @@ fit <- ARml(training_data, max_lag = 12, caret_method = "glmboost",
             verbose = FALSE)
 #> Loading required package: lattice
 #> Loading required package: ggplot2
-
-forecast(fit, h = length(testing_data), level = c(95,80))-> fc
+forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
 
 accuracy(fc, testing_data)
 #>                     ME     RMSE      MAE        MPE     MAPE      MASE
@@ -66,17 +63,13 @@ accuracy(fc, testing_data)
 #>                   ACF1 Theil's U
 #> Training set 0.5707204        NA
 #> Test set     0.3971016 0.7547318
-
-
-fc_plot(fc) + 
+autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
 
 ``` r
-
-
 ## NOTE : Promotions, holidays, and other external variables can be added in the model via xreg argument. Please look at the documentation of ARml.
 
 # Forecasting Retail Data with cubist regression
@@ -94,7 +87,7 @@ testing_data <- dtlist$test
 fit <- ARml(training_data, max_lag = 12, caret_method = "cubist", 
             verbose = FALSE)
 
-forecast(fit, h = length(testing_data), level = c(95,80))-> fc
+forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
 
 accuracy(fc, testing_data)
 #>                     ME     RMSE      MAE         MPE     MAPE      MASE
@@ -103,16 +96,13 @@ accuracy(fc, testing_data)
 #>                    ACF1 Theil's U
 #> Training set  0.2309758        NA
 #> Test set     -0.1450719 0.1701567
-
-fc_plot(fc) + 
+autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 ```
 
 <img src="man/figures/README-example-2.png" width="100%" />
 
 ``` r
-
-
 # Forecasting using Support Vector Machines with Linear Kernel
 
 data(retail_wide, package = "caretForecast")
@@ -128,7 +118,7 @@ testing_data <- dtlist$test
 fit <- ARml(training_data, max_lag = 12, caret_method = "svmLinear2", 
             verbose = FALSE)
 
-forecast(fit, h = length(testing_data), level = c(95,80))-> fc
+forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
 
 accuracy(fc, testing_data)
 #>                      ME      RMSE       MAE        MPE     MAPE      MASE
@@ -137,8 +127,7 @@ accuracy(fc, testing_data)
 #>                    ACF1 Theil's U
 #> Training set 0.06480896        NA
 #> Test set     0.33020419  0.884742
-
-fc_plot(fc) + 
+autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 ```
 
@@ -177,9 +166,6 @@ get_var_imp(fc, plot = F)
 #> S1-12   0.40638
 #> S2-12   0.09599
 #> C5-12   0.05234
-
-
-
 # Forecasting using Ridge Regression
 data(retail_wide, package = "caretForecast")
 
@@ -194,7 +180,7 @@ testing_data <- dtlist$test
 fit <- ARml(training_data, max_lag = 12, caret_method = "ridge", 
             verbose = FALSE)
 
-forecast(fit, h = length(testing_data), level = c(95,80))-> fc
+forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
 
 accuracy(fc, testing_data)
 #>                     ME     RMSE      MAE        MPE     MAPE      MASE
@@ -203,8 +189,7 @@ accuracy(fc, testing_data)
 #>                     ACF1 Theil's U
 #> Training set 0.004518837        NA
 #> Test set     0.389409945 0.6513039
-
-fc_plot(fc) + 
+autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 ```
 
