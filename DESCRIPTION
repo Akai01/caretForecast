@@ -1,6 +1,6 @@
 Package: caretForecast
 Title: Time Series Forecasting Using Caret Infrastructure
-Version: 0.0.1.9001
+Version: 0.0.2
 Authors@R: 
     person(given = "Resul",
            family = "Akay",
