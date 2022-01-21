@@ -83,11 +83,11 @@
 #'
 #'test <- window(AirPassengers, start = c(1960, 1))
 #'
-#'ARml(train_data, caret_method = "svmLinear2", max_lag = 12) -> fit
+#'ARml(train_data, caret_method = "cubist", max_lag = 12) -> fit
 #'
-#'forecast(fit, h = length(test), level = NULL, PI = T) -> fc
+#'forecast(fit, h = length(test)) -> fc
 #'
-#'fc_plot(fc)+ autolayer(test)
+#'autoplot(fc) + autolayer(test)
 #'
 #'accuracy(fc, test)
 #' }

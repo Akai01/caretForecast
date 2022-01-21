@@ -9,3 +9,4 @@
 ^pkgdown$
 ^\.github$
 ^_config.yml
+^CRAN-RELEASE$

@@ -64,12 +64,12 @@ forecast_loop <- function(object, xreg, h) {
 #'
 #' test <- window(AirPassengers, start = c(1960, 1))
 #'
-#' ARml(train, caret_method = "svmLinear2", max_lag = 12, trend_method = "none",
+#' ARml(train, caret_method = "cubist", max_lag = 12, trend_method = "none",
 #'  pre_process = "center") -> fit
 #'
-#' forecast(fit, h = length(test), level = NULL, PI = T) -> fc
+#' forecast(fit, h = length(test), level = c(80,95), PI = TRUE) -> fc
 #'
-#' plot(fc)+ autolayer(test)
+#' autoplot(fc)+ autolayer(test)
 #'
 #' accuracy(fc, test)
 #'
