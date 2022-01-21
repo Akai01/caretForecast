@@ -1,9 +1,0 @@
-pandoc: 2.11.2
-pkgdown: 1.6.1
-pkgdown_sha: ~
-articles: {}
-last_built: 2021-01-25T15:13Z
-urls:
-  reference: https://akai01.github.io/caretForecast//reference
-  article: https://akai01.github.io/caretForecast//articles
-
