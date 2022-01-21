@@ -9,6 +9,7 @@ ARml(
   max_lag = 5,
   xreg = NULL,
   caret_method = "cubist",
+  metric = "RMSE",
   pre_process = NULL,
   cv = TRUE,
   cv_horizon = 4,
@@ -42,6 +43,9 @@ regression model to use.
 Possible values are found using names(getModelInfo()).
 A list of functions can also be passed for a custom model function.
 See \url{http://topepo.github.io/caret/} for details.}
+
+\item{metric}{A string that specifies what summary metric will be used to
+select the optimal model. See \code{?caret::train}.}
 
 \item{pre_process}{A string vector that defines a pre-processing of the
 predictor data.

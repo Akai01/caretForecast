@@ -14,6 +14,8 @@
 #' Possible values are found using names(getModelInfo()).
 #' A list of functions can also be passed for a custom model function.
 #' See \url{http://topepo.github.io/caret/} for details.
+#' @param metric A string that specifies what summary metric will be used to
+#' select the optimal model. See \code{?caret::train}.
 #' @param pre_process A string vector that defines a pre-processing of the
 #' predictor data.
 #' Current possibilities are "BoxCox", "YeoJohnson", "expoTrans", "center",
@@ -95,6 +97,7 @@ ARml <- function(y,
                  max_lag = 5,
                  xreg = NULL,
                  caret_method = "cubist",
+                 metric = "RMSE",
                  pre_process = NULL,
                  cv = TRUE,
                  cv_horizon = 4,
@@ -224,7 +227,7 @@ ARml <- function(y,
                       method = caret_method,
                       preProcess = pre_process,
                       weights = NULL,
-                      metric =  "RMSE",
+                      metric =  metric,
                       trControl = caret::trainControl(
                         method = training_method,
                         initialWindow = initial_window,

@@ -20,6 +20,7 @@ Imports:
     magrittr (>= 2.0.1),
     methods (>= 4.1.1)
 Suggests: 
+    Cubist (>= 0.3.0),
     knitr (>= 1.29),
     testthat (>= 2.3.2)
 VignetteBuilder: 
