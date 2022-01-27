@@ -13,9 +13,9 @@ A character vector of Suggested methods
 Suggested methods for ARml
 }
 \examples{
-\dontrun{
+
 suggested_methods()
-}
+
 }
 \author{
 Resul Akay

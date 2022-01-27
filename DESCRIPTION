@@ -6,9 +6,9 @@ Authors@R:
            family = "Akay",
            role = c("aut", "cre"),
            email = "resulakay1@gmail.com")
-Description: This package allows users to forecast univariate time
-    series using caret infrastructure. The user can use any caret package 
-    supported regression model for fitting a model.
+Description: Recursive time series forecast using Caret infrastructure. 
+    The models are selected based on time series cross-validation and 
+    forecasting is done recursively.
 License: GPL-3
 URL: https://github.com/Akai01/caretForecast
 BugReports: https://github.com/Akai01/caretForecast/issues
@@ -23,8 +23,6 @@ Suggests:
     Cubist (>= 0.3.0),
     knitr (>= 1.29),
     testthat (>= 2.3.2)
-VignetteBuilder: 
-    knitr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

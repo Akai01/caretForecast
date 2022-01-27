@@ -18,11 +18,11 @@ A list with train and test elements
 Split a time series into training and testing sets
 }
 \examples{
-\dontrun{
+
 
 dlist <- split_ts(retail_wide[,1], test_size = 12)
 
-}
+
 
 
 }

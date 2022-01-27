@@ -6,7 +6,13 @@
 \usage{
 accuracy(object,...)
 }
+\value{
+A matrix with forecast accuracy measures.
+}
 \description{
 See \code{\link[forecast]{accuracy}} for details.
+}
+\seealso{
+\code{\link[forecast]{accuracy}}
 }
 \keyword{internal}

@@ -15,16 +15,21 @@ knitr::opts_chunk$set(
 
 # caretForecast
 
-
 <!-- badges: start -->
-[![codecov](https://codecov.io/gh/Akai01/caretForecast/branch/master/graph/badge.svg)](https://codecov.io/gh/Akai01/caretForecast)
-[![CRAN status](https://www.r-pkg.org/badges/version/caretForecast)](https://CRAN.R-project.org/package=caretForecast)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+
 <!-- badges: end -->
 
-The goal of caretForecast is to provide tools for forecasting time series data using various machine learning algorithms. (More details will follow...)
+
+The goal of caretForecast is to provide tools for forecasting time series data using various machine learning algorithms.
 
 ## Installation
+
+The CRAN version with:
+
+``` r
+install.packages("caretForecast")
+
+```
 
 
 The development version from [GitHub](https://github.com/) with:
@@ -43,7 +48,7 @@ different ML models.
 ```{r example}
 library(caretForecast)
 
-# Forecasting Retail Data with glmboost
+# Forecasting with glmboost
 data(retail_wide, package = "caretForecast")
 
 i <- 8
@@ -69,7 +74,7 @@ autoplot(fc) +
 
 ## NOTE : Promotions, holidays, and other external variables can be added in the model via xreg argument. Please look at the documentation of ARml.
 
-# Forecasting Retail Data with cubist regression
+# Forecasting with cubist regression
 
 i <- 9
 
@@ -97,7 +102,7 @@ autoplot(fc) +
 
 data(retail_wide, package = "caretForecast")
 
-i <- 7
+i <- 9
 
 dtlist <- caretForecast::split_ts(retail_wide[,i], test_size = 12)
 
@@ -106,7 +111,7 @@ training_data <- dtlist$train
 testing_data <- dtlist$test
 
 fit <- ARml(training_data, max_lag = 12, caret_method = "svmLinear2", 
-            verbose = FALSE)
+            verbose = FALSE, pre_process = c("scale", "center"))
 
 forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
 

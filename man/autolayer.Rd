@@ -6,7 +6,13 @@
 \usage{
 autolayer(object,...)
 }
+\value{
+A ggplot layer
+}
 \description{
 See \code{\link[forecast]{autolayer}} for details.
+}
+\seealso{
+\code{\link[forecast]{autolayer}}
 }
 \keyword{internal}

@@ -4,7 +4,7 @@
 \alias{get_var_imp}
 \title{Variable importance for forecasting model.}
 \usage{
-get_var_imp(object, plot = T)
+get_var_imp(object, plot = TRUE)
 }
 \arguments{
 \item{object}{A list class of ARml or forecast object derived from ARml}
@@ -12,19 +12,19 @@ get_var_imp(object, plot = T)
 \item{plot}{Boolean, if TRUE, variable importance will be ploted.}
 }
 \value{
-A list class of "varImp.train". See \code{\link[caret]{varImp}}
+A list class of "varImp.train". See \code{\link[caret]{varImp}} or a
+"trellis" plot.
 }
 \description{
 Variable importance for forecasting model.
 }
 \examples{
-\dontrun{
 
 train <- window(AirPassengers, end = c(1959, 12))
 
 test <- window(AirPassengers, start = c(1960, 1))
 
-ARml(train, caret_method = "cubist", max_lag = 12, trend_method = "none",
+ARml(train, caret_method = "lm", max_lag = 12, trend_method = "none",
  pre_process = "center") -> fit
 
 forecast(fit, h = length(test), level = c(80,95), PI = TRUE) -> fc
@@ -33,8 +33,8 @@ autoplot(fc)+ autolayer(test)
 
 accuracy(fc, test)
 
-get_var_imp(fc, plot = T)
-}
+get_var_imp(fc, plot = TRUE)
+
 
 }
 \author{

@@ -4,19 +4,18 @@
 # caretForecast
 
 <!-- badges: start -->
-
-[![codecov](https://codecov.io/gh/Akai01/caretForecast/branch/master/graph/badge.svg)](https://codecov.io/gh/Akai01/caretForecast)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/caretForecast)](https://CRAN.R-project.org/package=caretForecast)
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 The goal of caretForecast is to provide tools for forecasting time
-series data using various machine learning algorithms. (More details
-will follow…)
+series data using various machine learning algorithms.
 
 ## Installation
+
+The CRAN version with:
+
+``` r
+install.packages("caretForecast")
+```
 
 The development version from [GitHub](https://github.com/) with:
 
@@ -37,7 +36,7 @@ library(caretForecast)
 #> Registered S3 method overwritten by 'quantmod':
 #>   method            from
 #>   as.zoo.data.frame zoo
-# Forecasting Retail Data with glmboost
+# Forecasting with glmboost
 data(retail_wide, package = "caretForecast")
 
 i <- 8
@@ -70,7 +69,7 @@ autoplot(fc) +
 ``` r
 ## NOTE : Promotions, holidays, and other external variables can be added in the model via xreg argument. Please look at the documentation of ARml.
 
-# Forecasting Retail Data with cubist regression
+# Forecasting with cubist regression
 
 i <- 9
 
@@ -105,7 +104,7 @@ autoplot(fc) +
 
 data(retail_wide, package = "caretForecast")
 
-i <- 7
+i <- 9
 
 dtlist <- caretForecast::split_ts(retail_wide[,i], test_size = 12)
 
@@ -114,17 +113,17 @@ training_data <- dtlist$train
 testing_data <- dtlist$test
 
 fit <- ARml(training_data, max_lag = 12, caret_method = "svmLinear2", 
-            verbose = FALSE)
+            verbose = FALSE, pre_process = c("scale", "center"))
 
 forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
 
 accuracy(fc, testing_data)
-#>                      ME      RMSE       MAE        MPE     MAPE      MASE
-#> Training set  0.3016388  6.933042  4.969558 -0.1057475 3.724202 0.3209987
-#> Test set     16.6048808 20.812588 16.846600  5.7734741 5.875854 1.0881725
-#>                    ACF1 Theil's U
-#> Training set 0.06480896        NA
-#> Test set     0.33020419  0.884742
+#>                     ME     RMSE      MAE        MPE     MAPE      MASE
+#> Training set  1.086666 15.67422 11.87520 0.06663619 2.497392 0.3957375
+#> Test set     10.671509 16.75893 12.72986 1.33830385 1.611293 0.4242188
+#>                     ACF1 Theil's U
+#> Training set  0.09739853        NA
+#> Test set     -0.27328009 0.2062128
 autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 ```
@@ -144,26 +143,26 @@ get_var_imp(fc, plot = F)
 #>   only 20 most important variables shown (out of 22)
 #> 
 #>         Overall
-#> lag1  100.00000
-#> lag12  99.74827
-#> lag2   97.78807
-#> lag3   97.74610
-#> lag4   97.10962
-#> lag5   97.08285
-#> lag7   96.20291
-#> lag11  95.90430
-#> lag6   95.80115
-#> lag8   95.68963
-#> lag9   95.38585
-#> lag10  94.50733
-#> C1-12   0.68853
-#> S3-12   0.60001
-#> C2-12   0.50234
-#> C4-12   0.44290
-#> S5-12   0.41720
-#> S1-12   0.40638
-#> S2-12   0.09599
-#> C5-12   0.05234
+#> lag12 100.00000
+#> lag1   89.70809
+#> lag11  88.21434
+#> lag2   87.15896
+#> lag3   86.95035
+#> lag9   86.22539
+#> lag5   85.98743
+#> lag7   85.86392
+#> lag10  85.56408
+#> lag4   85.44561
+#> lag8   84.95210
+#> lag6   83.66422
+#> S1-12   2.62893
+#> S3-12   1.38199
+#> S5-12   1.32829
+#> C2-12   1.21307
+#> C4-12   1.09981
+#> C1-12   0.44682
+#> S2-12   0.14723
+#> C3-12   0.09562
 # Forecasting using Ridge Regression
 data(retail_wide, package = "caretForecast")
 

@@ -22,7 +22,6 @@
 #' @author Resul Akay
 #'
 #' @examples
-#' \dontrun{
 #'
 #'library(caretForecast)
 #'
@@ -30,15 +29,13 @@
 #'
 #'test <- window(AirPassengers, start = c(1960, 1))
 #'
-#'ARml(train_data, caret_method = "cubist", max_lag = 12) -> fit
+#'ARml(train_data, caret_method = "lm", max_lag = 12) -> fit
 #'
 #'forecast(fit, h = length(test), level = c(80,95), PI = TRUE) -> fc
 #'
 #'autoplot(fc)+ autolayer(test)
 #'
 #'accuracy(fc, test)
-#' }
-#'
 #'
 #'@export
 forecast <- function(object,
@@ -90,8 +87,8 @@ forecast.ARml <- function(object,
     newxreg1 <- NULL
   }
 
-  if(PI){
-    if(is.null(level)){
+  if (PI) {
+    if (is.null(level)) {
       warning("level was not provided. Prediction intervals will not be returned")
       PI <- FALSE
     }
@@ -106,20 +103,20 @@ forecast.ARml <- function(object,
   y <- fc_x$y
 
   if (!is.null(lambda)) {
-    y <- forecast::InvBoxCox(
-      y,
-      lambda = lambda,
-      biasadj = BoxCox_biasadj,
-      fvar = BoxCox_fvar
-    )
+    y <- forecast::InvBoxCox(y,
+                             lambda = lambda,
+                             biasadj = BoxCox_biasadj,
+                             fvar = BoxCox_fvar)
   }
 
-  if(PI){
-    bs_pi <- pi(y = object$y,
-                fc = y,
-                num = num_bs,
-                block_size = NULL,
-                level = level)
+  if (PI) {
+    bs_pi <- pi(
+      y = object$y,
+      fc = y,
+      num = num_bs,
+      block_size = NULL,
+      level = level
+    )
     lower <- bs_pi[["lower"]]
     upper <- bs_pi[["upper"]]
   } else {

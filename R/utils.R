@@ -1,14 +1,14 @@
 #' @importFrom forecast bld.mbb.bootstrap fourier
 #' @importFrom caret varImp
 pred_func <- function(i, x, y, newxreg, object, freq, fourier_h) {
-  newxreg_in <- newxreg[i, ]
+  newxreg_in <- newxreg[i,]
   new_data <- c(y[length(y)], x[nrow(x), 1:(object$max_lag - 1)])
   if (object$max_lag == 1) {
     new_data = new_data[-1]
   }
   if (object$seasonal == TRUE & freq > 1)
   {
-    new_data <- c(new_data, fourier_h[i,])
+    new_data <- c(new_data, fourier_h[i, ])
   }
   if (!is.null(newxreg_in)) {
     new_data <- c(new_data, newxreg_in)
@@ -45,7 +45,7 @@ forecast_loop <- function(object, xreg, h) {
   y <- ts(y[-(1:length(object$y_modified))],
           frequency = freq,
           start = max(time(object$y)) + 1 / freq)
-  x <- x[-(1:nrow(object$x)), ]
+  x <- x[-(1:nrow(object$x)),]
 
   return(list("x" = x,
               "y" = y))
@@ -55,16 +55,16 @@ forecast_loop <- function(object, xreg, h) {
 #'
 #' @param object A list class of ARml or forecast object derived from ARml
 #' @param plot Boolean, if TRUE, variable importance will be ploted.
-#' @return A list class of "varImp.train". See \code{\link[caret]{varImp}}
+#' @return A list class of "varImp.train". See \code{\link[caret]{varImp}} or a
+#' "trellis" plot.
 #' @author Resul Akay
 #' @examples
-#' \dontrun{
 #'
 #' train <- window(AirPassengers, end = c(1959, 12))
 #'
 #' test <- window(AirPassengers, start = c(1960, 1))
 #'
-#' ARml(train, caret_method = "cubist", max_lag = 12, trend_method = "none",
+#' ARml(train, caret_method = "lm", max_lag = 12, trend_method = "none",
 #'  pre_process = "center") -> fit
 #'
 #' forecast(fit, h = length(test), level = c(80,95), PI = TRUE) -> fc
@@ -73,25 +73,21 @@ forecast_loop <- function(object, xreg, h) {
 #'
 #' accuracy(fc, test)
 #'
-#' get_var_imp(fc, plot = T)
-#' }
+#' get_var_imp(fc, plot = TRUE)
+#'
 #'
 #' @export
 
-get_var_imp <- function(object, plot = T) {
-  if (!is(object, c("ARml", "forecastARml"))) {
+get_var_imp <- function(object, plot = TRUE) {
+  if ("forecastARml" %notin% class(object)) {
     stop("object must be an forecastARml or ARml object")
   }
-
-
   if (plot) {
     return(plot(varImp(object$model)))
   }
-
   if (!plot) {
     return(varImp(object$model))
   }
-
 }
 
 lag_maker <- function(y, max_lag) {
@@ -127,7 +123,7 @@ lag_maker <- function(y, max_lag) {
       from = 1, to = max_lag1, by = 1
     )))
 
-  dta <- dta[, -1]
+  dta <- dta[,-1]
 
   return(dta)
 }
@@ -168,11 +164,11 @@ lag_maker <- function(y, max_lag) {
 #' A list with train and test elements
 #' @author Resul Akay
 #' @examples
-#' \dontrun{
+#'
 #'
 #' dlist <- split_ts(retail_wide[,1], test_size = 12)
 #'
-#' }
+#'
 #'
 #'
 #'@export
@@ -195,72 +191,118 @@ split_ts <- function (y, test_size = 10) {
 #' @return A character vector of Suggested methods
 #' @author Resul Akay
 #' @examples
-#' \dontrun{
+#'
 #' suggested_methods()
-#' }
+#'
 #' @export
-suggested_methods <- function(){
+suggested_methods <- function() {
   message(
     "In general user can train any method which supported by caret.
-The following methods are suggested")
-  caret_methods <- c("cubist", "svmLinear", "enet", "bridge", "glmboost",
-                     "ridge", "lasso", "relaxo", "M5Rules", "M5", "lm",
-                     "gaussprLinear", "glm", "glmnet", "pcr", "ppr", "foba",
-                     "gbm", "svmLinear2", "glm.nb", "gcvEarth", "lars2", "lars",
-                     "icr", "ctree2", "ctree", "bayesglm")
+The following methods are suggested"
+  )
+  caret_methods <-
+    c(
+      "cubist",
+      "svmLinear",
+      "enet",
+      "bridge",
+      "glmboost",
+      "ridge",
+      "lasso",
+      "relaxo",
+      "M5Rules",
+      "M5",
+      "lm",
+      "gaussprLinear",
+      "glm",
+      "glmnet",
+      "pcr",
+      "ppr",
+      "foba",
+      "gbm",
+      "svmLinear2",
+      "glm.nb",
+      "gcvEarth",
+      "lars2",
+      "lars",
+      "icr",
+      "ctree2",
+      "ctree",
+      "bayesglm"
+    )
 
   return(caret_methods)
 }
 
-bs <- function(x, num, block_size = NULL){
-  bs_data <- bld.mbb.bootstrap(x = x, num = num, block_size = block_size)
+bs <- function(x, num, block_size = NULL) {
+  bs_data <-
+    bld.mbb.bootstrap(x = x,
+                      num = num,
+                      block_size = block_size)
   bs_data <- as.data.frame(bs_data)
   colnames(bs_data) <- paste0("series_", seq_len(ncol(bs_data)))
   bs_data <- as.matrix(bs_data)
   return(bs_data)
 }
 #' @importFrom stats quantile tsp tsp<-
-pi <- function(y, fc, num, block_size = NULL, level = c(80, 95)){
-  if(class(y)!="ts"){
+pi <- function(y,
+               fc,
+               num,
+               block_size = NULL,
+               level = c(80, 95)) {
+  if (class(y) != "ts") {
     stop("y must be a ts object")
   }
-  if(class(fc)!="ts"){
+  if (class(fc) != "ts") {
     stop("fc must be a ts object")
   }
 
-  if(frequency(y)!=frequency(fc)){
+  if (frequency(y) != frequency(fc)) {
     stop("y and fc has different frequency")
   }
 
-  y2 <- ts(c(y,fc), start = start(y), frequency = frequency(y))
-  sim <- bs(y2, num = num, block_size = block_size)%>%ts(start = 1, frequency = 12)
-  lower <- apply(sim, 1, quantile, 0.5 - level/200, type = 8, na.rm = TRUE)
-  if(length(level)>1){
+  y2 <- ts(c(y, fc), start = start(y), frequency = frequency(y))
+  sim <-
+    bs(y2, num = num, block_size = block_size) %>% ts(start = 1, frequency = 12)
+  lower <-
+    apply(sim,
+          1,
+          quantile,
+          0.5 - level / 200,
+          type = 8,
+          na.rm = TRUE)
+  if (length(level) > 1) {
     lower <- t(lower)
   }
   lower <- as.matrix(lower)
-  lower <- lower[(length(y)+1):length(y2), ]
+  lower <- lower[(length(y) + 1):length(y2),]
   lower <- as.data.frame(lower)
-  colnames(lower) <- paste0("%",level)
+  colnames(lower) <- paste0("%", level)
 
-  if(length(level)>1){
+  if (length(level) > 1) {
     lower <- ts(lower)
   } else {
     lower <- ts(lower)
     lower <- ts(matrix(lower, ncol = 1L))
   }
 
-  upper <- apply(sim, 1, quantile, 0.5 + level/200, type = 8, na.rm = TRUE)
+  upper <-
+    apply(sim,
+          1,
+          quantile,
+          0.5 + level / 200,
+          type = 8,
+          na.rm = TRUE)
 
-  if(length(level)>1){
+  if (length(level) > 1) {
     upper <- t(upper)
   }
   upper <- as.matrix(upper)
-  upper <- upper[(length(y)+1):length(y2),]
+  upper <- upper[(length(y) + 1):length(y2), ]
   upper <- as.data.frame(upper)
-  colnames(upper) <- paste0("%",level)
+  colnames(upper) <- paste0("%", level)
 
-  if(length(level)>1){
+  if (length(level) > 1) {
     upper <- ts(upper)
   } else {
     upper <- ts(upper)
@@ -282,6 +324,8 @@ pi <- function(y, fc, num, block_size = NULL, level = c(80, 95)){
 #' @export
 #' @importFrom forecast autoplot
 #' @usage autoplot(object,...)
+#' @return A ggplot object
+#' @seealso \code{\link[forecast]{autoplot}}
 NULL
 
 #' forecast package autolayer function
@@ -293,7 +337,9 @@ NULL
 #' @keywords internal
 #' @export
 #' @importFrom forecast autolayer
+#' @return A ggplot layer
 #' @usage autolayer(object,...)
+#' @seealso \code{\link[forecast]{autolayer}}
 NULL
 
 
@@ -307,6 +353,8 @@ NULL
 #' @export
 #' @importFrom forecast accuracy
 #' @usage accuracy(object,...)
+#' @return A matrix with forecast accuracy measures.
+#' @seealso \code{\link[forecast]{accuracy}}
 NULL
 
 
@@ -319,6 +367,8 @@ NULL
 #' @keywords internal
 #' @export
 #' @importFrom magrittr %>%
+#' @return Nothing
+#'
 #' @usage lhs \%>\% rhs
 NULL
 
@@ -331,5 +381,6 @@ NULL
 #' @keywords internal
 #' @export
 #' @importFrom magrittr %<>%
+#' @return Nothing
 #' @usage lhs \%<>\% rhs
 NULL

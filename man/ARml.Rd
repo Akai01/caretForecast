@@ -34,7 +34,7 @@ ARml(
 
 \item{max_lag}{Maximum value of lag.}
 
-\item{xreg}{Optionally, a numerical vector or matrix of external regressors,
+\item{xreg}{Optional. A numerical vector or matrix of external regressors,
 which must have the same number of rows as y.
 (It should not be a data frame.).}
 
@@ -128,7 +128,6 @@ A list class of forecast containing the following elemets
 Autoregressive forecasting using various Machine Learning models.
 }
 \examples{
-\dontrun{
 
 library(caretForecast)
 
@@ -136,14 +135,14 @@ train_data <- window(AirPassengers, end = c(1959, 12))
 
 test <- window(AirPassengers, start = c(1960, 1))
 
-ARml(train_data, caret_method = "cubist", max_lag = 12) -> fit
+ARml(train_data, caret_method = "lm", max_lag = 12) -> fit
 
 forecast(fit, h = length(test)) -> fc
 
 autoplot(fc) + autolayer(test)
 
 accuracy(fc, test)
-}
+
 }
 \author{
 Resul Akay

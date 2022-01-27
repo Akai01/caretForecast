@@ -6,7 +6,13 @@
 \usage{
 autoplot(object,...)
 }
+\value{
+A ggplot object
+}
 \description{
 See \code{\link[forecast]{autoplot}} for details.
+}
+\seealso{
+\code{\link[forecast]{autoplot}}
 }
 \keyword{internal}

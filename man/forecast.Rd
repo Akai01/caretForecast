@@ -49,7 +49,6 @@ A list class of forecast containing the following elemets
 Forecasting an ARml object
 }
 \examples{
-\dontrun{
 
 library(caretForecast)
 
@@ -57,15 +56,13 @@ train_data <- window(AirPassengers, end = c(1959, 12))
 
 test <- window(AirPassengers, start = c(1960, 1))
 
-ARml(train_data, caret_method = "cubist", max_lag = 12) -> fit
+ARml(train_data, caret_method = "lm", max_lag = 12) -> fit
 
 forecast(fit, h = length(test), level = c(80,95), PI = TRUE) -> fc
 
 autoplot(fc)+ autolayer(test)
 
 accuracy(fc, test)
-}
-
 
 }
 \author{

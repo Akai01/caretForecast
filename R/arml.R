@@ -5,7 +5,7 @@
 #' @importFrom forecast is.constant na.interp BoxCox.lambda BoxCox InvBoxCox
 #' @importFrom caret train trainControl
 #' @param y  A univariate time series object.
-#' @param xreg Optionally, a numerical vector or matrix of external regressors,
+#' @param xreg Optional. A numerical vector or matrix of external regressors,
 #' which must have the same number of rows as y.
 #'  (It should not be a data frame.).
 #' @param max_lag Maximum value of lag.
@@ -75,7 +75,6 @@
 #' @author Resul Akay
 #'
 #' @examples
-#' \dontrun{
 #'
 #'library(caretForecast)
 #'
@@ -83,14 +82,14 @@
 #'
 #'test <- window(AirPassengers, start = c(1960, 1))
 #'
-#'ARml(train_data, caret_method = "cubist", max_lag = 12) -> fit
+#'ARml(train_data, caret_method = "lm", max_lag = 12) -> fit
 #'
 #'forecast(fit, h = length(test)) -> fc
 #'
 #'autoplot(fc) + autolayer(test)
 #'
 #'accuracy(fc, test)
-#' }
+#'
 #' @export
 
 ARml <- function(y,
@@ -101,11 +100,11 @@ ARml <- function(y,
                  pre_process = NULL,
                  cv = TRUE,
                  cv_horizon = 4,
-                 initial_window = length(y) - max_lag -  cv_horizon*2,
+                 initial_window = length(y) - max_lag -  cv_horizon * 2,
                  fixed_window = FALSE,
                  verbose = TRUE,
                  seasonal = TRUE,
-                 K =  frequency(y)/2 -1,
+                 K =  frequency(y) / 2 - 1,
                  tune_grid = NULL,
                  lambda = "auto",
                  BoxCox_method = c("guerrero", "loglik"),
@@ -114,8 +113,8 @@ ARml <- function(y,
                  BoxCox_biasadj = FALSE,
                  BoxCox_fvar = NULL,
                  allow_parallel = FALSE,
-                 ...){
-  if("ts" %notin% class(y)){
+                 ...) {
+  if ("ts" %notin% class(y)) {
     stop("y must be a univariate time series")
   }
 
@@ -123,133 +122,147 @@ ARml <- function(y,
 
   freq <- stats::frequency(y)
 
-  if(length_y < freq){
+  if (length_y < freq) {
     stop("Not enough data to fit a model")
   }
 
-  if(max_lag <= 0){
+  if (max_lag <= 0) {
     warning("max_lag increased to 1. max_lag must be max_lag >= 1")
     max_lag <- 1
   }
 
-  if(c(length_y - freq - round(freq / 4)) < max_lag){
-
-    warning(paste("Input data is too short. Reducing max_lags to ",
-                  round(length_y - freq - round(freq / 4))))
+  if (c(length_y - freq - round(freq / 4)) < max_lag) {
+    warning(paste(
+      "Input data is too short. Reducing max_lags to ",
+      round(length_y - freq - round(freq / 4))
+    ))
     max_lag <- round(length_y - freq - round(freq / 4))
   }
 
-  if (max_lag != round(max_lag)){
+  if (max_lag != round(max_lag)) {
     max_lag <- round(max_lag)
-
     message(paste("max_lag must be an integer, max_lag rounded to", max_lag))
   }
 
-  if(!is.null(xreg)){
-    if("matrix" %notin% class(xreg)){
+  if (!is.null(xreg)) {
+    if ("matrix" %notin% class(xreg)) {
       xreg <- as.matrix(xreg)
     }
   }
 
   constant_y <- forecast::is.constant(forecast::na.interp(y))
 
-  if(constant_y) {
+  if (constant_y) {
     warning("Constant data, setting max_lag = 1, lambda = NULL")
     lambda <- NULL
     max_lag = 1
   }
 
-  if(!is.null(xreg))
+  if (!is.null(xreg))
   {
     ncolxreg <- ncol(xreg)
   }
 
-  if(is.null(lambda)){
+  if (is.null(lambda)) {
     modified_y <- y
   }
-  if(!is.null(lambda)){
-  if(lambda=="auto"){
-    lambda  <- forecast::BoxCox.lambda(y, method = BoxCox_method,
-                                       lower = BoxCox_lower,
-                                       upper = BoxCox_upper)
-    modified_y <- forecast::BoxCox(y, lambda)
+  if (!is.null(lambda)) {
+    if (lambda == "auto") {
+      lambda  <- forecast::BoxCox.lambda(y,
+                                         method = BoxCox_method,
+                                         lower = BoxCox_lower,
+                                         upper = BoxCox_upper)
+      modified_y <- forecast::BoxCox(y, lambda)
+    }
+
+    if (is.numeric(lambda)) {
+      modified_y <- forecast::BoxCox(y, lambda)
+    }
   }
 
-  if(is.numeric(lambda)){
-    modified_y <- forecast::BoxCox(y, lambda)
-  }
-}
+  modified_y_2 <- ts(modified_y[-seq_len(max_lag)],
+                     start = time(modified_y)[max_lag + 1],
+                     frequency = freq)
 
-  modified_y_2 <- ts(modified_y[-(1:(max_lag))], start = time(modified_y)[max_lag + 1],
-           frequency = freq)
-
-  if(seasonal == TRUE | freq > 1)
+  if (seasonal == TRUE | freq > 1)
   {
     ncolx <- max_lag + K * 2
-    }
-  if(seasonal == FALSE | freq == 1)
-    {
+  }
+  if (seasonal == FALSE | freq == 1)
+  {
     ncolx <- max_lag
   }
 
   x <- matrix(0, nrow = c(length_y - max_lag), ncol = ncolx)
 
-  x[ , 1:max_lag] <- lag_maker(modified_y, max_lag)
+  x[, seq_len(max_lag)] <- lag_maker(modified_y, max_lag)
 
-  if(seasonal == TRUE & freq > 1)
-    {
+  if (seasonal == TRUE & freq > 1)
+  {
     fourier_s <- fourier(modified_y_2, K = K)
-    x[ , (max_lag + 1):ncolx] <- fourier_s
+    x[, (max_lag + 1):ncolx] <- fourier_s
     colnames(x) <- c(paste0("lag", 1:max_lag), colnames(fourier_s))
   }
 
-  if(seasonal == FALSE | freq == 1)
-    {
+  if (seasonal == FALSE | freq == 1)
+  {
     colnames(x) <- c(paste0("lag", 1:max_lag))
   }
 
-  if(!is.null(xreg)){
-    xreg <- xreg[-(1:max_lag),]
-    x <- cbind(x, xreg[ , , drop = FALSE])
+  if (!is.null(xreg)) {
+    col_xreg <- ncol(xreg)
+    name_xreg <- colnames(xreg)
+    xreg <- xreg[-seq_len(max_lag), ]
+    if (col_xreg == 1) {
+      xreg <- as.matrix(matrix(xreg, ncol = 1))
+      colnames(xreg)[1] <- name_xreg[1]
+      rm(name_xreg, col_xreg)
+    }
+    x <- cbind(x, xreg)
   }
 
   training_method <- "timeslice"
 
-  if(!cv){
+  if (!cv) {
     training_method <- "none"
-    if(is.null(tune_grid)){
+    if (is.null(tune_grid)) {
       stop("Only one model should be specified in tune_grid with no resampling")
     }
   }
 
-  model <- caret::train(x = x,
-                      y = as.numeric(modified_y_2),
-                      method = caret_method,
-                      preProcess = pre_process,
-                      weights = NULL,
-                      metric =  metric,
-                      trControl = caret::trainControl(
-                        method = training_method,
-                        initialWindow = initial_window,
-                        horizon = cv_horizon,
-                        fixedWindow = fixed_window,
-                        verboseIter = verbose,
-                        allowParallel = allow_parallel),
-                      tuneGrid = tune_grid)
+  model <- caret::train(
+    x = x,
+    y = as.numeric(modified_y_2),
+    method = caret_method,
+    preProcess = pre_process,
+    weights = NULL,
+    metric =  metric,
+    trControl = caret::trainControl(
+      method = training_method,
+      initialWindow = initial_window,
+      horizon = cv_horizon,
+      fixedWindow = fixed_window,
+      verboseIter = verbose,
+      allowParallel = allow_parallel
+    ),
+    tuneGrid = tune_grid
+  )
 
   fitted <- ts(c(rep(NA, max_lag),
                  predict(model, newdata = x)),
-               frequency = freq, start = min(time(modified_y)))
+               frequency = freq,
+               start = min(time(modified_y)))
 
-  if(!is.null(lambda)){
-    fitted <- forecast::InvBoxCox(fitted, lambda = lambda,
+  if (!is.null(lambda)) {
+    fitted <- forecast::InvBoxCox(fitted,
+                                  lambda = lambda,
                                   biasadj = BoxCox_biasadj,
-                                fvar = BoxCox_fvar)
-    }
+                                  fvar = BoxCox_fvar)
+  }
 
   K_m <- 0
 
-  if(seasonal == TRUE & freq > 1)
+  if (seasonal == TRUE & freq > 1)
   {
     K_m <- K
   }
@@ -267,16 +280,16 @@ ARml <- function(y,
     seasonal = seasonal,
     BoxCox_biasadj = BoxCox_biasadj,
     BoxCox_fvar = BoxCox_fvar,
-    method = paste0("caret method ",caret_method, " with ", method)
+    method = paste0("caret method ", caret_method, " with ", method)
   )
 
-  if(seasonal == TRUE & freq > 1)
-    {
+  if (seasonal == TRUE & freq > 1)
+  {
     output$fourier_s <- fourier_s
     output$K <- K
   }
   output$xreg_fit <- NULL
-  if(!is.null(xreg)){
+  if (!is.null(xreg)) {
     output$xreg_fit <- xreg
   }
   class(output) <- "ARml"
