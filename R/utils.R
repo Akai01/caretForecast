@@ -4,7 +4,7 @@ pred_func <- function(i, x, y, newxreg, object, freq, fourier_h) {
   newxreg_in <- newxreg[i,]
   new_data <- c(y[length(y)], x[nrow(x), 1:(object$max_lag - 1)])
   if (object$max_lag == 1) {
-    new_data = new_data[-1]
+    new_data = new_data[-2]
   }
   if (object$seasonal == TRUE & freq > 1)
   {
@@ -196,40 +196,18 @@ split_ts <- function (y, test_size = 10) {
 #'
 #' @export
 suggested_methods <- function() {
-  message(
-    "In general user can train any method which supported by caret.
-The following methods are suggested"
-  )
-  caret_methods <-
-    c(
-      "cubist",
-      "svmLinear",
-      "enet",
-      "bridge",
-      "glmboost",
-      "ridge",
-      "lasso",
-      "relaxo",
-      "M5Rules",
-      "M5",
-      "lm",
-      "gaussprLinear",
-      "glm",
-      "glmnet",
-      "pcr",
-      "ppr",
-      "foba",
-      "gbm",
-      "svmLinear2",
-      "glm.nb",
-      "gcvEarth",
-      "lars2",
-      "lars",
-      "icr",
-      "ctree2",
-      "ctree",
-      "bayesglm"
-    )
+  message("In general user can train any method which supported by caret.
+          \nThe following methods are suggested"
+          )
+  caret_methods <- c("spikeslab", "bagEarth", "bagEarthGCV", "blasso",
+                     "cforest", "earth","extraTrees", "gbm_h2o", "glmStepAIC",
+                     "parRF", "qrf", "Rborist", "rf", "rqlasso", "rqnc",
+                     "spikeslab", "xgbDART", "xgbLinear", "ranger", "cubist",
+                     "svmLinear", "enet", "bridge", "glmboost", "ridge",
+                     "lasso", "relaxo", "M5Rules", "M5", "lm", "gaussprLinear",
+                     "glm", "glmnet", "pcr", "ppr", "foba", "gbm", "svmLinear2",
+                     "glm.nb", "gcvEarth", "lars2", "lars", "icr", "ctree2",
+                     "ctree", "bayesglm")
 
   return(caret_methods)
 }
