@@ -159,7 +159,7 @@ ARml <- function(y,
     }
   }
 
-  constant_y <- forecast::is.constant(forecast::na.interp(y))
+  constant_y <- is_constant(forecast::na.interp(y))
 
   if (constant_y) {
     warning("Constant data, setting max_lag = 1, lambda = NULL")
