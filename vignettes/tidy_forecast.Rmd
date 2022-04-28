@@ -1,0 +1,19 @@
+---
+title: "tidy_forecast"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tidy_forecast}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(caretForecast)
+```

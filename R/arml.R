@@ -1,10 +1,18 @@
 #' Autoregressive forecasting using various Machine Learning models.
 #'
+#' @description
+#' `r lifecycle::badge('superseded')`
+#'
+#' Please use \code{\link{CARET}} instead.
+#'
+#'
 #' @importFrom methods is
 #' @importFrom stats frequency is.ts predict sd start time ts
 #' @importFrom forecast is.constant na.interp BoxCox.lambda BoxCox InvBoxCox
 #' @importFrom caret train trainControl
-#' @param y  A univariate time series object.
+#'
+#' @param y A time series, i.e. ts object.
+#'
 #' @param xreg Optional. A numerical vector or matrix of external regressors,
 #' which must have the same number of rows as y.
 #'  (It should not be a data frame.).
@@ -63,7 +71,9 @@
 #' @param allow_parallel If a parallel backend is loaded and available,
 #' should the function use it?
 #' @param ... Ignored.
-#' @return A list class of forecast containing the following elemets
+#' @returns
+#'
+#' A list class of forecast containing the following elemets
 #' * x : The input time series
 #' * method : The name of the forecasting method as a character string
 #' * mean : Point forecasts as a time series
@@ -72,7 +82,6 @@
 #' * level : The confidence values associated with the prediction intervals
 #' * model : A list containing information about the fitted model
 #' * newx : A matrix containing regressors
-#' @author Resul Akay
 #'
 #' @examples
 #'
@@ -82,7 +91,7 @@
 #'
 #'test <- window(AirPassengers, start = c(1960, 1))
 #'
-#'ARml(train_data, caret_method = "lm", max_lag = 12) -> fit
+#'ARml(train_data, caret_method = "lm", max_lag = 12, K = 6) -> fit
 #'
 #'forecast(fit, h = length(test)) -> fc
 #'
@@ -91,7 +100,6 @@
 #'accuracy(fc, test)
 #'
 #' @export
-
 ARml <- function(y,
                  max_lag = 5,
                  xreg = NULL,
@@ -104,7 +112,7 @@ ARml <- function(y,
                  fixed_window = FALSE,
                  verbose = TRUE,
                  seasonal = TRUE,
-                 K =  frequency(y) / 2 - 1,
+                 K =  frequency(y) / 2,
                  tune_grid = NULL,
                  lambda = "auto",
                  BoxCox_method = c("guerrero", "loglik"),
@@ -114,6 +122,7 @@ ARml <- function(y,
                  BoxCox_fvar = NULL,
                  allow_parallel = FALSE,
                  ...) {
+
   if ("ts" %notin% class(y)) {
     stop("y must be a univariate time series")
   }
@@ -186,7 +195,11 @@ ARml <- function(y,
 
   if (seasonal == TRUE | freq > 1)
   {
-    ncolx <- max_lag + K * 2
+    if (K == freq / 2) {
+      ncolx <- max_lag + K * 2 - 1
+    } else {
+      ncolx <- max_lag + K * 2
+    }
   }
   if (seasonal == FALSE | freq == 1)
   {
@@ -212,7 +225,7 @@ ARml <- function(y,
   if (!is.null(xreg)) {
     col_xreg <- ncol(xreg)
     name_xreg <- colnames(xreg)
-    xreg <- xreg[-seq_len(max_lag), ]
+    xreg <- xreg[-seq_len(max_lag),]
     if (col_xreg == 1) {
       xreg <- as.matrix(matrix(xreg, ncol = 1))
       colnames(xreg)[1] <- name_xreg[1]
@@ -243,7 +256,10 @@ ARml <- function(y,
       horizon = cv_horizon,
       fixedWindow = fixed_window,
       verboseIter = verbose,
-      allowParallel = allow_parallel
+      allowParallel = allow_parallel,
+      returnData = FALSE,
+      returnResamp = "none",
+      savePredictions = "none"
     ),
     tuneGrid = tune_grid
   )

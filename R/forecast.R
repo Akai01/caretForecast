@@ -37,18 +37,7 @@
 #'
 #'accuracy(fc, test)
 #'
-#'@export
-forecast <- function(object,
-                     h = frequency(object$y),
-                     xreg = NULL,
-                     level = c(80, 95),
-                     PI = FALSE,
-                     num_bs = 1000,
-                     ...) {
-  UseMethod("forecast")
-}
-
-#'@export
+#' @export
 forecast.ARml <- function(object,
                           h = frequency(object$y),
                           xreg = NULL,
@@ -137,5 +126,4 @@ forecast.ARml <- function(object,
   )
   class(output) <- c("forecast", "forecastARml")
   return(output)
-
 }

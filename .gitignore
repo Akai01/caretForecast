@@ -19,3 +19,4 @@ po/*~
 .Rproj.user/
 .DS_Store
 docs
+inst/doc

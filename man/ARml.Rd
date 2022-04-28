@@ -17,7 +17,7 @@ ARml(
   fixed_window = FALSE,
   verbose = TRUE,
   seasonal = TRUE,
-  K = frequency(y)/2 - 1,
+  K = frequency(y)/2,
   tune_grid = NULL,
   lambda = "auto",
   BoxCox_method = c("guerrero", "loglik"),
@@ -30,7 +30,7 @@ ARml(
 )
 }
 \arguments{
-\item{y}{A univariate time series object.}
+\item{y}{A time series, i.e. ts object.}
 
 \item{max_lag}{Maximum value of lag.}
 
@@ -125,7 +125,9 @@ A list class of forecast containing the following elemets
 }
 }
 \description{
-Autoregressive forecasting using various Machine Learning models.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+
+Please use \code{\link{CARET}} instead.
 }
 \examples{
 
@@ -135,7 +137,7 @@ train_data <- window(AirPassengers, end = c(1959, 12))
 
 test <- window(AirPassengers, start = c(1960, 1))
 
-ARml(train_data, caret_method = "lm", max_lag = 12) -> fit
+ARml(train_data, caret_method = "lm", max_lag = 12, K = 6) -> fit
 
 forecast(fit, h = length(test)) -> fc
 
@@ -143,7 +145,4 @@ autoplot(fc) + autolayer(test)
 
 accuracy(fc, test)
 
-}
-\author{
-Resul Akay
 }

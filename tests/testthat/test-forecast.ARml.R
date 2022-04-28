@@ -2,10 +2,9 @@
 if(require(testthat)){
 
   test_that("tests for some arguments in forecast 1", {
-    library(forecast)
     forecast(ARml(AirPassengers, caret_method = "lm", max_lag = 12), h = 2) -> fc
     values <- round(c(fc$mean))
-    expect_that(values, equals(c(454, 434)))
+    expect_that(values, equals(c(453, 435)))
 
   })
 }
