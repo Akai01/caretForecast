@@ -291,51 +291,6 @@ pi <- function(y,
   return(list(lower = lower, upper = upper))
 }
 
-
-#' forecast package autoplot function
-#'
-#' See \code{\link[forecast]{autoplot}} for details.
-#'
-#' @name autoplot
-#' @rdname autoplot
-#' @keywords internal
-#' @export
-#' @importFrom forecast autoplot
-#' @usage autoplot(object,...)
-#' @return A ggplot object
-#' @seealso \code{\link[forecast]{autoplot}}
-NULL
-
-#' forecast package autolayer function
-#'
-#' See \code{\link[forecast]{autolayer}} for details.
-#'
-#' @name autolayer
-#' @rdname autolayer
-#' @keywords internal
-#' @export
-#' @importFrom forecast autolayer
-#' @return A ggplot layer
-#' @usage autolayer(object,...)
-#' @seealso \code{\link[forecast]{autolayer}}
-NULL
-
-
-#' Accuracy measures for a forecast model
-#'
-#' See \code{\link[forecast]{accuracy}} for details.
-#'
-#' @name accuracy
-#' @rdname accuracy
-#' @keywords internal
-#' @export
-#' @importFrom forecast accuracy
-#' @usage accuracy(object,...)
-#' @return A matrix with forecast accuracy measures.
-#' @seealso \code{\link[forecast]{accuracy}}
-NULL
-
-
 #' magrittr pipe operator
 #'
 #' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.

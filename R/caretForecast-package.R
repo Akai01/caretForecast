@@ -2,6 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @importFrom lifecycle deprecated
+#' @importFrom lifecycle deprecated badge
+#'
 ## usethis namespace: end
 NULL

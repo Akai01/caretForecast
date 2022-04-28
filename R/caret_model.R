@@ -327,14 +327,16 @@ forecast.CARET <- function(object, new_data, specials = NULL, ...) {
     y = c(y, pred)
   }
 
-
   fc <- y[-seq_len(length(object$y_modified))]
   y <- y[seq_len(length(object$y_modified))]
-  se <- sd(residuals(object$model), na.rm = TRUE) * sqrt(h * (1 + h / length(y)))
-  if(is.null(se)){
-    se <- 1
-  }
-  distributional::dist_normal(fc, se)
+
+  se <- tryCatch({
+    sd(residuals(object$model), na.rm = TRUE) * sqrt(h * (1 + h / length(y)))
+  }, error = function(err){
+    1
+  })
+
+  return(distributional::dist_normal(fc, se))
 }
 
 #' @importFrom dplyr bind_cols lag
