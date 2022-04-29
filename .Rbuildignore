@@ -10,3 +10,5 @@
 ^\.github$
 ^_config.yml
 ^CRAN-RELEASE$
+^doc$
+^Meta$

@@ -317,3 +317,10 @@ NULL
 #' @return Nothing
 #' @usage lhs \%<>\% rhs
 NULL
+
+is_constant <- function(x) {
+  x <- as.numeric(x)
+  y <- rep(x[1], length(x))
+  out <- x == y
+  return(all(out))
+}

@@ -1,0 +1,89 @@
+---
+title: "Introduction to caretForecast"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to caretForecast}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.height = 4,
+  fig.width = 7
+)
+```
+
+The ```caretForecast``` is an interface to the ```caret``` package for univariate time series forecasting.
+
+The package supports two types of data via two modeling APIs:
+
+* ```ts``` objects which users can use with the ```ARml``` function,
+
+* tidy temporal data in the ```tsibble``` format, which users can use with the ```CARET``` function.
+
+However, the two main modeling APIs use the same strategy; the CARET function is a more practical way of modeling the time series via a formula interface.
+
+The ```caretForecast``` fits the following model: 
+
+\begin{equation}
+y_t = f(\textbf{y}_{t-1}) + \epsilon_{t}
+\end{equation}
+
+where $\textbf{y}_{t-1} = (y_{t-1}, y_{t-2}, ..., y_{t-p})$ lagged matrix of the time series and $f$ is the selected ```caret_method```, and $\epsilon_{t}$ is the error which assumed to be assumed to be homoscedastic.
+
+
+```{r setup, message=FALSE}
+library(caretForecast)
+library(tsibble)
+library(dplyr)
+```
+
+```{r tssible_data}
+tourism_melb <- tourism %>%
+  filter(Region == "Melbourne")
+tourism_melb %>%
+  group_by(Purpose) %>%
+  slice(1)
+```
+
+
+```{r plots}
+
+tourism_melb %>%
+  autoplot(Trips)
+
+```
+
+
+```{r fit, message=FALSE}
+
+fit <- tourism_melb %>%
+  model(
+    caret = CARET(Trips ~ fourier(K = 2) + order(8) , caret_method = "lasso", verbose = FALSE),
+    ets = fable::ETS(Trips ~ trend("A")),
+    arima = fable::ARIMA(Trips)
+  )
+fit
+
+```
+
+```{r forecast}
+fc <- fit %>%
+  forecast(h = "5 years")
+fc
+```
+
+
+```{r hilo}
+fc %>%
+  hilo(level = c(80, 95))
+```
+
+
+```{r plotfc, fig.height=10}
+fc %>%
+  autoplot(tourism_melb)
+```
