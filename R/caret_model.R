@@ -376,3 +376,24 @@ fit_base <- function(x,
   )
   return(out)
 }
+
+#' Extract fitted values from a fable model
+#'
+#' Extracts the fitted values.
+#'
+#' @inheritParams forecast.CARET
+#'
+#' @return A vector of fitted values.
+#'
+#' @examples
+#'
+#' library(tsibble)
+#' USAccDeaths %>%
+#'   as_tsibble() %>%
+#'   model(caret = CARET(log(value) ~ order(5))) %>%
+#'   fitted()
+#'
+#' @export
+fitted.CARET <- function(object, ...) {
+  fitted(object$model)
+}

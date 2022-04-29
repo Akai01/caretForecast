@@ -38,11 +38,74 @@ The development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("Akai01/caretForecast")
 ```
-## Example
-### Note: User can train any caret supported regression model.
+# Examples 
 
 These are basic examples which shows you how to solve common problems with 
 different ML models. 
+
+## Examples of tidy forecasting via formula interface:
+
+Load the packages:
+
+```{r setup, message=FALSE}
+library(caretForecast)
+library(tsibble)
+library(dplyr)
+```
+
+```{r tssible_data}
+tourism_syd <- tourism %>%
+  filter(Region == "Sydney")
+
+tourism_syd %>%
+  group_by(Purpose) %>%
+  slice(1)
+```
+
+
+```{r plots}
+
+tourism_syd %>%
+  autoplot(Trips)
+
+```
+
+
+```{r fit, message=FALSE}
+
+fit <- tourism_syd %>%
+  model(
+    caret = CARET(Trips ~ fourier(K = 2) + order(8) , caret_method = "lasso", verbose = FALSE)
+  )
+fit
+
+```
+
+```{r forecast}
+fc <- fit %>%
+  forecast(h = "5 years")
+fc
+```
+
+
+```{r hilo}
+fc %>%
+  hilo(level = c(80, 95))
+```
+
+
+```{r plotfc, fig.height=10}
+fc %>%
+  autoplot(tourism_syd)
+```
+
+
+
+
+## Examples with ```ts``` objects:
+### Note: User can train any caret supported regression model.
+
+
 
 
 ```{r example}
