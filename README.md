@@ -36,6 +36,7 @@ library(caretForecast)
 #> Registered S3 method overwritten by 'quantmod':
 #>   method            from
 #>   as.zoo.data.frame zoo
+
 # Forecasting with glmboost
 data(retail_wide, package = "caretForecast")
 
@@ -49,8 +50,12 @@ testing_data <- dtlist$test
 
 fit <- ARml(training_data, max_lag = 12, caret_method = "glmboost", 
             verbose = FALSE)
-#> Loading required package: lattice
+#> Registered S3 method overwritten by 'inum':
+#>   method          from   
+#>   format.interval tsibble
 #> Loading required package: ggplot2
+#> Loading required package: lattice
+
 forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
 
 accuracy(fc, testing_data)
@@ -60,6 +65,8 @@ accuracy(fc, testing_data)
 #>                   ACF1 Theil's U
 #> Training set 0.5707204        NA
 #> Test set     0.3971016 0.7547318
+
+
 autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 ```
@@ -67,6 +74,8 @@ autoplot(fc) +
 <img src="man/figures/README-example-1.png" width="100%" />
 
 ``` r
+
+
 ## NOTE : Promotions, holidays, and other external variables can be added in the model via xreg argument. Please look at the documentation of ARml.
 
 # Forecasting with cubist regression
@@ -93,6 +102,7 @@ accuracy(fc, testing_data)
 #>                    ACF1 Theil's U
 #> Training set  0.2309758        NA
 #> Test set     -0.1450719 0.1701567
+
 autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 ```
@@ -100,6 +110,8 @@ autoplot(fc) +
 <img src="man/figures/README-example-2.png" width="100%" />
 
 ``` r
+
+
 # Forecasting using Support Vector Machines with Linear Kernel
 
 data(retail_wide, package = "caretForecast")
@@ -124,6 +136,7 @@ accuracy(fc, testing_data)
 #>                     ACF1 Theil's U
 #> Training set  0.09739853        NA
 #> Test set     -0.27328009 0.2062128
+
 autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 ```
@@ -163,6 +176,9 @@ get_var_imp(fc, plot = F)
 #> C1-12   0.44682
 #> S2-12   0.14723
 #> C3-12   0.09562
+
+
+
 # Forecasting using Ridge Regression
 data(retail_wide, package = "caretForecast")
 
@@ -186,6 +202,7 @@ accuracy(fc, testing_data)
 #>                     ACF1 Theil's U
 #> Training set 0.004518837        NA
 #> Test set     0.389409945 0.6513039
+
 autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 ```
