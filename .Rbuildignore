@@ -10,3 +10,4 @@
 ^\.github$
 ^_config.yml
 ^CRAN-RELEASE$
+^CRAN-SUBMISSION$
