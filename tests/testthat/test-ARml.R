@@ -1,7 +1,7 @@
 # A unit test for ARml function
 if(require(testthat)){
   test_that("tests for some arguments in ARml", {
-    ARml(AirPassengers, caret_method = "lm", max_lag = 12) -> fit
+    ARml(AirPassengers, caret_method = "lm", max_lag = 12,  K = 5) -> fit
 
     class_fit <- class(fit)
 
@@ -12,7 +12,8 @@ if(require(testthat)){
 
 if(require(testthat)){
   test_that("tests for some arguments in ARml", {
-    ARml(AirPassengers, caret_method = "lm", max_lag = 12, lambda = NULL) -> fit
+    ARml(AirPassengers, caret_method = "lm", max_lag = 12, lambda = NULL,
+         K= 5) -> fit
 
     class_fit <- class(fit)
 
@@ -24,7 +25,7 @@ if(require(testthat)){
 if(require(testthat)){
   test_that("tests for some arguments in ARml", {
     ARml(AirPassengers, caret_method = "lm", max_lag = 12, lambda = "auto",
-         BoxCox_method = "loglik") -> fit
+         BoxCox_method = "loglik", K = 5) -> fit
 
     class_fit <- class(fit)
 

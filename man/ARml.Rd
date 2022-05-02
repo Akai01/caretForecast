@@ -17,7 +17,7 @@ ARml(
   fixed_window = FALSE,
   verbose = TRUE,
   seasonal = TRUE,
-  K = frequency(y)/2 - 1,
+  K = frequency(y)/2,
   tune_grid = NULL,
   lambda = "auto",
   BoxCox_method = c("guerrero", "loglik"),
