@@ -108,7 +108,7 @@ For example, \code{fixed = list(constant = 20)}.
 
 
 model_spec = CARET(
-  object = value ~ order(5) + trend() + fourier(K = 6),
+  object = value ~ order(12) + trend() + fourier(K = 6),
   caret_method = "lm",
   verbose = FALSE)
 

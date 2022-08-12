@@ -20,7 +20,6 @@ Imports:
     distributional (>= 0.3.0),
     dplyr (>= 1.0.8),
     forecast (>= 8.16),
-    generics (>= 0.1.2),
     lifecycle,
     magrittr (>= 2.0.2),
     methods (>= 4.1.3),
@@ -35,5 +34,5 @@ Suggests:
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 VignetteBuilder: knitr

@@ -90,7 +90,7 @@
 #'
 #'
 #' model_spec = CARET(
-#'   object = value ~ order(5) + trend() + fourier(K = 6),
+#'   object = value ~ order(12) + trend() + fourier(K = 6),
 #'   caret_method = "lm",
 #'   verbose = FALSE)
 #'
@@ -392,7 +392,7 @@ fit_base <- function(x,
 #'   as_tsibble() %>%
 #'   model(caret = CARET(log(value) ~ order(5))) %>%
 #'   fitted()
-#'
+#' @importFrom stats fitted
 #' @export
 fitted.CARET <- function(object, ...) {
   fitted(object$model)

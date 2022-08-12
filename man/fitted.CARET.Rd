@@ -24,5 +24,4 @@ USAccDeaths \%>\%
   as_tsibble() \%>\%
   model(caret = CARET(log(value) ~ order(5))) \%>\%
   fitted()
-
 }
