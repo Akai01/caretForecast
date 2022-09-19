@@ -137,7 +137,8 @@ CARET <- function(formula,
     fixed_window = fixed_window,
     verbose = verbose,
     allow_parallel = allow_parallel,
-    tune_grid = tune_grid
+    tune_grid = tune_grid,
+    ... = ...
   )
 }
 
@@ -145,9 +146,9 @@ CARET <- function(formula,
 #' @importFrom rlang get_env is_empty env_parents new_formula call2 enexprs
 #' @importFrom rlang enquos
 specials_caret <- fabletools::new_specials(
-  order = function(p = 1, period = NULL) {
+  order = function(p, P = 1, period = NULL) {
     period <- get_frequencies(period, self$data, .auto = "smallest")
-    list(p = p, period = period)
+    list(p = p, P = P, period = period)
   },
 
   common_xregs,
@@ -200,8 +201,10 @@ train_caret <- function(.data,
                         fixed_window = TRUE,
                         verbose = TRUE,
                         allow_parallel = FALSE,
-                        tune_grid = NULL) {
-  max_lag <- specials$order[[1]]$p
+                        tune_grid = NULL,
+                        ... = ...) {
+  p <- specials$order[[1]]$p
+  P <- specials$order[[1]]$P
   freq <- specials$order[[1]][["period"]][[1]]
 
   xreg <- specials$xreg[[1]]
@@ -213,76 +216,60 @@ train_caret <- function(.data,
   }
   y <- .data[[mv]]
   y <- as.numeric(y)
-  # check inputs
-  length_y <- length(y)
 
-  if (length_y < freq) {
-    stop("Not enough data to fit a model")
+  object_data <- prepare_data(y = y, p = p, P = P, xreg = xreg)
+  training_method <- "timeslice"
+
+  if (!cv) {
+    training_method <- "none"
+    if (is.null(tune_grid)) {
+      stop("Only one model should be specified in tune_grid with no resampling")
+    }
+  }
+  if(is.null(initial_window)){
+    initial_window <- length(object_data[["y"]]) - object_data[["max_lag"]] -  cv_horizon * 2
   }
 
-  if (max_lag <= 0) {
-    warning("p increased to 1. p must be p >= 1")
-    max_lag <- 1
-  }
-
-  if (c(length_y - freq - round(freq / 4)) < max_lag) {
-    max_lag <- round(length_y - freq - round(freq / 4))
-    warning(paste("Input data is too short. p reduced to ", max_lag))
-  }
-
-  if (max_lag != round(max_lag)) {
-    max_lag <- round(max_lag)
-    message(paste("p must be an integer, p rounded to", max_lag))
-  }
-
-  constant_y <- is_constant(y)
-
-  if (constant_y) {
-    warning("Constant data, setting p = 1")
-    max_lag <- 1
-  }
-  # end check
-  x <- lag_maker_fable(y , max_lag = max_lag)
-
-  x_future <- x
-
-  if ("matrix" %in% class(xreg[["xreg"]])) {
-    xreg2 <- as.data.frame(xreg[["xreg"]])
-    x <- dplyr::bind_cols(x, xreg2)
-    rm(xreg2)
-  }
-
-  if (is.null(initial_window)) {
-    initial_window <- length(y) - max_lag -  cv_horizon * 2
-  }
-  rows_to_omit <- seq_len(max_lag)
-  x <- as.matrix(x)
-  x <- x[-rows_to_omit, ]
-  y2 <- y[-rows_to_omit]
-  x_future <- x_future[-rows_to_omit, ]
-
-  fit_m <- fit_base(
-    y = y2,
-    x = x,
-    caret_method = caret_method,
+  model <- caret::train(
+    x = object_data[["x"]],
+    y = c(object_data[["y"]]),
+    method = caret_method,
+    preProcess = pre_process,
+    weights = NULL,
     metric =  metric,
-    initial_window = initial_window,
-    cv_horizon = cv_horizon,
-    fixed_window = fixed_window,
-    verbose = verbose,
-    allow_parallel = allow_parallel,
-    tune_grid = tune_grid
+    trControl = caret::trainControl(
+      method = training_method,
+      initialWindow = initial_window,
+      horizon = cv_horizon,
+      fixedWindow = fixed_window,
+      verboseIter = verbose,
+      allowParallel = allow_parallel,
+      returnData = TRUE,
+      returnResamp = "final",
+      savePredictions = "final"
+    ),
+    tuneGrid = tune_grid,
+    ...
+  )
+  fitted_y <- predict(model, newdata = object_data[["x"]])
+  fitted_y <- c(rep(NA, object_data[["max_lag"]]), fitted_y)
+  fitted_y <- ts(fitted_y, frequency = object_data[["frequency"]],
+                 start = min(time(object_data[["y"]])))
+
+  method <- paste0("ARml(", object_data[["p"]], paste(", ", object_data[["P"]]), ")")
+
+  output <- list(
+    y =  y,
+    xreg = !is.null(xreg),
+    y_modified = object_data[["y"]],
+    x = object_data[["x"]],
+    model = model,
+    fitted = fitted_y,
+    max_lag = object_data[["max_lag"]],
+    method = paste0("CARET ", caret_method, " with ", method),
+    lags = object_data[["lags"]]
   )
 
-  out <- list(
-    model = fit_m,
-    freq = freq,
-    max_lag = max_lag,
-    x_future = as.matrix(x_future),
-    x = x,
-    y = y,
-    y_modified = y2
-  )
   out <- structure(out, class = "CARET")
 
   return(out)
@@ -358,7 +345,7 @@ fit_base <- function(x,
                      fixed_window = TRUE,
                      verbose = TRUE,
                      allow_parallel = FALSE,
-                     tune_grid = NULL) {
+                     tune_grid = NULL, ...) {
   out <- caret::train(
     x = x,
     y = y,
@@ -372,7 +359,8 @@ fit_base <- function(x,
       verboseIter = verbose,
       allowParallel = allow_parallel
     ),
-    tuneGrid = tune_grid
+    tuneGrid = tune_grid,
+    ... = ...
   )
   return(out)
 }

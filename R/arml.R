@@ -443,3 +443,173 @@ forecast.ARml <- function(object,
   return(output)
 }
 
+#' @importFrom forecast bld.mbb.bootstrap fourier
+#' @importFrom caret varImp
+pred_func <- function(i, x, y, newxreg, object, freq, fourier_h) {
+  newxreg_in <- newxreg[i,]
+  new_data <- c(y[length(y)], x[nrow(x), 1:(object$max_lag - 1)])
+  if (object$max_lag == 1) {
+    new_data = new_data[-2]
+  }
+  if (object$seasonal == TRUE & freq > 1)
+  {
+    new_data <- c(new_data, fourier_h[i, ])
+  }
+  if (!is.null(newxreg_in)) {
+    new_data <- c(new_data, newxreg_in)
+  }
+  new_data <- matrix(new_data, nrow = 1)
+  colnames(new_data) <- colnames(x)
+  pred <- predict(object$model, newdata = new_data)
+  return(list("x" = rbind(x, new_data),
+              "y" = c(y, pred)))
+}
+
+forecast_loop <- function(object, xreg, h) {
+  x <- object$x
+  y <- object$y_modified
+  freq <- stats::frequency(object$y_modified)
+  if (object$seasonal == TRUE & freq > 1)
+  {
+    fourier_h <-
+      forecast::fourier(object$y_modified, K = object$K, h = h)
+  }
+  for (i in 1:h) {
+    fc_x <- pred_func(
+      i,
+      x = x,
+      y = y,
+      newxreg = xreg,
+      object = object,
+      freq = freq,
+      fourier_h = fourier_h
+    )
+    x <- fc_x$x
+    y <- fc_x$y
+  }
+  y <- ts(y[-(1:length(object$y_modified))],
+          frequency = freq,
+          start = max(time(object$y)) + 1 / freq)
+  x <- x[-(1:nrow(object$x)),]
+
+  return(list("x" = x,
+              "y" = y))
+}
+
+lag_maker <- function(y, max_lag) {
+  if ("ts" %notin% class(y)) {
+    stop("y must be a 'ts' object")
+  }
+
+  max_lag1 <- round(max_lag)
+  if (max_lag1 != max_lag) {
+    message(
+      paste(
+        "'max_lag' should not be a fractional number.",
+        "'max_lag' rounde to",
+        max_lag1,
+        sep = " "
+      )
+    )
+  }
+  length_y <- length(y)
+  n_col <- max_lag1 + 1
+  dta <- apply(
+    array(seq(
+      from = 1, to = n_col, by = 1
+    )),
+    1,
+    FUN = function(i) {
+      y[(max_lag1 + 2 - i):(length_y + 1 - i)]
+    }
+  )
+
+  colnames(dta) <-
+    c("y", paste0("y_lag", seq(
+      from = 1, to = max_lag1, by = 1
+    )))
+
+  dta <- dta[,-1]
+
+  return(dta)
+}
+
+bs <- function(x, num, block_size = NULL) {
+  bs_data <-
+    bld.mbb.bootstrap(x = x,
+                      num = num,
+                      block_size = block_size)
+  bs_data <- as.data.frame(bs_data)
+  colnames(bs_data) <- paste0("series_", seq_len(ncol(bs_data)))
+  bs_data <- as.matrix(bs_data)
+  return(bs_data)
+}
+#' @importFrom stats quantile tsp tsp<-
+pi <- function(y,
+               fc,
+               num,
+               block_size = NULL,
+               level = c(80, 95)) {
+  if (class(y) != "ts") {
+    stop("y must be a ts object")
+  }
+  if (class(fc) != "ts") {
+    stop("fc must be a ts object")
+  }
+
+  if (frequency(y) != frequency(fc)) {
+    stop("y and fc has different frequency")
+  }
+
+  y2 <- ts(c(y, fc), start = start(y), frequency = frequency(y))
+  sim <-
+    bs(y2, num = num, block_size = block_size) %>% ts(start = 1, frequency = 12)
+  lower <-
+    apply(sim,
+          1,
+          quantile,
+          0.5 - level / 200,
+          type = 8,
+          na.rm = TRUE)
+  if (length(level) > 1) {
+    lower <- t(lower)
+  }
+  lower <- as.matrix(lower)
+  lower <- lower[(length(y) + 1):length(y2),]
+  lower <- as.data.frame(lower)
+  colnames(lower) <- paste0("%", level)
+
+  if (length(level) > 1) {
+    lower <- ts(lower)
+  } else {
+    lower <- ts(lower)
+    lower <- ts(matrix(lower, ncol = 1L))
+  }
+
+  upper <-
+    apply(sim,
+          1,
+          quantile,
+          0.5 + level / 200,
+          type = 8,
+          na.rm = TRUE)
+
+  if (length(level) > 1) {
+    upper <- t(upper)
+  }
+  upper <- as.matrix(upper)
+  upper <- upper[(length(y) + 1):length(y2), ]
+  upper <- as.data.frame(upper)
+  colnames(upper) <- paste0("%", level)
+
+  if (length(level) > 1) {
+    upper <- ts(upper)
+  } else {
+    upper <- ts(upper)
+    upper <- ts(matrix(upper, ncol = 1L))
+  }
+
+  tsp(lower) <- tsp(upper) <- tsp(fc)
+  return(list(lower = lower, upper = upper))
+}
+

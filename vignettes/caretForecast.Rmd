@@ -52,7 +52,8 @@ tourism_melb %>%
 
 ```{r plots}
 
-tourism_melb %>%
+tourism %>%
+  filter(Region == "Melbourne")%>%
   autoplot(Trips)
 
 ```
