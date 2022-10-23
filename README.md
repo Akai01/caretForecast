@@ -6,8 +6,8 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of caretForecast is to provide tools for forecasting time
-series data using various machine learning algorithms.
+caretForecast aspires to equip users with the means of using machine
+learning algorithms for time series data forecasting.
 
 ## Installation
 
@@ -26,10 +26,12 @@ devtools::install_github("Akai01/caretForecast")
 
 ## Example
 
-### Note: User can train any caret supported regression model.
+By using caretForecast, users can train any regression model that is
+compatible with the caret package. This allows them to use any machine
+learning model they need in order to solve specific problems, as shown
+by the examples below.
 
-These are basic examples which shows you how to solve common problems
-with different ML models.
+### Load the library
 
 ``` r
 library(caretForecast)
@@ -37,9 +39,12 @@ library(caretForecast)
 #>   method            from
 #>   as.zoo.data.frame zoo
 
-# Forecasting with glmboost
 data(retail_wide, package = "caretForecast")
+```
 
+### Forecasting with glmboost
+
+``` r
 i <- 8
 
 dtlist <- caretForecast::split_ts(retail_wide[,i], test_size = 12)
@@ -50,39 +55,31 @@ testing_data <- dtlist$test
 
 fit <- ARml(training_data, max_lag = 12, caret_method = "glmboost", 
             verbose = FALSE)
-#> Registered S3 method overwritten by 'inum':
-#>   method          from   
-#>   format.interval tsibble
+#> initial_window = NULL. Setting initial_window = 301
 #> Loading required package: ggplot2
 #> Loading required package: lattice
 
-forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
+forecast(fit, h = length(testing_data), level = c(80,95))-> fc
 
 accuracy(fc, testing_data)
-#>                     ME     RMSE      MAE        MPE     MAPE      MASE
-#> Training set 0.8868074 16.39661 11.65025 -0.3620986 5.702257 0.7559694
-#> Test set     8.3976171 20.15546 17.20306  3.0153042 5.572722 1.1162843
+#>                        ME     RMSE      MAE       MPE     MAPE     MASE
+#> Training set 1.899361e-14 16.55233 11.98019 -1.132477 6.137096 0.777379
+#> Test set     7.472114e+00 21.68302 18.33423  2.780723 5.876433 1.189685
 #>                   ACF1 Theil's U
-#> Training set 0.5707204        NA
-#> Test set     0.3971016 0.7547318
+#> Training set 0.6181425        NA
+#> Test set     0.3849258 0.8078558
 
 
 autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<img src="man/figures/README-example2-1.png" width="100%" />
+
+### Forecasting with cubist regression
 
 ``` r
-
-
-## NOTE : Promotions, holidays, and other external variables can be added in the model via xreg argument. Please look at the documentation of ARml.
-
-# Forecasting with cubist regression
-
 i <- 9
-
-data(retail_wide, package = "caretForecast")
 
 dtlist <- caretForecast::split_ts(retail_wide[,i], test_size = 12)
 
@@ -92,29 +89,27 @@ testing_data <- dtlist$test
 
 fit <- ARml(training_data, max_lag = 12, caret_method = "cubist", 
             verbose = FALSE)
+#> initial_window = NULL. Setting initial_window = 301
 
 forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
 
 accuracy(fc, testing_data)
-#>                     ME     RMSE      MAE         MPE     MAPE      MASE
-#> Training set 0.3452345 16.39877 12.22406 -0.08475644 2.533889 0.4073634
-#> Test set     2.5562312 14.21461 12.39887  0.24907619 1.592606 0.4131888
-#>                    ACF1 Theil's U
-#> Training set  0.2309758        NA
-#> Test set     -0.1450719 0.1701567
+#>                       ME     RMSE      MAE        MPE     MAPE      MASE
+#> Training set   0.5498926 13.33516 10.36501  0.0394589 2.223005 0.3454108
+#> Test set     -17.9231242 47.13871 32.03537 -2.6737257 4.271373 1.0675691
+#>                   ACF1 Theil's U
+#> Training set 0.3979153        NA
+#> Test set     0.4934659 0.4736043
 
 autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 ```
 
-<img src="man/figures/README-example-2.png" width="100%" />
+<img src="man/figures/README-example3-1.png" width="100%" />
+
+### Forecasting using Support Vector Machines with Linear Kernel
 
 ``` r
-
-
-# Forecasting using Support Vector Machines with Linear Kernel
-
-data(retail_wide, package = "caretForecast")
 
 i <- 9
 
@@ -126,61 +121,64 @@ testing_data <- dtlist$test
 
 fit <- ARml(training_data, max_lag = 12, caret_method = "svmLinear2", 
             verbose = FALSE, pre_process = c("scale", "center"))
+#> initial_window = NULL. Setting initial_window = 301
 
 forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
 
 accuracy(fc, testing_data)
-#>                     ME     RMSE      MAE        MPE     MAPE      MASE
-#> Training set  1.086666 15.67422 11.87520 0.06663619 2.497392 0.3957375
-#> Test set     10.671509 16.75893 12.72986 1.33830385 1.611293 0.4242188
-#>                     ACF1 Theil's U
-#> Training set  0.09739853        NA
-#> Test set     -0.27328009 0.2062128
+#>                      ME     RMSE      MAE        MPE     MAPE      MASE
+#> Training set -0.2227708 22.66741 17.16009 -0.2476916 3.712496 0.5718548
+#> Test set     -1.4732653 28.47932 22.92438 -0.4787467 2.883937 0.7639481
+#>                   ACF1 Theil's U
+#> Training set 0.3290937        NA
+#> Test set     0.3863955 0.3137822
 
 autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 ```
 
-<img src="man/figures/README-example-3.png" width="100%" />
+<img src="man/figures/README-example4-1.png" width="100%" />
 
 ``` r
+
 get_var_imp(fc)
 ```
 
-<img src="man/figures/README-example-4.png" width="100%" />
+<img src="man/figures/README-example4-2.png" width="100%" />
 
 ``` r
+
 get_var_imp(fc, plot = F)
 #> loess r-squared variable importance
 #> 
-#>   only 20 most important variables shown (out of 22)
+#>   only 20 most important variables shown (out of 23)
 #> 
-#>         Overall
-#> lag12 100.00000
-#> lag1   89.70809
-#> lag11  88.21434
-#> lag2   87.15896
-#> lag3   86.95035
-#> lag9   86.22539
-#> lag5   85.98743
-#> lag7   85.86392
-#> lag10  85.56408
-#> lag4   85.44561
-#> lag8   84.95210
-#> lag6   83.66422
-#> S1-12   2.62893
-#> S3-12   1.38199
-#> S5-12   1.32829
-#> C2-12   1.21307
-#> C4-12   1.09981
-#> C1-12   0.44682
-#> S2-12   0.14723
-#> C3-12   0.09562
+#>        Overall
+#> lag12 100.0000
+#> lag1   83.9153
+#> lag11  80.4644
+#> lag2   79.9170
+#> lag3   79.5019
+#> lag4   78.3472
+#> lag9   78.1634
+#> lag5   78.0262
+#> lag7   77.9153
+#> lag8   76.7721
+#> lag10  76.4275
+#> lag6   75.7056
+#> S1-12   3.8169
+#> S3-12   2.4230
+#> C2-12   2.1863
+#> S5-12   2.1154
+#> C4-12   1.9426
+#> C1-12   0.5974
+#> C6-12   0.3883
+#> S2-12   0.2220
+```
 
+### Forecasting using Ridge Regression
 
-
-# Forecasting using Ridge Regression
-data(retail_wide, package = "caretForecast")
+``` r
 
 i <- 8
 
@@ -192,54 +190,103 @@ testing_data <- dtlist$test
 
 fit <- ARml(training_data, max_lag = 12, caret_method = "ridge", 
             verbose = FALSE)
+#> initial_window = NULL. Setting initial_window = 301
 
 forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
 
 accuracy(fc, testing_data)
-#>                     ME     RMSE      MAE        MPE     MAPE      MASE
-#> Training set 0.1414756  8.88367  6.44208 -0.0953757 3.126316 0.4180182
-#> Test set     0.9965672 17.71459 13.30744  0.7019753 4.092068 0.8635023
-#>                     ACF1 Theil's U
-#> Training set 0.004518837        NA
-#> Test set     0.389409945 0.6513039
+#>                       ME     RMSE      MAE        MPE     MAPE      MASE
+#> Training set 7.11464e-14 12.69082  9.53269 -0.1991292 5.212444 0.6185639
+#> Test set     1.52445e+00 14.45469 12.04357  0.6431543 3.880894 0.7814914
+#>                   ACF1 Theil's U
+#> Training set 0.2598784        NA
+#> Test set     0.3463574 0.5056792
 
 autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 ```
 
-<img src="man/figures/README-example-5.png" width="100%" />
+<img src="man/figures/README-example5-1.png" width="100%" />
 
 ``` r
+
 get_var_imp(fc)
 ```
 
-<img src="man/figures/README-example-6.png" width="100%" />
+<img src="man/figures/README-example5-2.png" width="100%" />
 
 ``` r
+
 get_var_imp(fc, plot = F)
 #> loess r-squared variable importance
 #> 
-#>   only 20 most important variables shown (out of 22)
+#>   only 20 most important variables shown (out of 23)
 #> 
-#>         Overall
-#> lag12 100.00000
-#> lag1   89.57697
-#> lag11  86.89260
-#> lag2   85.81967
-#> lag3   84.07269
-#> lag10  83.53358
-#> lag9   82.52774
-#> lag7   82.18917
-#> lag4   81.93730
-#> lag5   81.85290
-#> lag8   81.22696
-#> lag6   79.96364
-#> S1-12   4.51371
-#> S3-12   1.59063
-#> C2-12   1.54661
-#> S5-12   1.53004
-#> C4-12   1.24044
-#> C1-12   0.38784
-#> S2-12   0.35446
-#> S4-12   0.07244
+#>        Overall
+#> lag12 100.0000
+#> lag1   84.2313
+#> lag2   78.9566
+#> lag11  78.5354
+#> lag3   76.3480
+#> lag10  74.4727
+#> lag4   74.1330
+#> lag7   74.0737
+#> lag9   73.9113
+#> lag5   73.2040
+#> lag8   72.7224
+#> lag6   71.5713
+#> S1-12   6.3658
+#> S3-12   2.7341
+#> C2-12   2.7125
+#> S5-12   2.4858
+#> C4-12   2.2137
+#> C6-12   0.6381
+#> C1-12   0.5176
+#> S2-12   0.4464
 ```
+
+## Adding external variables
+
+The xreg argument can be used for adding promotions, holidays, and other
+external variables to the model. In the example below, we will add
+seasonal dummies to the model. We set the ‘seasonal = FALSE’ to avoid
+adding the Fourier series to the model together with seasonal dummies.
+
+``` r
+
+xreg_train <- forecast::seasonaldummy(AirPassengers)
+
+newxreg <- forecast::seasonaldummy(AirPassengers, h = 21)
+
+fit <- ARml(AirPassengers, max_lag = 4, caret_method = "cubist", 
+            seasonal = FALSE, xreg = xreg_train, verbose = FALSE)
+#> initial_window = NULL. Setting initial_window = 132
+
+fc <- forecast(fit, h = 12, level = c(80, 95, 99), xreg = newxreg)
+
+autoplot(fc)
+```
+
+<img src="man/figures/README-example6-1.png" width="100%" />
+
+``` r
+
+get_var_imp(fc)
+```
+
+<img src="man/figures/README-example6-2.png" width="100%" />
+
+# Forecasting Hierarchical or grouped time series
+
+``` r
+library(hts)
+
+data("htseg1", package = "hts")
+
+fc <- forecast(htseg1, h = 4, FUN = caretForecast::ARml, 
+               caret_method = "ridge", verbose = FALSE)
+
+plot(fc)
+```
+
+<img src="man/figures/README-example7-1.png" width="100%" />

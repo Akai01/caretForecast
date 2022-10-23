@@ -6,11 +6,10 @@ Authors@R:
            family = "Akay",
            role = c("aut", "cre"),
            email = "resulakay1@gmail.com")
-Description: The caretForecast package makes it easy to create conformal time 
-  series forecasts using the caret infrastructure. The primary function ARml 
-  provides access to state-of-the-art machine learning models for forecasting 
-  applications. The hyperparameter of each model is selected based on time series
-  cross-validation, and forecasting is done recursively.
+Description: Conformal time series forecasting using the caret infrastructure. 
+  It provides access to state-of-the-art machine learning models for forecasting
+  applications. The hyperparameter of each model is selected based on time 
+  series cross-validation, and forecasting is done recursively.
 License: GPL (>= 3)
 URL: https://github.com/Akai01/caretForecast
 BugReports: https://github.com/Akai01/caretForecast/issues

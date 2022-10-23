@@ -27,7 +27,7 @@ test <- window(AirPassengers, start = c(1960, 1))
 ARml(train, caret_method = "lm", max_lag = 12, trend_method = "none",
  pre_process = "center") -> fit
 
-forecast(fit, h = length(test), level = c(80,95), PI = TRUE) -> fc
+forecast(fit, h = length(test), level = c(80,95)) -> fc
 
 autoplot(fc)+ autolayer(test)
 

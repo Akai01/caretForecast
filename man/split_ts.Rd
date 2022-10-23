@@ -19,11 +19,7 @@ Split a time series into training and testing sets
 }
 \examples{
 
-
 dlist <- split_ts(retail_wide[,1], test_size = 12)
-
-
-
 
 }
 \author{

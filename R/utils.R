@@ -1,4 +1,4 @@
-#' @importFrom forecast bld.mbb.bootstrap fourier
+#' @importFrom forecast fourier
 #' @importFrom caret varImp
 pred_func <- function(i, x, y, newxreg, object, freq, fourier_h) {
   newxreg_in <- newxreg[i,]
@@ -67,7 +67,7 @@ forecast_loop <- function(object, xreg, h) {
 #' ARml(train, caret_method = "lm", max_lag = 12, trend_method = "none",
 #'  pre_process = "center") -> fit
 #'
-#' forecast(fit, h = length(test), level = c(80,95), PI = TRUE) -> fc
+#' forecast(fit, h = length(test), level = c(80,95)) -> fc
 #'
 #' autoplot(fc)+ autolayer(test)
 #'
@@ -165,11 +165,7 @@ lag_maker <- function(y, max_lag) {
 #' @author Resul Akay
 #' @examples
 #'
-#'
 #' dlist <- split_ts(retail_wide[,1], test_size = 12)
-#'
-#'
-#'
 #'
 #'@export
 split_ts <- function (y, test_size = 10) {
@@ -212,153 +208,40 @@ suggested_methods <- function() {
   return(caret_methods)
 }
 
-bs <- function(x, num, block_size = NULL) {
-  bs_data <-
-    bld.mbb.bootstrap(x = x,
-                      num = num,
-                      block_size = block_size)
-  bs_data <- as.data.frame(bs_data)
-  colnames(bs_data) <- paste0("series_", seq_len(ncol(bs_data)))
-  bs_data <- as.matrix(bs_data)
-  return(bs_data)
-}
-#' @importFrom stats quantile tsp tsp<-
-pi <- function(y,
-               fc,
-               num,
-               block_size = NULL,
-               level = c(80, 95)) {
-  if (class(y) != "ts") {
-    stop("y must be a ts object")
-  }
-  if (class(fc) != "ts") {
-    stop("fc must be a ts object")
-  }
-
-  if (frequency(y) != frequency(fc)) {
-    stop("y and fc has different frequency")
-  }
-
-  y2 <- ts(c(y, fc), start = start(y), frequency = frequency(y))
-  sim <-
-    bs(y2, num = num, block_size = block_size) %>% ts(start = 1, frequency = 12)
-  lower <-
-    apply(sim,
-          1,
-          quantile,
-          0.5 - level / 200,
-          type = 8,
-          na.rm = TRUE)
-  if (length(level) > 1) {
-    lower <- t(lower)
-  }
-  lower <- as.matrix(lower)
-  lower <- lower[(length(y) + 1):length(y2),]
-  lower <- as.data.frame(lower)
-  colnames(lower) <- paste0("%", level)
-
-  if (length(level) > 1) {
-    lower <- ts(lower)
-  } else {
-    lower <- ts(lower)
-    lower <- ts(matrix(lower, ncol = 1L))
-  }
-
-  upper <-
-    apply(sim,
-          1,
-          quantile,
-          0.5 + level / 200,
-          type = 8,
-          na.rm = TRUE)
-
-  if (length(level) > 1) {
-    upper <- t(upper)
-  }
-  upper <- as.matrix(upper)
-  upper <- upper[(length(y) + 1):length(y2), ]
-  upper <- as.data.frame(upper)
-  colnames(upper) <- paste0("%", level)
-
-  if (length(level) > 1) {
-    upper <- ts(upper)
-  } else {
-    upper <- ts(upper)
-    upper <- ts(matrix(upper, ncol = 1L))
-  }
-
-  tsp(lower) <- tsp(upper) <- tsp(fc)
-  return(list(lower = lower, upper = upper))
-}
-
-
-#' forecast package autoplot function
-#'
-#' See \code{\link[forecast]{autoplot}} for details.
-#'
-#' @name autoplot
-#' @rdname autoplot
-#' @keywords internal
 #' @export
+residuals.ARml <- function(object, ...){
+  res <- object$y - object$fitted
+  return(res)
+}
+
+conformal_intervals <- function(residuals, y_hat, level){
+  level <- c(level/100)
+  conf_reg <- conformalRegressor(residuals)
+  conf_pred <- predict(conf_reg, y_hat = y_hat, confidence = level)
+  upper <- ts(dplyr::select(conf_pred, dplyr::starts_with("upper_")))
+  tsp(upper) <- tsp(y_hat)
+  lower <- ts(dplyr::select(conf_pred, dplyr::starts_with("lower_")))
+  tsp(lower) <- tsp(y_hat)
+  out <- list(upper = upper, lower = lower)
+return(out)
+}
+
 #' @importFrom forecast autoplot
-#' @usage autoplot(object,...)
-#' @return A ggplot object
-#' @seealso \code{\link[forecast]{autoplot}}
-NULL
-
-#' forecast package autolayer function
-#'
-#' See \code{\link[forecast]{autolayer}} for details.
-#'
-#' @name autolayer
-#' @rdname autolayer
-#' @keywords internal
 #' @export
+forecast::autoplot
+
 #' @importFrom forecast autolayer
-#' @return A ggplot layer
-#' @usage autolayer(object,...)
-#' @seealso \code{\link[forecast]{autolayer}}
-NULL
-
-
-#' Accuracy measures for a forecast model
-#'
-#' See \code{\link[forecast]{accuracy}} for details.
-#'
-#' @name accuracy
-#' @rdname accuracy
-#' @keywords internal
 #' @export
-#' @importFrom forecast accuracy
-#' @usage accuracy(object,...)
-#' @return A matrix with forecast accuracy measures.
-#' @seealso \code{\link[forecast]{accuracy}}
-NULL
+forecast::autolayer
 
-
-#' magrittr pipe operator
-#'
-#' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
-#'
-#' @name %>%
-#' @rdname pipe
-#' @keywords internal
+#' @importFrom generics accuracy
 #' @export
+generics::accuracy
+
 #' @importFrom magrittr %>%
-#' @return Nothing
-#'
-#' @usage lhs \%>\% rhs
-NULL
-
-#' Assignment pipe
-#'
-#' See \code{magrittr::\link[magrittr:pipe]{\%<>\%}} for details.
-#'
-#' @name %<>%
-#' @rdname assignment_pipe
-#' @keywords internal
 #' @export
+magrittr::`%>%`
+
 #' @importFrom magrittr %<>%
-#' @return Nothing
-#' @usage lhs \%<>\% rhs
-NULL
+#' @export
+magrittr::`%<>%`

@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 
-The goal of caretForecast is to provide tools for forecasting time series data using various machine learning algorithms.
+caretForecast aspires to equip users with the means of using machine learning algorithms for time series data forecasting.
 
 ## Installation
 
@@ -39,18 +39,21 @@ The development version from [GitHub](https://github.com/) with:
 devtools::install_github("Akai01/caretForecast")
 ```
 ## Example
-### Note: User can train any caret supported regression model.
 
-These are basic examples which shows you how to solve common problems with 
-different ML models. 
+By using caretForecast, users can train any regression model that is compatible with the caret package. This allows them to use any machine learning model they need in order to solve specific problems, as shown by the examples below.
 
 
-```{r example}
+### Load the library
+
+```{r example1}
 library(caretForecast)
 
-# Forecasting with glmboost
 data(retail_wide, package = "caretForecast")
 
+```
+
+### Forecasting with glmboost
+```{r, example2}
 i <- 8
 
 dtlist <- caretForecast::split_ts(retail_wide[,i], test_size = 12)
@@ -62,7 +65,7 @@ testing_data <- dtlist$test
 fit <- ARml(training_data, max_lag = 12, caret_method = "glmboost", 
             verbose = FALSE)
 
-forecast(fit, h = length(testing_data), level = c(80,95), PI = TRUE)-> fc
+forecast(fit, h = length(testing_data), level = c(80,95))-> fc
 
 accuracy(fc, testing_data)
 
@@ -70,15 +73,12 @@ accuracy(fc, testing_data)
 autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 
+```
 
+### Forecasting with cubist regression
 
-## NOTE : Promotions, holidays, and other external variables can be added in the model via xreg argument. Please look at the documentation of ARml.
-
-# Forecasting with cubist regression
-
+```{r, example3}
 i <- 9
-
-data(retail_wide, package = "caretForecast")
 
 dtlist <- caretForecast::split_ts(retail_wide[,i], test_size = 12)
 
@@ -96,11 +96,11 @@ accuracy(fc, testing_data)
 autoplot(fc) + 
   autolayer(testing_data, series = "testing_data")
 
+```
 
+### Forecasting using Support Vector Machines with Linear Kernel
 
-# Forecasting using Support Vector Machines with Linear Kernel
-
-data(retail_wide, package = "caretForecast")
+```{r, example4}
 
 i <- 9
 
@@ -124,10 +124,11 @@ get_var_imp(fc)
 
 get_var_imp(fc, plot = F)
 
+```
 
+### Forecasting using Ridge Regression
 
-# Forecasting using Ridge Regression
-data(retail_wide, package = "caretForecast")
+```{r, example5}
 
 i <- 8
 
@@ -152,4 +153,38 @@ get_var_imp(fc)
 get_var_imp(fc, plot = F)
 ```
 
+## Adding external variables
 
+The xreg argument can be used for adding promotions, holidays, and other external variables to the model. In the example below, we will add seasonal dummies to the model. We set the 'seasonal = FALSE' to avoid adding the Fourier series to the model together with seasonal dummies.
+
+```{r, example6}
+
+xreg_train <- forecast::seasonaldummy(AirPassengers)
+
+newxreg <- forecast::seasonaldummy(AirPassengers, h = 21)
+
+fit <- ARml(AirPassengers, max_lag = 4, caret_method = "cubist", 
+            seasonal = FALSE, xreg = xreg_train, verbose = FALSE)
+
+fc <- forecast(fit, h = 12, level = c(80, 95, 99), xreg = newxreg)
+
+autoplot(fc)
+
+get_var_imp(fc)
+
+```
+
+# Forecasting Hierarchical or grouped time series
+
+
+```{r, example7, warning=FALSE, message=FALSE}
+library(hts)
+
+data("htseg1", package = "hts")
+
+fc <- forecast(htseg1, h = 4, FUN = caretForecast::ARml, 
+               caret_method = "ridge", verbose = FALSE)
+
+plot(fc)
+
+```
