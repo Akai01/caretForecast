@@ -1,7 +1,7 @@
 #' @importFrom forecast fourier
 #' @importFrom caret varImp
 pred_func <- function(i, x, y, newxreg, object, freq, fourier_h) {
-  newxreg_in <- newxreg[i,]
+  newxreg_in <- if (!is.null(newxreg)) newxreg[i,] else NULL
   new_data <- c(y[length(y)], x[nrow(x), 1:(object$max_lag - 1)])
   if (object$max_lag == 1) {
     new_data = new_data[-2]
@@ -24,6 +24,7 @@ forecast_loop <- function(object, xreg, h) {
   x <- object$x
   y <- object$y_modified
   freq <- stats::frequency(object$y_modified)
+  fourier_h <- NULL
   if (object$seasonal == TRUE & freq > 1)
   {
     fourier_h <-
@@ -93,6 +94,14 @@ get_var_imp <- function(object, plot = TRUE) {
 lag_maker <- function(y, max_lag) {
   if ("ts" %notin% class(y)) {
     stop("y must be a 'ts' object")
+  }
+
+  if (max_lag <= 0) {
+    stop("max_lag must be greater than 0")
+  }
+
+  if (max_lag >= length(y)) {
+    stop("max_lag must be less than length(y)")
   }
 
   max_lag1 <- round(max_lag)
@@ -172,6 +181,15 @@ split_ts <- function (y, test_size = 10) {
   if ("ts" %notin% class(y) | "mts" %in% class(y)) {
     stop("y must be a univariate time series class of 'ts'")
   }
+
+  if (test_size <= 0) {
+    stop("test_size must be greater than 0")
+  }
+
+  if (test_size >= length(y)) {
+    stop("test_size must be less than length(y)")
+  }
+
   num_train <- length(y) - test_size
   train_start <- stats::start(y)
   freq <- stats::frequency(y)
@@ -198,7 +216,7 @@ suggested_methods <- function() {
   caret_methods <- c("spikeslab", "bagEarth", "bagEarthGCV", "blasso",
                      "cforest", "earth","extraTrees", "gbm_h2o", "glmStepAIC",
                      "parRF", "qrf", "Rborist", "rf", "rqlasso", "rqnc",
-                     "spikeslab", "xgbDART", "xgbLinear", "ranger", "cubist",
+                     "xgbDART", "xgbLinear", "ranger", "cubist",
                      "svmLinear", "enet", "bridge", "glmboost", "ridge",
                      "lasso", "relaxo", "M5Rules", "M5", "lm", "gaussprLinear",
                      "glm", "glmnet", "pcr", "ppr", "foba", "gbm", "svmLinear2",
@@ -210,8 +228,253 @@ suggested_methods <- function() {
 
 #' @export
 residuals.ARml <- function(object, ...){
+
   res <- object$y - object$fitted
   return(res)
+}
+
+#' Perform rolling-origin calibration with recursive forecasting
+#'
+#' This function computes horizon-specific nonconformity scores by performing
+#' rolling-origin evaluation with recursive multi-step forecasting. This ensures
+#' proper out-of-sample calibration that respects the exchangeability assumption
+#' required for valid conformal prediction intervals.
+#'
+#' @param y Original time series (untransformed)
+#' @param y_modified Transformed time series (Box-Cox if applicable)
+#' @param max_lag Maximum lag used in the model
+#' @param caret_method The caret method name
+#' @param seasonal Logical, whether seasonal terms are used
+#' @param K Fourier order for seasonality
+#' @param lambda Box-Cox transformation parameter
+#' @param pre_process Pre-processing specification
+#' @param tune_grid Tuning grid (uses best parameters from initial fit)
+#' @param xreg External regressors matrix (optional)
+#' @param calibration_horizon Maximum forecast horizon for calibration
+#' @param n_windows Number of rolling windows for calibration
+#' @param initial_window Initial training window size for calibration
+#' @param verbose Logical, print progress
+#' @return A list with horizon-indexed vectors of sorted absolute errors
+#' @keywords internal
+calibrate_horizon_scores <- function(y, y_modified, max_lag, caret_method,
+                                      seasonal, K, lambda, pre_process,
+                                      tune_grid, xreg = NULL,
+                                      calibration_horizon,
+                                      n_windows = NULL,
+                                      initial_window = NULL,
+                                      verbose = FALSE) {
+
+  freq <- stats::frequency(y)
+  length_y <- length(y)
+
+
+  # Determine calibration windows
+  # We need enough data for: initial_window + max_lag + calibration_horizon
+  min_required <- max_lag + calibration_horizon + 10  # minimum 10 training obs
+
+  if (is.null(initial_window)) {
+    # Use 70% of available data as initial window
+    initial_window <- max(min_required, floor(0.7 * (length_y - calibration_horizon)))
+  }
+
+  if (is.null(n_windows)) {
+    # Number of possible windows
+    n_windows <- length_y - initial_window - calibration_horizon + 1
+    n_windows <- min(n_windows, 50)  # Cap at 50 windows for computational efficiency
+  }
+
+  if (n_windows < 2) {
+    warning("Not enough data for proper calibration. Using fallback method.")
+    return(NULL)
+  }
+
+  # Calculate window start positions (evenly spaced if we have more possible than requested)
+  max_possible_windows <- length_y - initial_window - calibration_horizon + 1
+  if (max_possible_windows > n_windows) {
+    window_starts <- round(seq(1, max_possible_windows, length.out = n_windows))
+  } else {
+    window_starts <- 1:max_possible_windows
+    n_windows <- max_possible_windows
+  }
+
+  # Initialize storage for errors by horizon
+  # Each element will be a vector of absolute errors for that horizon
+  horizon_errors <- vector("list", calibration_horizon)
+  for (h in 1:calibration_horizon) {
+    horizon_errors[[h]] <- numeric(0)
+  }
+
+  if (verbose) {
+    message(sprintf("Calibrating conformal scores using %d rolling windows...", n_windows))
+  }
+
+  for (w_idx in seq_along(window_starts)) {
+    w_start <- window_starts[w_idx]
+    train_end <- initial_window + w_start - 1
+    test_start <- train_end + 1
+    test_end <- min(test_start + calibration_horizon - 1, length_y)
+    actual_horizon <- test_end - train_end
+
+    if (actual_horizon < 1) next
+
+    # Extract training data
+    y_train <- ts(y[1:train_end], start = stats::start(y), frequency = freq)
+    y_mod_train <- ts(y_modified[1:train_end], start = stats::start(y_modified),
+                      frequency = freq)
+
+    # Extract test actuals
+    y_test <- y[(test_start):test_end]
+
+    # Build feature matrix for training
+    y_mod_for_lags <- y_mod_train
+    modified_y_2 <- ts(y_mod_for_lags[-seq_len(max_lag)],
+                       start = time(y_mod_for_lags)[max_lag + 1],
+                       frequency = freq)
+
+    train_length <- length(y_mod_for_lags)
+
+    # Determine if seasonal terms should be used
+    use_seasonal <- seasonal && freq > 1 && (train_length - max_lag >= freq + 1)
+
+    # Build feature matrix
+    if (use_seasonal) {
+      if (K == freq / 2) {
+        ncolx <- max_lag + K * 2 - 1
+      } else {
+        ncolx <- max_lag + K * 2
+      }
+    } else {
+      ncolx <- max_lag
+    }
+
+    x_train <- matrix(0, nrow = train_length - max_lag, ncol = ncolx)
+    x_train[, seq_len(max_lag)] <- lag_maker(y_mod_for_lags, max_lag)
+
+    if (use_seasonal) {
+      fourier_s <- forecast::fourier(modified_y_2, K = K)
+      x_train[, (max_lag + 1):ncolx] <- fourier_s
+      colnames(x_train) <- c(paste0("lag", 1:max_lag), colnames(fourier_s))
+    } else {
+      colnames(x_train) <- paste0("lag", 1:max_lag)
+    }
+
+    # Add xreg if present
+    if (!is.null(xreg)) {
+      xreg_train <- xreg[1:train_end, , drop = FALSE]
+      xreg_train <- xreg_train[-seq_len(max_lag), , drop = FALSE]
+      x_train <- cbind(x_train, xreg_train)
+    }
+
+    # Train model on this window (with fixed hyperparameters from tune_grid)
+    tryCatch({
+      model_cal <- caret::train(
+        x = x_train,
+        y = as.numeric(modified_y_2),
+        method = caret_method,
+        preProcess = pre_process,
+        trControl = caret::trainControl(method = "none"),
+        tuneGrid = tune_grid
+      )
+
+      # Create a temporary object for recursive forecasting
+      temp_object <- list(
+        y = y_train,
+        y_modified = modified_y_2,
+        x = x_train,
+        model = model_cal,
+        max_lag = max_lag,
+        lambda = lambda,
+        seasonal = use_seasonal,
+        K = if (use_seasonal) K else NULL
+      )
+
+      # Prepare xreg for forecasting if needed
+      xreg_fc <- NULL
+      if (!is.null(xreg)) {
+        xreg_fc <- xreg[test_start:test_end, , drop = FALSE]
+      }
+
+      # Perform recursive forecasting
+      fc_result <- forecast_loop_cal(temp_object, xreg = xreg_fc, h = actual_horizon)
+      forecasts <- as.numeric(fc_result$y)
+
+      # Apply inverse Box-Cox if needed
+      if (!is.null(lambda)) {
+        forecasts <- forecast::InvBoxCox(forecasts, lambda = lambda)
+      }
+
+      # Calculate absolute errors for each horizon
+      for (h in 1:actual_horizon) {
+        abs_error <- abs(forecasts[h] - y_test[h])
+        horizon_errors[[h]] <- c(horizon_errors[[h]], abs_error)
+      }
+
+    }, error = function(e) {
+      if (verbose) {
+        message(sprintf("Window %d failed: %s", w_idx, e$message))
+      }
+    })
+  }
+
+  # Check if we have enough calibration samples
+  min_samples <- min(sapply(horizon_errors, length))
+  if (min_samples < 2) {
+    warning("Insufficient calibration samples. Using fallback method.")
+    return(NULL)
+  }
+
+  # Sort the errors for each horizon (for quantile computation)
+  for (h in 1:calibration_horizon) {
+    horizon_errors[[h]] <- sort(horizon_errors[[h]])
+  }
+
+  names(horizon_errors) <- paste0("h", 1:calibration_horizon)
+
+  if (verbose) {
+    message(sprintf("Calibration complete. Samples per horizon: %d to %d",
+                    min_samples, max(sapply(horizon_errors, length))))
+  }
+
+  return(horizon_errors)
+}
+
+#' Internal forecast loop for calibration (without time series attributes)
+#' @keywords internal
+forecast_loop_cal <- function(object, xreg, h) {
+  x <- object$x
+  y <- as.numeric(object$y_modified)
+  freq <- stats::frequency(object$y_modified)
+
+  fourier_h <- NULL
+  if (isTRUE(object$seasonal) && freq > 1 && !is.null(object$K)) {
+    fourier_h <- forecast::fourier(object$y_modified, K = object$K, h = h)
+  }
+
+  for (i in 1:h) {
+    # Build new data point
+    newxreg_in <- if (!is.null(xreg)) xreg[i, ] else NULL
+    new_data <- c(y[length(y)], x[nrow(x), 1:(object$max_lag - 1)])
+    if (object$max_lag == 1) {
+      new_data <- new_data[-2]
+    }
+    if (isTRUE(object$seasonal) && freq > 1 && !is.null(fourier_h)) {
+      new_data <- c(new_data, fourier_h[i, ])
+    }
+    if (!is.null(newxreg_in)) {
+      new_data <- c(new_data, newxreg_in)
+    }
+    new_data <- matrix(new_data, nrow = 1)
+    colnames(new_data) <- colnames(x)
+
+    pred <- predict(object$model, newdata = new_data)
+    x <- rbind(x, new_data)
+    y <- c(y, pred)
+  }
+
+  # Extract only the forecasted values
+  forecasts <- y[-(1:length(object$y_modified))]
+
+  return(list("x" = x, "y" = forecasts))
 }
 
 conformal_intervals <- function(residuals, y_hat, level){

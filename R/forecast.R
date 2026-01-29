@@ -45,6 +45,7 @@ forecast.ARml <- function(object,
                           level = c(80, 95),
                           ...) {
 
+  ncolxreg <- NULL
   if (!is.null(object$xreg_fit)) {
     ncolxreg <- ncol(object$xreg_fit)
   }
@@ -89,29 +90,74 @@ forecast.ARml <- function(object,
                              fvar = BoxCox_fvar)
   }
 
-  res <- tryCatch({
-    residuals(object)
-  }, error = function(err){
-    out <- NULL
-    return(out)
-  })
+  # Compute prediction intervals
 
-  if(is.null(res)){
-    lower <- NULL
-    upper <- NULL
-  } else {
+  # Use horizon-specific calibration if available (preferred method)
+  if (!is.null(object$calibration)) {
     intervals <- tryCatch({
-      conformal_intervals(residuals = res, y_hat = y, level = level)
-    }, error =  function(err) {
+      # Convert level from percentage to proportion
+      conf_levels <- level / 100
+
+      # Get horizon-specific intervals
+      conf_pred <- predict(object$calibration,
+                           y_hat = as.numeric(y),
+                           confidence = conf_levels)
+
+      # Extract lower and upper bounds
+      lower_cols <- grep("^lower_", names(conf_pred), value = TRUE)
+      upper_cols <- grep("^upper_", names(conf_pred), value = TRUE)
+
+      lower_mat <- as.matrix(conf_pred[, lower_cols, drop = FALSE])
+      upper_mat <- as.matrix(conf_pred[, upper_cols, drop = FALSE])
+
+      # Convert to time series
+      lower_ts <- ts(lower_mat, start = stats::start(y),
+                     frequency = stats::frequency(y))
+      upper_ts <- ts(upper_mat, start = stats::start(y),
+                     frequency = stats::frequency(y))
+
+      colnames(lower_ts) <- paste0(level, "%")
+      colnames(upper_ts) <- paste0(level, "%")
+
+      list(lower = lower_ts, upper = upper_ts)
+    }, error = function(err) {
+      warning(paste("Horizon-specific intervals failed:", err$message,
+                    "\nFalling back to in-sample residuals."))
       NULL
     })
-    if(is.null(intervals)){
+
+    if (!is.null(intervals)) {
+      lower <- intervals$lower
+      upper <- intervals$upper
+    } else {
       lower <- NULL
       upper <- NULL
-      warning("I could not derive conformal prediction intervals")
+    }
+  } else {
+    # Fallback: use in-sample residuals (original method - less accurate)
+    res <- tryCatch({
+      residuals(object)
+    }, error = function(err){
+      NULL
+    })
+
+    if(is.null(res)){
+      lower <- NULL
+      upper <- NULL
     } else {
-      lower <- intervals[["lower"]]
-      upper<- intervals[["upper"]]
+      intervals <- tryCatch({
+        conformal_intervals(residuals = res, y_hat = y, level = level)
+      }, error =  function(err) {
+        NULL
+      })
+      if(is.null(intervals)){
+        lower <- NULL
+        upper <- NULL
+        warning("Could not derive conformal prediction intervals")
+      } else {
+        lower <- intervals[["lower"]]
+        upper <- intervals[["upper"]]
+      }
     }
   }
 

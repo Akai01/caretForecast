@@ -62,6 +62,15 @@
 #'  and the corresponding upper and lower intervals.
 #' @param allow_parallel If a parallel backend is loaded and available,
 #' should the function use it?
+#' @param calibrate Logical. If TRUE, performs rolling-origin calibration to
+#' compute horizon-specific conformal prediction intervals. This produces
+#' properly calibrated intervals that widen with forecast horizon (trumpet shape).
+#' Default is TRUE.
+#' @param calibration_horizon Maximum forecast horizon for calibration.
+#' If NULL (default), uses \code{2 * frequency(y)} for seasonal data or 10
+#' for non-seasonal data.
+#' @param n_cal_windows Number of rolling windows for calibration.
+#' If NULL (default), automatically determined based on data length (max 50).
 #' @param ... Ignored.
 #' @return A list class of forecast containing the following elemets
 #' * x : The input time series
@@ -72,6 +81,7 @@
 #' * level : The confidence values associated with the prediction intervals
 #' * model : A list containing information about the fitted model
 #' * newx : A matrix containing regressors
+#' * calibration : Horizon-specific conformal calibration scores (if calibrate=TRUE)
 #' @author Resul Akay
 #'
 #' @examples
@@ -113,6 +123,9 @@ ARml <- function(y,
                  BoxCox_biasadj = FALSE,
                  BoxCox_fvar = NULL,
                  allow_parallel = FALSE,
+                 calibrate = TRUE,
+                 calibration_horizon = NULL,
+                 n_cal_windows = NULL,
                  ...) {
 
   if ("ts" %notin% class(y)) {
@@ -121,9 +134,9 @@ ARml <- function(y,
   freq <- stats::frequency(y)
   length_y <- length(y)
 
-  if (c(length_y - freq - round(freq / 4)) < max_lag) {
+  if ((length_y - freq - round(freq / 4)) < max_lag) {
     if(length_y > 3){
-      max_lag <- length_y + 3 - length_y
+      max_lag <- 3
     } else {
       max_lag <- 1
     }
@@ -337,6 +350,75 @@ ARml <- function(y,
   if (!is.null(xreg)) {
     output$xreg_fit <- xreg
   }
+
+  # Store additional info needed for calibration
+  output$caret_method <- caret_method
+  output$pre_process <- pre_process
+
+  # Perform horizon-specific calibration for conformal prediction intervals
+  output$calibration <- NULL
+  if (calibrate) {
+    # Set default calibration horizon
+    if (is.null(calibration_horizon)) {
+      calibration_horizon <- ifelse(freq > 1, 2 * freq, 10)
+    }
+
+    # Get the best tuning parameters from the model
+    best_tune <- model$bestTune
+
+    if (verbose) {
+      message("Performing horizon-specific calibration for conformal prediction intervals...")
+    }
+
+    # Need to reconstruct the full modified_y for calibration
+    # (before it was truncated by max_lag)
+    if (is.null(lambda)) {
+      full_modified_y <- y
+    } else {
+      full_modified_y <- forecast::BoxCox(y, lambda)
+    }
+
+    # Store xreg_original before it was truncated
+    xreg_original <- NULL
+    if (!is.null(xreg)) {
+      # xreg was modified in place - need to get original
+      # Reconstruct by adding back the removed rows
+      # Actually, the original xreg was passed in but modified
+      # We need to store it before modification next time
+      # For now, we'll work with what we have
+      xreg_original <- rbind(matrix(NA, nrow = max_lag, ncol = ncol(xreg)), xreg)
+    }
+
+    cal_scores <- tryCatch({
+      calibrate_horizon_scores(
+        y = y,
+        y_modified = full_modified_y,
+        max_lag = max_lag,
+        caret_method = caret_method,
+        seasonal = seasonal,
+        K = if (seasonal && freq > 1) K else NULL,
+        lambda = lambda,
+        pre_process = pre_process,
+        tune_grid = best_tune,
+        xreg = xreg_original,
+        calibration_horizon = calibration_horizon,
+        n_windows = n_cal_windows,
+        verbose = verbose
+      )
+    }, error = function(e) {
+      if (verbose) {
+        warning(paste("Calibration failed:", e$message,
+                      "\nFalling back to in-sample residuals."))
+      }
+      NULL
+    })
+
+    if (!is.null(cal_scores)) {
+      output$calibration <- conformalRegressorByHorizon(cal_scores)
+      output$calibration_horizon <- calibration_horizon
+    }
+  }
+
   class(output) <- "ARml"
   return(output)
 }

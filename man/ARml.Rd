@@ -26,6 +26,9 @@ ARml(
   BoxCox_biasadj = FALSE,
   BoxCox_fvar = NULL,
   allow_parallel = FALSE,
+  calibrate = TRUE,
+  calibration_horizon = NULL,
+  n_cal_windows = NULL,
   ...
 )
 }
@@ -109,6 +112,18 @@ and the corresponding upper and lower intervals.}
 \item{allow_parallel}{If a parallel backend is loaded and available,
 should the function use it?}
 
+\item{calibrate}{Logical. If TRUE, performs rolling-origin calibration to
+compute horizon-specific conformal prediction intervals. This produces
+properly calibrated intervals that widen with forecast horizon (trumpet shape).
+Default is TRUE.}
+
+\item{calibration_horizon}{Maximum forecast horizon for calibration.
+If NULL (default), uses \code{2 * frequency(y)} for seasonal data or 10
+for non-seasonal data.}
+
+\item{n_cal_windows}{Number of rolling windows for calibration.
+If NULL (default), automatically determined based on data length (max 50).}
+
 \item{...}{Ignored.}
 }
 \value{
@@ -122,6 +137,7 @@ A list class of forecast containing the following elemets
 \item level : The confidence values associated with the prediction intervals
 \item model : A list containing information about the fitted model
 \item newx : A matrix containing regressors
+\item calibration : Horizon-specific conformal calibration scores (if calibrate=TRUE)
 }
 }
 \description{
