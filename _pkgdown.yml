@@ -1,0 +1,85 @@
+url: https://akai01.github.io/caretForecast/
+
+template:
+  bootstrap: 5
+  bootswatch: flatly
+  bslib:
+    primary: "#0d6efd"
+    border-radius: 0.5rem
+    btn-border-radius: 0.25rem
+
+home:
+  title: caretForecast
+  description: Conformal Time Series Forecasting Using Machine Learning
+  links:
+    - text: Report a bug
+      href: https://github.com/Akai01/caretForecast/issues
+
+navbar:
+  structure:
+    left: [intro, reference, articles, news]
+    right: [search, github]
+  components:
+    github:
+      icon: fab fa-github
+      href: https://github.com/Akai01/caretForecast
+      aria-label: GitHub
+
+reference:
+  - title: Model Fitting
+    desc: >
+      Functions for fitting machine learning models to time series data.
+    contents:
+      - ARml
+      - suggested_methods
+
+  - title: Forecasting
+    desc: >
+      Generate point forecasts and prediction intervals.
+    contents:
+      - forecast.ARml
+
+  - title: Conformal Prediction
+    desc: >
+      Functions for computing conformal prediction intervals with proper
+      coverage guarantees.
+    contents:
+      - conformalRegressor
+      - conformalRegressorByHorizon
+      - predict.conformalRegressor
+      - predict.conformalRegressorByHorizon
+
+  - title: Model Diagnostics
+    desc: >
+      Tools for evaluating and understanding model performance.
+    contents:
+      - get_var_imp
+      - residuals.ARml
+
+  - title: Data Utilities
+    desc: >
+      Helper functions for preparing time series data.
+    contents:
+      - split_ts
+
+  - title: Datasets
+    desc: >
+      Example datasets included in the package.
+    contents:
+      - retail
+      - retail_wide
+
+  - title: Re-exports
+    desc: >
+      Functions re-exported from other packages for convenience.
+    contents:
+      - reexports
+
+authors:
+  Resul Akay:
+    href: https://github.com/Akai01
+
+footer:
+  structure:
+    left: developed_by
+    right: built_with

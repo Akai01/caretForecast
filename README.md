@@ -6,6 +6,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/Akai01/caretForecast/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Akai01/caretForecast/actions/workflows/R-CMD-check.yaml)
+[![pkgdown](https://github.com/Akai01/caretForecast/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/Akai01/caretForecast/actions/workflows/pkgdown.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/Akai01/caretForecast/graph/badge.svg)](https://app.codecov.io/gh/Akai01/caretForecast)
 [![CRAN
