@@ -28,7 +28,6 @@ intervals that naturally widen as the forecast horizon increases
 Boström, H., 2022. crepes: a Python Package for Generating Conformal
 Regressors and Predictive Systems. In Conformal and Probabilistic Prediction
 and Applications. PMLR, 179.
-\url{https://copa-conference.com/papers/COPA2022_paper_11.pdf}
 
 Stankeviciute, K., Alaa, A. M., & van der Schaar, M., 2021.
 Conformal Time-series Forecasting. NeurIPS 2021.

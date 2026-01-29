@@ -21,7 +21,6 @@ Fit a conformal regressor.
 Boström, H., 2022. crepes: a Python Package for Generating Conformal
 Regressors and Predictive Systems. In Conformal and Probabilistic Prediction
 and Applications. PMLR, 179.
-\url{https://copa-conference.com/papers/COPA2022_paper_11.pdf}
 }
 \author{
 Resul Akay
