@@ -184,7 +184,7 @@ get_var_imp(fc)
 
 ## Conformal Prediction Intervals
 
-As of version 0.1.1, caretForecast implements **horizon-specific conformal prediction intervals**. This approach provides properly calibrated prediction intervals that naturally widen with forecast horizon (trumpet shape), addressing a common limitation of ML-based forecasting methods.
+As of version 0.1.2, caretForecast implements **horizon-specific conformal prediction intervals**. This approach provides properly calibrated prediction intervals that naturally widen with forecast horizon (trumpet shape), addressing a common limitation of ML-based forecasting methods.
 
 ### How it works
 
