@@ -5,6 +5,17 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/Akai01/caretForecast/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Akai01/caretForecast/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/Akai01/caretForecast/graph/badge.svg)](https://app.codecov.io/gh/Akai01/caretForecast)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/caretForecast)](https://CRAN.R-project.org/package=caretForecast)
+[![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/caretForecast)](https://CRAN.R-project.org/package=caretForecast)
+[![Lifecycle:
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
+[![License: GPL
+v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 <!-- badges: end -->
 
 caretForecast aspires to equip users with the means of using machine
