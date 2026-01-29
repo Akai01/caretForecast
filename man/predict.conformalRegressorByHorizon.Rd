@@ -18,7 +18,7 @@
 
 \item{y_hat}{Predicted values (one per horizon)}
 
-\item{confidence}{Confidence level(s) between 0 and 1 (e.g., 0.95 for 95\\%)}
+\item{confidence}{Confidence level(s) between 0 and 1 (e.g., 0.95 for 95 percent)}
 
 \item{y_min}{The minimum value to include in prediction intervals}
 

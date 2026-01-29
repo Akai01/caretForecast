@@ -4,10 +4,22 @@
 # caretForecast
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 caretForecast aspires to equip users with the means of using machine
 learning algorithms for time series data forecasting.
+
+## Features
+
+- Use any regression model from the caret package for time series
+  forecasting
+- Automatic feature engineering with lagged values and Fourier terms for
+  seasonality
+- **Horizon-specific conformal prediction intervals** with proper
+  out-of-sample calibration
+- Support for external regressors (promotions, holidays, etc.)
+- Compatible with hierarchical/grouped time series via the hts package
 
 ## Installation
 
@@ -53,7 +65,7 @@ training_data <- dtlist$train
 
 testing_data <- dtlist$test
 
-fit <- ARml(training_data, max_lag = 12, caret_method = "glmboost", 
+fit <- ARml(training_data, max_lag = 12, caret_method = "cubist", 
             verbose = FALSE)
 #> initial_window = NULL. Setting initial_window = 301
 #> Loading required package: ggplot2
@@ -62,12 +74,12 @@ fit <- ARml(training_data, max_lag = 12, caret_method = "glmboost",
 forecast(fit, h = length(testing_data), level = c(80,95))-> fc
 
 accuracy(fc, testing_data)
-#>                        ME     RMSE      MAE       MPE     MAPE     MASE
-#> Training set 1.899361e-14 16.55233 11.98019 -1.132477 6.137096 0.777379
-#> Test set     7.472114e+00 21.68302 18.33423  2.780723 5.876433 1.189685
+#>                     ME      RMSE       MAE        MPE     MAPE      MASE
+#> Training set 0.3616104  8.550244  6.349603 -0.0727533 3.243307 0.4120175
+#> Test set     2.4886342 15.770333 11.247363  1.1450840 3.448918 0.7298268
 #>                   ACF1 Theil's U
-#> Training set 0.6181425        NA
-#> Test set     0.3849258 0.8078558
+#> Training set 0.2754280        NA
+#> Test set     0.3447055 0.5827831
 
 
 autoplot(fc) + 
@@ -276,17 +288,44 @@ get_var_imp(fc)
 
 <img src="man/figures/README-example6-2.png" width="100%" />
 
-# Forecasting Hierarchical or grouped time series
+## Conformal Prediction Intervals
+
+As of version 0.1.1, caretForecast implements **horizon-specific
+conformal prediction intervals**. This approach provides properly
+calibrated prediction intervals that naturally widen with forecast
+horizon (trumpet shape), addressing a common limitation of ML-based
+forecasting methods.
+
+### How it works
+
+When `calibrate = TRUE` (the default), `ARml()` performs rolling-origin
+calibration using out-of-sample forecasts to compute nonconformity
+scores for each forecast horizon. This ensures that the prediction
+intervals have the correct coverage probability.
+
+### Key parameters
+
+- `calibrate`: Logical. If TRUE (default), performs horizon-specific
+  calibration for conformal prediction intervals
+- `calibration_horizon`: Maximum forecast horizon for calibration.
+  Defaults to `2 * frequency(y)` for seasonal data or 10 for
+  non-seasonal data
+- `n_cal_windows`: Number of rolling windows for calibration.
+  Automatically determined based on data length (max 50)
+
+### Example with calibrated intervals
 
 ``` r
-library(hts)
+# Fit model with conformal calibration (default)
+fit <- ARml(AirPassengers, max_lag = 12, caret_method = "ridge",
+            verbose = FALSE, calibrate = TRUE)
+#> initial_window = NULL. Setting initial_window = 124
 
-data("htseg1", package = "hts")
+# Forecast with prediction intervals
+fc <- forecast(fit, h = 24, level = c(80, 95))
 
-fc <- forecast(htseg1, h = 4, FUN = caretForecast::ARml, 
-               caret_method = "ridge", verbose = FALSE)
-
-plot(fc)
+# The intervals widen appropriately with forecast horizon
+autoplot(fc)
 ```
 
-<img src="man/figures/README-example7-1.png" width="100%" />
+<img src="man/figures/README-example_conformal-1.png" width="100%" />

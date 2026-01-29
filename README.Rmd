@@ -22,6 +22,14 @@ knitr::opts_chunk$set(
 
 caretForecast aspires to equip users with the means of using machine learning algorithms for time series data forecasting.
 
+## Features
+
+- Use any regression model from the caret package for time series forecasting
+- Automatic feature engineering with lagged values and Fourier terms for seasonality
+- **Horizon-specific conformal prediction intervals** with proper out-of-sample calibration
+- Support for external regressors (promotions, holidays, etc.)
+- Compatible with hierarchical/grouped time series via the hts package
+
 ## Installation
 
 The CRAN version with:
@@ -62,7 +70,7 @@ training_data <- dtlist$train
 
 testing_data <- dtlist$test
 
-fit <- ARml(training_data, max_lag = 12, caret_method = "glmboost", 
+fit <- ARml(training_data, max_lag = 12, caret_method = "cubist", 
             verbose = FALSE)
 
 forecast(fit, h = length(testing_data), level = c(80,95))-> fc
@@ -174,17 +182,30 @@ get_var_imp(fc)
 
 ```
 
-# Forecasting Hierarchical or grouped time series
+## Conformal Prediction Intervals
 
+As of version 0.1.1, caretForecast implements **horizon-specific conformal prediction intervals**. This approach provides properly calibrated prediction intervals that naturally widen with forecast horizon (trumpet shape), addressing a common limitation of ML-based forecasting methods.
 
-```{r, example7, warning=FALSE, message=FALSE}
-library(hts)
+### How it works
 
-data("htseg1", package = "hts")
+When `calibrate = TRUE` (the default), `ARml()` performs rolling-origin calibration using out-of-sample forecasts to compute nonconformity scores for each forecast horizon. This ensures that the prediction intervals have the correct coverage probability.
 
-fc <- forecast(htseg1, h = 4, FUN = caretForecast::ARml, 
-               caret_method = "ridge", verbose = FALSE)
+### Key parameters
 
-plot(fc)
+- `calibrate`: Logical. If TRUE (default), performs horizon-specific calibration for conformal prediction intervals
+- `calibration_horizon`: Maximum forecast horizon for calibration. Defaults to `2 * frequency(y)` for seasonal data or 10 for non-seasonal data
+- `n_cal_windows`: Number of rolling windows for calibration. Automatically determined based on data length (max 50)
 
+### Example with calibrated intervals
+
+```{r, example_conformal}
+# Fit model with conformal calibration (default)
+fit <- ARml(AirPassengers, max_lag = 12, caret_method = "ridge",
+            verbose = FALSE, calibrate = TRUE)
+
+# Forecast with prediction intervals
+fc <- forecast(fit, h = 24, level = c(80, 95))
+
+# The intervals widen appropriately with forecast horizon
+autoplot(fc)
 ```

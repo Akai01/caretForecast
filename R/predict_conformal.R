@@ -113,7 +113,7 @@ predict.conformalRegressor <- function(object, y_hat = NULL, sigmas = NULL,
 #'
 #' @param object A conformalRegressorByHorizon object
 #' @param y_hat Predicted values (one per horizon)
-#' @param confidence Confidence level(s) between 0 and 1 (e.g., 0.95 for 95\%)
+#' @param confidence Confidence level(s) between 0 and 1 (e.g., 0.95 for 95 percent)
 #' @param y_min The minimum value to include in prediction intervals
 #' @param y_max The maximum value to include in prediction intervals
 #' @param ... Ignored
