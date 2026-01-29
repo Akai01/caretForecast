@@ -54,7 +54,6 @@ reference:
       Tools for evaluating and understanding model performance.
     contents:
       - get_var_imp
-      - residuals.ARml
 
   - title: Data Utilities
     desc: >
