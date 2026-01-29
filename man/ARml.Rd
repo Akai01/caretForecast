@@ -45,7 +45,7 @@ which must have the same number of rows as y.
 regression model to use.
 Possible values are found using names(getModelInfo()).
 A list of functions can also be passed for a custom model function.
-See \url{http://topepo.github.io/caret/} for details.}
+See \url{https://topepo.github.io/caret/} for details.}
 
 \item{metric}{A string that specifies what summary metric will be used to
 select the optimal model. See \code{?caret::train}.}
@@ -81,7 +81,7 @@ used for modeling seasonality.}
 \item{tune_grid}{A data frame with possible tuning values.
 The columns are named the same as the tuning parameters.
 Use getModelInfo to get a list of tuning parameters for each model or
-see \url{http://topepo.github.io/caret/available-models.html}.
+see \url{https://topepo.github.io/caret/available-models.html}.
 (NOTE: If given, this argument must be named.)}
 
 \item{lambda}{BoxCox transformation parameter. If \code{lambda = NULL}

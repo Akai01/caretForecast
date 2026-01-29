@@ -13,7 +13,7 @@
 #' regression model to use.
 #' Possible values are found using names(getModelInfo()).
 #' A list of functions can also be passed for a custom model function.
-#' See \url{http://topepo.github.io/caret/} for details.
+#' See \url{https://topepo.github.io/caret/} for details.
 #' @param metric A string that specifies what summary metric will be used to
 #' select the optimal model. See \code{?caret::train}.
 #' @param pre_process A string vector that defines a pre-processing of the
@@ -39,7 +39,7 @@
 #' @param tune_grid A data frame with possible tuning values.
 #' The columns are named the same as the tuning parameters.
 #' Use getModelInfo to get a list of tuning parameters for each model or
-#' see \url{http://topepo.github.io/caret/available-models.html}.
+#' see \url{https://topepo.github.io/caret/available-models.html}.
 #' (NOTE: If given, this argument must be named.)
 #' @param lambda BoxCox transformation parameter. If \code{lambda = NULL}
 #' If \code{lambda = "auto"}, then the transformation parameter lambda is chosen
