@@ -55,7 +55,7 @@ ARml(
   A string specifying which classification or regression model to use.
   Possible values are found using names(getModelInfo()). A list of
   functions can also be passed for a custom model function. See
-  <http://topepo.github.io/caret/> for details.
+  <https://topepo.github.io/caret/> for details.
 
 - metric:
 
@@ -109,8 +109,8 @@ ARml(
   A data frame with possible tuning values. The columns are named the
   same as the tuning parameters. Use getModelInfo to get a list of
   tuning parameters for each model or see
-  [http://topepo.github.io/caret/available-models.html](http://topepo.github.io/caret/available-models.md).
-  (NOTE: If given, this argument must be named.)
+  <https://topepo.github.io/caret/available-models.html>. (NOTE: If
+  given, this argument must be named.)
 
 - lambda:
 
