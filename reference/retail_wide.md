@@ -14,7 +14,7 @@ An object of class mts (inherits from ts, matrix) with 333 rows and 43
 columns.
 
 This data set is the wide format of
-[retail](https://akai01.github.io/caretForecast/reference/retail.md)
+[retail](https://taf-society.github.io/caretForecast/reference/retail.md)
 data.
 
 ## Source

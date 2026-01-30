@@ -7,11 +7,11 @@ CRAN release: 2026-01-30
 - Implemented horizon-specific conformal prediction intervals with
   proper out-of-sample calibration
 - Added new parameters to
-  [`ARml()`](https://akai01.github.io/caretForecast/reference/ARml.md):
+  [`ARml()`](https://taf-society.github.io/caretForecast/reference/ARml.md):
   `calibrate`, `calibration_horizon`, `n_cal_windows`
 - New functions:
-  [`conformalRegressorByHorizon()`](https://akai01.github.io/caretForecast/reference/conformalRegressorByHorizon.md),
-  [`calibrate_horizon_scores()`](https://akai01.github.io/caretForecast/reference/calibrate_horizon_scores.md)
+  [`conformalRegressorByHorizon()`](https://taf-society.github.io/caretForecast/reference/conformalRegressorByHorizon.md),
+  [`calibrate_horizon_scores()`](https://taf-society.github.io/caretForecast/reference/calibrate_horizon_scores.md)
 - Prediction intervals now properly widen with forecast horizon (trumpet
   shape)
 - Added comprehensive test suite for short time series handling

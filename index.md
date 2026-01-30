@@ -26,7 +26,7 @@ The development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("Akai01/caretForecast")
+devtools::install_github("taf-society/caretForecast")
 ```
 
 ## Example
@@ -292,7 +292,7 @@ forecasting methods.
 ### How it works
 
 When `calibrate = TRUE` (the default),
-[`ARml()`](https://akai01.github.io/caretForecast/reference/ARml.md)
+[`ARml()`](https://taf-society.github.io/caretForecast/reference/ARml.md)
 performs rolling-origin calibration using out-of-sample forecasts to
 compute nonconformity scores for each forecast horizon. This ensures
 that the prediction intervals have the correct coverage probability.

@@ -19,7 +19,7 @@ conformalRegressorByHorizon(horizon_errors)
   A named list where each element contains sorted absolute errors for
   that horizon. Names should be "h1", "h2", etc. This is typically
   produced by
-  [`calibrate_horizon_scores()`](https://akai01.github.io/caretForecast/reference/calibrate_horizon_scores.md).
+  [`calibrate_horizon_scores()`](https://taf-society.github.io/caretForecast/reference/calibrate_horizon_scores.md).
 
 ## Value
 
