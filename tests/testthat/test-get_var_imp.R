@@ -26,3 +26,38 @@ if(require(testthat)){
 
   })
 }
+
+# Test that get_var_imp accepts ARml objects directly (not just forecastARml)
+if(require(testthat)){
+
+  test_that("get_var_imp accepts ARml objects", {
+    library(caretForecast)
+    fit <- ARml(AirPassengers, caret_method = "lm", max_lag = 12,
+                verbose = FALSE, calibrate = FALSE)
+
+    # Should work with ARml object directly
+    a <- get_var_imp(fit, plot = FALSE)
+    expect_s3_class(a, "varImp.train")
+
+    # Should also work with forecastARml object
+    fc <- forecast(fit, h = 12)
+    b <- get_var_imp(fc, plot = FALSE)
+    expect_s3_class(b, "varImp.train")
+  })
+}
+
+# Test that get_var_imp rejects invalid objects
+if(require(testthat)){
+
+  test_that("get_var_imp rejects invalid objects", {
+    expect_error(
+      get_var_imp(list(a = 1, b = 2)),
+      "must be a forecastARml or ARml object"
+    )
+
+    expect_error(
+      get_var_imp(data.frame(x = 1:10)),
+      "must be a forecastARml or ARml object"
+    )
+  })
+}
