@@ -35,7 +35,7 @@ train <- window(AirPassengers, end = c(1959, 12))
 
 test <- window(AirPassengers, start = c(1960, 1))
 
-ARml(train, caret_method = "lm", max_lag = 12, trend_method = "none",
+ARml(train, caret_method = "lm", max_lag = 12,
  pre_process = "center") -> fit
 #> initial_window = NULL. Setting initial_window = 112
 #> + Training112: intercept=TRUE 
@@ -61,7 +61,7 @@ autoplot(fc)+ autolayer(test)
 
 accuracy(fc, test)
 #>                        ME     RMSE       MAE        MPE     MAPE      MASE
-#> Training set 1.267169e-14 10.19861  7.884296 -0.1380603 3.263387 0.2589260
+#> Training set 3.434088e-15 10.19861  7.884296 -0.1380603 3.263387 0.2589260
 #> Test set     5.515070e+00 19.71858 17.108979  0.8260714 3.540353 0.5618712
 #>                    ACF1 Theil's U
 #> Training set 0.07296876        NA

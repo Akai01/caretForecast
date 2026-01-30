@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">caretForecast</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/window.html" class="external-link">window</a></span><span class="op">(</span><span class="va">AirPassengers</span>, start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1960</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ARml.html">ARml</a></span><span class="op">(</span><span class="va">train</span>, caret_method <span class="op">=</span> <span class="st">"lm"</span>, max_lag <span class="op">=</span> <span class="fl">12</span>, trend_method <span class="op">=</span> <span class="st">"none"</span>,</span></span>
+<span class="r-in"><span><span class="fu"><a href="ARml.html">ARml</a></span><span class="op">(</span><span class="va">train</span>, caret_method <span class="op">=</span> <span class="st">"lm"</span>, max_lag <span class="op">=</span> <span class="fl">12</span>,</span></span>
 <span class="r-in"><span> pre_process <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">fit</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> initial_window = NULL. Setting initial_window = 112</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> + Training112: intercept=TRUE </span>
@@ -97,7 +97,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/accuracy.html" class="external-link">accuracy</a></span><span class="op">(</span><span class="va">fc</span>, <span class="va">test</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                        ME     RMSE       MAE        MPE     MAPE      MASE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Training set 1.267169e-14 10.19861  7.884296 -0.1380603 3.263387 0.2589260</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Training set 3.434088e-15 10.19861  7.884296 -0.1380603 3.263387 0.2589260</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Test set     5.515070e+00 19.71858 17.108979  0.8260714 3.540353 0.5618712</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    ACF1 Theil's U</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Training set 0.07296876        NA</span>

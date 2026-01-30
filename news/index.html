@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">caretForecast</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,18 @@
       <small>Source: <a href="https://github.com/taf-society/caretForecast/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.3" id="caretforecast-013">caretForecast 0.1.3<a class="anchor" aria-label="anchor" href="#caretforecast-013"></a></h2>
+<ul><li>Fixed <code><a href="../reference/get_var_imp.html">get_var_imp()</a></code> to accept both <code>ARml</code> and <code>forecastARml</code> objects as documented</li>
+<li>Fixed dimension drop in <code>lag_maker()</code> when <code>max_lag = 1</code>
+</li>
+<li>Fixed dimension drop in <code>forecast_loop()</code> when forecasting single step</li>
+<li>Fixed <code>xreg</code> being lost during calibration - now properly preserved before truncation</li>
+<li>Fixed redundant BoxCox transformation when <code>lambda = "auto"</code>
+</li>
+<li>Fixed invalid <code>trend_method</code> parameter in <code><a href="../reference/get_var_imp.html">get_var_imp()</a></code> example</li>
+<li>Fixed syntax error in test file</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.2" id="caretforecast-012">caretForecast 0.1.2<a class="anchor" aria-label="anchor" href="#caretforecast-012"></a></h2><p class="text-muted">CRAN release: 2026-01-30</p>
 <ul><li>Implemented horizon-specific conformal prediction intervals with proper out-of-sample calibration</li>
