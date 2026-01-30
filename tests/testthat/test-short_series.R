@@ -151,6 +151,53 @@ if (require(testthat)) {
     expect_equal(length(fc$mean), 2)
   })
 
+  test_that("Short series with BoxCox biasadj = TRUE", {
+    set.seed(607)
+    short_ts <- ts(c(10, 15, 12, 18, 14, 20, 16), frequency = 1)
+
+    # biasadj = TRUE requires fvar to be provided
+    fit <- ARml(short_ts, max_lag = 2, caret_method = "lm",
+                lambda = "auto", BoxCox_biasadj = TRUE,
+                BoxCox_fvar = 1,
+                verbose = FALSE, calibrate = FALSE)
+
+    expect_s3_class(fit, "ARml")
+    expect_true(fit$BoxCox_biasadj)
+
+    fc <- forecast(fit, h = 2)
+    expect_equal(length(fc$mean), 2)
+  })
+
+  test_that("Short series with different BoxCox methods", {
+    set.seed(608)
+    short_ts <- ts(c(10, 15, 12, 18, 14, 20, 16, 22, 18), frequency = 1)
+
+    # guerrero method
+    fit1 <- ARml(short_ts, max_lag = 2, caret_method = "lm",
+                 lambda = "auto", BoxCox_method = "guerrero",
+                 verbose = FALSE, calibrate = FALSE)
+    expect_s3_class(fit1, "ARml")
+
+    # loglik method
+    fit2 <- ARml(short_ts, max_lag = 2, caret_method = "lm",
+                 lambda = "auto", BoxCox_method = "loglik",
+                 verbose = FALSE, calibrate = FALSE)
+    expect_s3_class(fit2, "ARml")
+  })
+
+  test_that("Short series with BoxCox bounds", {
+    set.seed(609)
+    short_ts <- ts(c(10, 15, 12, 18, 14, 20, 16, 22), frequency = 1)
+
+    fit <- ARml(short_ts, max_lag = 2, caret_method = "lm",
+                lambda = "auto",
+                BoxCox_lower = 0, BoxCox_upper = 1,
+                verbose = FALSE, calibrate = FALSE)
+
+    expect_s3_class(fit, "ARml")
+    expect_true(fit$lambda >= 0 && fit$lambda <= 1)
+  })
+
   test_that("Short monthly series with limited Fourier terms", {
     set.seed(707)
     # 20 monthly observations - can support some seasonality
