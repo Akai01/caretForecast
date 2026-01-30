@@ -1,5 +1,7 @@
 # caretForecast
 
+![caretForecast logo](reference/figures/logo.png)
+
 caretForecast aspires to equip users with the means of using machine
 learning algorithms for time series data forecasting.
 
@@ -13,6 +15,14 @@ learning algorithms for time series data forecasting.
   out-of-sample calibration
 - Support for external regressors (promotions, holidays, etc.)
 - Compatible with hierarchical/grouped time series via the hts package
+
+## About TAFS
+
+**TAFS (Time Series Analysis and Forecasting Society)** is a non-profit
+association (“Verein”) in Vienna, Austria. It connects academics,
+experts, practitioners, and students focused on time-series,
+forecasting, and decision science. Contributions remain fully open
+source. Learn more at [taf-society.org](https://taf-society.org/).
 
 ## Installation
 
