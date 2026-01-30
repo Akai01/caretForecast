@@ -46,7 +46,7 @@ forecast_loop <- function(object, xreg, h) {
   y <- ts(y[-(1:length(object$y_modified))],
           frequency = freq,
           start = max(time(object$y)) + 1 / freq)
-  x <- x[-(1:nrow(object$x)),]
+  x <- x[-(1:nrow(object$x)), , drop = FALSE]
 
   return(list("x" = x,
               "y" = y))
@@ -65,7 +65,7 @@ forecast_loop <- function(object, xreg, h) {
 #'
 #' test <- window(AirPassengers, start = c(1960, 1))
 #'
-#' ARml(train, caret_method = "lm", max_lag = 12, trend_method = "none",
+#' ARml(train, caret_method = "lm", max_lag = 12,
 #'  pre_process = "center") -> fit
 #'
 #' forecast(fit, h = length(test), level = c(80,95)) -> fc
@@ -80,8 +80,8 @@ forecast_loop <- function(object, xreg, h) {
 #' @export
 
 get_var_imp <- function(object, plot = TRUE) {
-  if ("forecastARml" %notin% class(object)) {
-    stop("object must be an forecastARml or ARml object")
+  if ("forecastARml" %notin% class(object) && "ARml" %notin% class(object)) {
+    stop("object must be a forecastARml or ARml object")
   }
   if (plot) {
     return(plot(varImp(object$model)))
@@ -132,7 +132,7 @@ lag_maker <- function(y, max_lag) {
       from = 1, to = max_lag1, by = 1
     )))
 
-  dta <- dta[,-1]
+  dta <- dta[, -1, drop = FALSE]
 
   return(dta)
 }

@@ -204,9 +204,7 @@ ARml <- function(y,
                                          lower = BoxCox_lower,
                                          upper = BoxCox_upper)
       modified_y <- forecast::BoxCox(y, lambda)
-    }
-
-    if (is.numeric(lambda)) {
+    } else if (is.numeric(lambda)) {
       modified_y <- forecast::BoxCox(y, lambda)
     }
   }
@@ -248,7 +246,9 @@ ARml <- function(y,
     colnames(x) <- c(paste0("lag", 1:max_lag))
   }
 
+  xreg_original <- NULL
   if (!is.null(xreg)) {
+    xreg_original <- xreg
     col_xreg <- ncol(xreg)
     name_xreg <- colnames(xreg)
     xreg <- xreg[-seq_len(max_lag),]
@@ -378,16 +378,7 @@ ARml <- function(y,
       full_modified_y <- forecast::BoxCox(y, lambda)
     }
 
-    # Store xreg_original before it was truncated
-    xreg_original <- NULL
-    if (!is.null(xreg)) {
-      # xreg was modified in place - need to get original
-      # Reconstruct by adding back the removed rows
-      # Actually, the original xreg was passed in but modified
-      # We need to store it before modification next time
-      # For now, we'll work with what we have
-      xreg_original <- rbind(matrix(NA, nrow = max_lag, ncol = ncol(xreg)), xreg)
-    }
+    # xreg_original was saved before truncation at line 252
 
     cal_scores <- tryCatch({
       calibrate_horizon_scores(
