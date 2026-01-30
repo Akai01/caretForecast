@@ -2,18 +2,30 @@ url: https://taf-society.github.io/caretForecast/
 
 template:
   bootstrap: 5
-  bootswatch: flatly
   bslib:
-    primary: "#0d6efd"
-    border-radius: 0.5rem
-    btn-border-radius: 0.25rem
+    # TAF Society theme (matching Durbyn.jl)
+    bg: "#ffffff"
+    fg: "#0b1324"
+    primary: "#2e7dd7"
+    secondary: "#6b7280"
+    base_font:
+      google: "Inter"
+    code_font:
+      google: "JetBrains Mono"
+    border-radius: 0.75rem
+    btn-border-radius: 0.75rem
+    card-bg: "#f8fafc"
 
 home:
   title: caretForecast
   description: Conformal Time Series Forecasting Using Machine Learning
+  sidebar:
+    structure: [links, license, community, citation, authors, toc, dev]
   links:
     - text: Report a bug
       href: https://github.com/taf-society/caretForecast/issues
+    - text: TAFS Website
+      href: https://taf-society.org/
 
 navbar:
   structure:
