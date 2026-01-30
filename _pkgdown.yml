@@ -1,4 +1,4 @@
-url: https://akai01.github.io/caretForecast/
+url: https://taf-society.github.io/caretForecast/
 
 template:
   bootstrap: 5
@@ -13,7 +13,7 @@ home:
   description: Conformal Time Series Forecasting Using Machine Learning
   links:
     - text: Report a bug
-      href: https://github.com/Akai01/caretForecast/issues
+      href: https://github.com/taf-society/caretForecast/issues
 
 navbar:
   structure:
@@ -22,7 +22,7 @@ navbar:
   components:
     github:
       icon: fab fa-github
-      href: https://github.com/Akai01/caretForecast
+      href: https://github.com/taf-society/caretForecast
       aria-label: GitHub
 
 reference:
@@ -76,7 +76,7 @@ reference:
 
 authors:
   Resul Akay:
-    href: https://github.com/Akai01
+    href: https://github.com/taf-society
 
 footer:
   structure:

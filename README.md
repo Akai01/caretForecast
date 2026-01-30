@@ -5,10 +5,10 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/Akai01/caretForecast/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Akai01/caretForecast/actions/workflows/R-CMD-check.yaml)
-[![pkgdown](https://github.com/Akai01/caretForecast/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/Akai01/caretForecast/actions/workflows/pkgdown.yaml)
+[![R-CMD-check](https://github.com/taf-society/caretForecast/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/taf-society/caretForecast/actions/workflows/R-CMD-check.yaml)
+[![pkgdown](https://github.com/taf-society/caretForecast/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/taf-society/caretForecast/actions/workflows/pkgdown.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/Akai01/caretForecast/graph/badge.svg)](https://app.codecov.io/gh/Akai01/caretForecast)
+coverage](https://codecov.io/gh/taf-society/caretForecast/graph/badge.svg)](https://app.codecov.io/gh/taf-society/caretForecast)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/caretForecast)](https://CRAN.R-project.org/package=caretForecast)
 [![CRAN
@@ -45,7 +45,7 @@ The development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("Akai01/caretForecast")
+devtools::install_github("taf-society/caretForecast")
 ```
 
 ## Example
