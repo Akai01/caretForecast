@@ -1,6 +1,6 @@
 Package: caretForecast
 Title: Conformal Time Series Forecasting Using State of Art Machine Learning Algorithms
-Version: 0.1.2
+Version: 0.1.3
 Authors@R:
     person(given = "Resul",
            family = "Akay",

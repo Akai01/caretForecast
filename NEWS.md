@@ -1,3 +1,5 @@
+# caretForecast 0.1.3
+
 # caretForecast 0.1.2
 
 * Implemented horizon-specific conformal prediction intervals with proper out-of-sample calibration
