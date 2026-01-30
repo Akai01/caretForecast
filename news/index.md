@@ -2,6 +2,8 @@
 
 ## caretForecast 0.1.2
 
+CRAN release: 2026-01-30
+
 - Implemented horizon-specific conformal prediction intervals with
   proper out-of-sample calibration
 - Added new parameters to
