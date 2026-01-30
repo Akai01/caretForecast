@@ -2,7 +2,7 @@ pandoc: 3.1.11
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles: {}
-last_built: 2026-01-30T14:47Z
+last_built: 2026-01-30T16:04Z
 urls:
   reference: https://taf-society.github.io/caretForecast/reference
   article: https://taf-society.github.io/caretForecast/articles
