@@ -89,7 +89,7 @@ autoplot(fc)+ autolayer(test)
 
 accuracy(fc, test)
 #>                         ME     RMSE       MAE        MPE     MAPE      MASE
-#> Training set -6.039671e-15 10.19861  7.884296 -0.1380603 3.263387 0.2589260
+#> Training set -6.951511e-14 10.19861  7.884296 -0.1380603 3.263387 0.2589260
 #> Test set      5.515070e+00 19.71858 17.108979  0.8260714 3.540353 0.5618712
 #>                    ACF1 Theil's U
 #> Training set 0.07296876        NA
