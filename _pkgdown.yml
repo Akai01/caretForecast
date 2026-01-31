@@ -96,4 +96,4 @@ footer:
     right: built_with
   components:
     developed_by:
-      text: "Developed by [Time Series Analysis and Forecasting](https://taf-society.org/)"
+      text: "Developed by <a href='https://taf-society.org/'>Time Series Analysis and Forecasting</a>"
