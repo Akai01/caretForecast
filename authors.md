@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/taf-society/caretForecast/blob/master/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/taf-society/caretForecast/blob/main/DESCRIPTION)
 
 Akay R (2026). *caretForecast: Conformal Time Series Forecasting Using
 State of Art Machine Learning Algorithms*. R package version 0.1.3,
