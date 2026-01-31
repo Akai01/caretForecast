@@ -92,8 +92,8 @@ authors:
 
 footer:
   structure:
-    left: developed_by
+    left: tafs
     right: built_with
   components:
-    developed_by:
+    tafs:
       text: "Developed by <a href='https://taf-society.org/'>Time Series Analysis and Forecasting</a>"
